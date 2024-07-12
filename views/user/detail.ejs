@@ -1,0 +1,78 @@
+<%- include("./../layouts/head.ejs") %>
+<!-- <div class="navbar">
+
+  <div class="row detail_row" >
+
+    <div class="col-1 no-padding">
+        <img src = "./../images/amazon.png" class="margin-top-7_5 width-100" alt = "logo" class="logo"/>
+    </div>
+
+    <div class="col-2 no-padding" >
+        <p class="deliver_address">Delivering to Scottdale Arizona<br /> <span> Update Location </span></p>
+    </div>
+
+    <div class="col-4 no-padding">
+        <input class="form-control no-border"  placeholder = "Search for Item">
+    </div>
+
+    <div class="col-2 no-padding" >
+        <p class="deliver_to">Hello! Sign in to <br /><span class="bold"> Accounts |  Admin </span></p>
+    </div>
+
+    <div class="col-1 no-padding sign_in_col">
+        <p class="returns_orders">Return / Orders </p>
+    </div>
+
+    <div class="col-1 no-padding relative" >
+        <img src="./../images/cart.png" class="cart_icon" />
+        <div class="bubble_cart">
+          <p class="margin-top-20">0</p>
+        </div>
+    </div>
+
+  </div>
+
+</div> -->
+
+<%- include("./header.ejs") %>
+<main>
+  <a href = "/"> </a>
+  <div class="row">
+
+    <div class="col-7">
+
+        <div class="product_detail_box">
+
+            <p class="product_detail--name"> <%= item.title %> </p>
+            <p class="product_detail--type"> <%= item.catagory %> </p>
+            <p class="product_detail--price"> $<%= item.price %>.99 </p>
+
+            <% var inactive = item.quantity > 0 ? "" : "sold_out" %>
+            <% var qty = item.quantity > 0 ? "Qty:"+item.quantity : "This Product is Currently Sold Out" %>
+
+            <p class="product_detail--sold <%= inactive %>"><%= qty %></p>
+            <br />
+                    <form action = "/cart" method = "POST">
+                      <input type="hidden" name="id" value = <%=item._id %>/>
+                      <button class="detail_button" type="submit" >Add to Cart</button>
+                    </form>
+            <br />
+            <p class="product_detail--description">
+              <%= item.description %>
+            </p>
+
+        </div>
+
+
+    </div>
+
+    <div class="col-4">
+      <img class="product_detail_image" src = <%= `./../${item.thumbnail}` %> />
+    </div>
+
+  </div>
+
+</main>
+
+
+<%- include("./../layouts/end.ejs") %>

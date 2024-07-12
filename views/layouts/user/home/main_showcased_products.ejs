@@ -1,0 +1,96 @@
+<div class="margin-top-5">
+  <!-- <p class="product_type">Top Deals</p> -->
+  <% console.log(catagories) %>
+
+<div class="row margin-top-2_5-neg">
+
+  <% if(items.top_deals.length < 5 ){ %>
+
+      <% for(var i =0; i <5; i++){%>
+
+        <div class="col-1-of-3">
+            <div class="product_box shadow_border">
+
+                <p class="product_name">Top Ranked Deals</p>
+                <img class="product_image"src = "./images/catagory_3.png"/>
+
+                <div class="product_text_box">
+                  <p class="product_id">[This could be your product!]</p>
+                  <p class="product_price product_price_original">[N/A]</p>
+                  <p class="product_price product_price_new">[N/A]</p>
+                  <a href = "#"><p class="product_price">See Details</p></a>
+                </div>
+
+            </div>
+
+        </div>
+
+    <%}%>
+
+  <%}else{ %>
+
+    <% for(var i =0; i < 5; i++){ %>
+        <div class="col-1-of-3 margin-top-5 padding-top-2_5">
+
+              <a href = "/product/<%=items.top_deals[i].id%>">
+              <div class="product_box shadow_border">
+
+              <p class="product_name">Top Deals</p>
+              <% new_name = items.top_deals[i].title.substring(0, 35) + "..."; %>
+              <p class="product_name_sub"><%= new_name %></p>
+
+              <img class="product_image" src = ./<%= items.top_deals[i].thumbnail %>>
+
+              <div class="product_text_box">
+                <% if(items.top_deals[i].discount > 20){ %>
+                  <p class="product_price product_price_original">$<%= items.top_deals[i].price  %>.99</p>
+              <%}%>
+              <p class="product_price product_price_new">$<%= parseInt(items.top_deals[i].price / 2).toString(); %>.99</p>
+
+              <% var new_description = items.top_deals[i].description  %>
+              <% if (items.top_deals[i].description.length > 105) { %>
+                <% new_description = items.top_deals[i].description.substring(0, 105) + "..."; %>
+              <% } %>
+                <p class="product_description_display"><%=new_description %></p>
+                <p class="product_price"style="font-weight:bold;text-align:center;text-decoration:underline">See Details</p>
+              </div>
+
+            </div>
+            </a>
+
+        </div>
+
+      <%}%>
+
+    <%}%>
+
+    <div class="col-1-of-3 margin-top-5 padding-2_5">
+        <div class="account_box product_box">
+            <p class="signup_title">Signup To Purchase!</p>
+
+            <div class="signup_box">
+              <div class="signup_button">
+                Create Account
+              </div>
+            </div>
+
+            <div class="login_box">
+
+              <p class="login_paragraph white">Already Have an Account?</p>
+
+              <div class="login_button white">
+                Login
+              </div>
+
+              <div class="google_login_button">
+                <img class="google_login_logo"src = "./images/google_logo.png"/>
+                <p class="google_link"> Login with Google </p>
+              </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,95 @@
+.more_deals_container{
+background: white;
+margin-top: 5%;
+padding:5% 2.5%;
+}
+.more_deals_title{
+  padding-left: 2.5%;
+  font-size: 20px;
+  color:black;
+  text-align: left;
+}
+.card{
+  padding-top: 5%;
+  padding-bottom:5%;
+}
+.more_deals_image{
+  margin:0 auto;
+  margin-left: 12.5%;
+  margin-top: 5%;
+  width:70%;
+
+}
+.more_deals_name{
+  color:black;
+  text-align: center;
+  font-weight: 500;
+
+}
+.more_deals_user{
+  color:black;
+  margin-top: 10%;
+  text-align: left;
+  font-weight: 500;
+padding-left: 5%;
+}
+.star_row{
+  width:50%;
+}
+.star_col{
+  width:20%;
+  float:left;
+}
+.star_img{
+  width:100%;
+}
+.card{
+  perspective: 150rem;
+  position: relative;
+  height:20rem;
+  &:hover &_side--front{
+    transform: rotateY(180deg);
+  }
+  &:hover &_side--back{
+    transform: rotateY(0deg);
+  }
+
+  &_side{
+    border:1px solid #e6e6e6;
+    padding:2.5% 5%;
+    position: absolute;
+    // top:0;
+    // left:0;
+    backface-visibility: hidden;
+    width:100%;
+    height: 100%;
+    transition: all .4s;
+  }
+  &_side--front{
+    background:white;
+  }
+  &_side--back{
+    background-image:linear-gradient( to right bottom,rgba(193, 193, 193, 1),rgba(255, 255, 160, 1));
+    transform: rotateY(180deg);
+  }
+
+}
+.price_number{
+  height:50%;
+  width:50%;
+  border-radius:50%;
+  background:white;
+  margin:auto;
+  margin-top:25%;
+  color:black;
+  text-align: center;
+  font-size:30px;
+  font-weight:500;
+  position: relative;
+}
+
+.price_deal{
+  top:35%;
+  position: absolute;
+  width:100%;
+}

@@ -1,0 +1,53 @@
+
+
+.logo_box{
+  position:absolute;
+  top:2.5%;
+  left:2.5%;
+  z-index:2;
+}
+
+.heading_box{
+  position: absolute;
+  right:0%;
+  top:10%;
+  padding: 5%;
+}
+
+.company_name{
+  text-align: left;
+  color:white;
+  float:left;
+  padding-top:5%;
+}
+
+.heading-secondary{
+  color:white;
+  animation:move_in_left 1s ease-in 1;
+  text-align: center;
+}
+
+.heading-primary{
+  color:white;
+  animation:move_in_right 1s ease-in 1;
+
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 5px;
+}
+
+.logo{
+  height:45px;
+  float:left;
+  width:45px;
+}
+
+.header{
+  padding:5%;
+  position: relative;
+  height:95vh;
+  background-position:top left;
+  background-size:cover;
+  background-image:url("./../images/landing.png");
+  clip-path: polygon(0 0, 100% 0 ,100% 85vh, 0 100%);
+}

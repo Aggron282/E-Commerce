@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+
+    <meta charset="utf-8">
+    <title></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://fonts.cdnfonts.com/css/amazon-ember" rel="stylesheet">
+    <link href ='./../css/login.css' rel="stylesheet"/>
+
+  </head>
+
+  <body>
+
+  <div class="container-fluid">
+    <div class="login_container">
+        <div class="row">
+            <div class="col-4">
+
+            </div>
+            <div class="col-4">
+                <div class="login_mod padding-bottom-10">
+                    <p class="login_title">Get Started</p>
+                    <form action = "/create_account" method = "POST">
+                      <div class="login_row">
+                        <label>
+                            Full Name
+                        </label>
+                        <input
+                        class =" login_form <%= validationErrors.find(e=>e.path == 'name') ? 'error_' :  ''  %>"
+                         name = "name" value = "<%= userInput.name %>" placeholder = "Enter Full Name"/>
+                      </div>
+                      <div class="login_row">
+                        <label>
+                          Create Username
+                        </label>
+                        <input
+                        class =" login_form <%= validationErrors.find(e=>e.path == 'username') ? 'error_' :  ''  %>"
+                        name = "username"  value = "<%= userInput.email %>" placeholder = "Enter Username"/>
+                      </div>
+                      <div class="login_row">
+                        <label>
+                            Create Password
+                        </label>
+                        <input name = "password"
+                        class ="login_form <%= validationErrors.find(e=>e.path == 'password') ? 'error_' :  ''  %>"
+                        value = "<%= userInput.password %>" type="password" placeholder = "Enter Password"/>
+                      </div>
+
+                    <button class="login_button" type="submit">Create Account</button>
+                  </form>
+
+                </div>
+            </div>
+            <div class="col-4"></div>
+        </div>
+    </div>
+
+  </div>
+
+  <script>
+
+  </script>
+  </body>

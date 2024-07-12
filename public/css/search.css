@@ -1,0 +1,36 @@
+.search_inactive{
+  visibility: collapse;
+}
+.search_active{
+  animation:search .5s 1 ease-in;
+}
+.search_page_overlay{
+  position: absolute;
+  padding-bottom:20%;
+  top:0%;
+  width:100%;
+  left:0%;
+  background:white;
+  z-index:99;
+  transition: all .5s;
+  padding:30px;
+  overflow: hidden;
+ transform:translateY(150px);
+}
+.search_page_animation{
+
+}
+@keyframes search{
+  0%{
+    opacity:0%;
+    transform: translateY(-500px);
+  }
+  100%{
+    opacity:1;
+
+    transform: translateY(150px);
+  }
+}
+.search_all{
+  float:left;border-radius:0px;width:60%;height:45px
+}

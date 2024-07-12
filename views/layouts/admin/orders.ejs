@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+
+    <meta charset="utf-8">
+    <title></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://fonts.cdnfonts.com/css/amazon-ember" rel="stylesheet">
+    <link href ='./../css/main.css' rel="stylesheet"/>
+    <link href ='./../css/detail.css' rel="stylesheet"/>
+    <link href ='./../css/review.css' rel="stylesheet"/>
+    <link href ='./../css/cart.css' rel="stylesheet"/>
+    <link href ='./../css/catagory_products.css' rel="stylesheet"/>
+
+
+  </head>
+
+<body>
+
+<div class="container-fluid">
+<div class="row">
+    <% for(var i =0; i < orders.length; i++){%>
+      <div class="col-12">
+          <div class="order_tab"style="width:90%;margin-left:2.5%;padding:1%;margin-top:2.5%;box-shadow:0px 0px 10px black">
+              <a href = <%= `/user_orders/${orders[i]._id}`%> style="color:black;text-decoration:none;font-size:16px" > Download Invoice </a>
+          </div>
+      </div>
+  <%}%>
+
+</div>
+
+</div>
+</body>
+<html>

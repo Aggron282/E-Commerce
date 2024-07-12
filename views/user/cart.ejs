@@ -1,0 +1,53 @@
+
+  <%- include("./../layouts/head.ejs") %>
+  <%- include("./header.ejs") %>
+
+  <main class="cart container-fluid">
+    <div class="cart_container padding-5 ">
+      <p class=" cart_heading width-100"> Your Cart</p>
+
+      <div class="row">
+        <div class="col-8">
+            <% if (items) {%>
+            <% if (items.length > 0) {%>
+
+              <% for (var i = 0; i < items.length; i++) { %>
+                <div class="cart_box">
+                  <div class="row">
+                    <div class="col-4">
+                      <img class="width-50 margin-left-25 cart_img" src =   <%= `/${items[i].data.thumbnail}` %> />
+                    </div>
+                    <div class="col-6">
+                      <p class="cart_title cart_text width-100"> <%= items[i].data.title %> </p>
+                      <p class="cart_price cart_text width-100"> $<%= items[i].data.price %>.99 </p>
+                      <p class="cart_quantity cart_text width-100"> Qty: <%= items[i].qty %> </p>
+                      <form method = "POST" action = "/cart/delete" >
+                        <input  type="hidden" name = "_id" value= <%= items[i].data._id %> />
+                        <button class="delete_button" type="submit"> Delete </button>
+                      </form>
+                    </div>
+
+
+                  </div>
+                </div>
+              <% }%>
+              <% } %>
+              <% } %>
+        </div>
+        <div class="col-3">
+            <div class="total_price_container">
+                <p class="total_price">Total Price</p>
+                <p class="total_number">$ <%= total_price %> .99</p>
+                <a href = "/cart/purchase"> <button class="checkout_button"> Proceed to Checkout </button> </a>
+            </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+<script src="./js/long_banner.js"></script>
+<script src="./js/slideshow.js"></script>
+
+<%- include("./../layouts/end.ejs") %>

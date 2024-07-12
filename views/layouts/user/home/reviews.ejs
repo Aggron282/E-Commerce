@@ -1,0 +1,24 @@
+
+
+
+<div class="margin-top-5 story_container">
+
+  <p class="story_title"> See What Our Users Think of Us! </p>
+  <% for(var i =0; i < reviews.length; i++) {%>
+    <div class="story">
+      <figure  class="story_shape">
+          <img class="story_img" src=<%=`./../images/${reviews[i].image} `%> />
+          <figcaption class="story_caption">
+            <%= reviews[i].name %>
+          </figcaption>
+      </figure>
+      <div class="story_text"style="transform:skewX(12deg)">
+          <h3 class="heading-tertiary u-margin-bottom-small"><%= reviews[i].title %> </h3>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. A diam maecenas sed enim ut sem viverra aliquet eget. Nisl nisi scelerisque eu ultrices vitae auctor eu. Risus nullam eget felis eget nunc lobortis mattis.
+          </p>
+      </div>
+    </div>
+    <%}%>
+
+</div>

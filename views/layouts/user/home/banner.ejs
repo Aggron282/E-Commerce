@@ -1,0 +1,25 @@
+
+<div class="items_banner_container" >
+
+  <div class="arrow_banner_container">
+    <img class="arrow_banner--left arrow_banner" src="./../images/arrow.png"/>
+    <img class="arrow_banner--right arrow_banner" src="./../images/arrow.png"/>
+  </div>
+
+    <p class="banner_title"> Items Tailored For You </p>
+
+    <div class="products_banner">
+
+      <% var left = 0; %>
+
+      <% for (var i =0; i < items.placeholder.length; i++){%>
+        <div class="product_item" style=<%=`left:`+left+"%" %>>
+            <img class="item_image" src = <%=`./../images/${items.placeholder[i]} ` %>/>
+        </div>
+        <%  left += 17.5; %>
+
+      <%}%>
+
+    </div>
+
+</div>

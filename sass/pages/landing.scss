@@ -1,0 +1,27 @@
+.section-about{
+  padding:25rem 0;
+  margin-top:-55vh;
+}
+.about-heading{
+  text-align: center;
+  padding-top: 1%;
+  font-size: 16px;
+  &--primary{
+    font-size:3rem;
+    text-transform: capitalize;
+    text-shadow: 0px 1rem 2rem #e6e6e6;
+    background-image: linear-gradient(
+    to right,
+    rgba(41, 139, 196, 1),
+    rgba(56, 182, 255, 1),
+    );
+    color:transparent;
+    -webkit-background-clip:text;
+  }
+  &--secondary{
+    font-size:1rem;
+    font-weight:400;
+    color:black;
+  }
+
+}

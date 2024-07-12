@@ -1,0 +1,82 @@
+p {
+  font-family:"Amazon Ember";
+  color:black;
+}
+
+.catagory_title{
+  color:black;
+  font-size:25px;
+  padding-left:2.5%;
+}
+
+.catagory_row{
+  padding-top:5%;
+  margin-top:2.5%;
+}
+
+.catagory_box{
+  box-shadow: 0px 0px 10px rgba(0,0,0,.5);
+  padding-bottom:5%;
+  padding-top:5%;
+}
+.arrow_banner{
+  filter: brightness(.5);
+    width: 5%;
+    position: absolute;
+     box-shadow: none;
+    background: none;
+    /* top: 0% !important; */
+    z-index: 99;
+    transition: all .3s;
+}
+.arrow_banner:hover{
+  filter: brightness(0);
+
+}
+.arrow_banner_container{
+  position: absolute;
+    width: 100%;
+    padding: 1%;
+    left: 0%;
+    top: 50%;
+    z-index: 999
+}
+.catagory_product_name{
+  font-size:16px;
+  text-align: center;
+  font-weight: bold;
+
+}
+.catagory_products{
+  padding-bottom:10%;
+
+}
+.no-margin-left{
+  margin-left:0% !important;
+}
+.catagory_image{
+  width:100%;
+  margin:0 auto;
+}
+.catagory_detail{
+  font-size: 18px;
+  font-weight:400;
+  text-align: center;
+  width:50%;
+  margin:0 auto;
+  transition: all .5s;
+  border-bottom:1px solid #e6e6e6;
+}
+.catagory_price{
+  text-align: left;
+  font-size:16px;
+}
+.catagory_detail:hover{
+border-color:limegreen;
+}
+.banner_title{
+  font-size:30px;
+  width:30%;
+  text-align: center;
+  border-bottom:2px solid black;
+}

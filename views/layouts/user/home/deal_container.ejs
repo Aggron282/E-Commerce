@@ -1,0 +1,40 @@
+<div class="margin-top-5" >
+<p class="deals_title">We Have The Best Deals!</p>
+
+<p class="deals_description">Amazon is widely known for our unmatchable prices!</p>
+
+<div class="slanted_background">
+    <img class="slanted_graphic"src ="./images/online.png"/>
+</div>
+
+<div class="product_deal_container">
+
+  <% if (items.top_deals.length > 5) {%>
+
+      <div class="product_deal_box">
+
+        <img class="product_deal_image" src = <%= `${items.top_deals[1].thumbnail}` %>/>
+
+        <div class="relative tag">
+
+          <div class="price_deal_tag">
+              Up to <%= items.top_deals[1].discount %> % off
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="deals_description_box">
+        <p class="product_deal_name"><%= items.top_deals[1].title %></p>
+        <p class="product_deal_price_cut">$<%= items.top_deals[1].price %>.99 </p>
+        <p class="product_deal_price_new">$<%=  parseInt(items.top_deals[1].price - (items.top_deals[1].price * (items.top_deals[1].discount / 100))).toString() %>.99</p>
+     </div>
+
+    <button class="deals_see_more">See More Deals</button>
+
+  <%}%>
+
+
+</div>
+</div>
