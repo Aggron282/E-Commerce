@@ -1,3 +1,16 @@
+var overlay_content_element = document.querySelector(".overlay_content");
+var main_content_element = document.querySelector(".main_content");
+var exit_element = document.querySelector(".exit_search");
+var search_overlay_element = document.querySelector(".search_page_overlay");
+var search_bar_element = document.querySelector(".search_all");
+var search_overlay_row_element = document.querySelector(".search_overlay_row");
+
+var hasSearched = false;
+var hasChanged = false;
+
+var fixed_time = 1000;
+
+
 function RenderItem(result){
 
   var name = result.title.substring(0, 30) + "..."
@@ -30,32 +43,25 @@ function RenderItem(result){
 
 }
 
+exit_element.addEventListener("click",(e)=>{
 
-var overlay_content = document.querySelector(".overlay_content");
-var main_content = document.querySelector(".main_content");
-
-var exit = document.querySelector(".exit_search");
-var hasSearched = false;
-var search_overlay = document.querySelector(".search_page_overlay");
-var fixed_time = 1000;
-var hasChanged = false;
-var search_bar = document.querySelector(".search_all");
-
-exit.addEventListener("click",(e)=>{
   hasSearched = false;
-  search_overlay.classList.add("search_inactive");
-  search_overlay.classList.remove("search_active");
-  overlay_content.classList.remove("active");
-  overlay_content.classList.add("inactive");
-  main_content.classList.add("active");
-  main_content.classList.remove("inactive");
+
+  search_overlay_element.classList.add("search_inactive");
+  overlay_content_element.classList.add("inactive");
+  main_content_element.classList.add("active");
+
+  search_overlay_element.classList.remove("search_active");
+  overlay_content_element.classList.remove("active");
+  main_content_element.classList.remove("inactive");
+
 })
 
-search_bar.addEventListener("keyup",(e)=>{
+search_bar_element.addEventListener("keyup",(e)=>{
 
   if(e.keyCode == 13 && !hasSearched){
 
-  var input = search_bar.value;3
+      var input = search_bar.value;
 
       const options = {
         method: "POST",
@@ -68,25 +74,28 @@ search_bar.addEventListener("keyup",(e)=>{
 
       axios.post("/search/product/",{input:input}).then((results)=>{
 
+        var html = ``;
         var data = results.data;
 
-        search_overlay.classList.remove("search_inactive");
-        search_overlay.classList.add("search_active");
-        overlay_content.classList.remove("inactive");
-        overlay_content.classList.add("active");
-        main_content.classList.add("inactive");
-        main_content.classList.remove("active");
         hasSearched = true;
-        var row = document.querySelector(".search_overlay_row");
-        var html = ``;
-        console.log(results);
+
+        search_overlay_element.classList.remove("search_inactive");
+        main_content_element.classList.remove("active");
+        overlay_content_element.classList.remove("inactive");
+
+        search_overlay_element.classList.add("search_active");
+        overlay_content_element.classList.add("active");
+        main_content_element.classList.add("inactive");
+
+
         for(var i = 0; i <data.length; i ++){
           html+= RenderItem(data[i]);
         }
 
-        row.innerHTML = html;
+        search_overlay_row_element.innerHTML = html;
 
       });
 
   }
+
 })

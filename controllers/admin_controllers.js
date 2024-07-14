@@ -4,40 +4,41 @@ var fs = require("fs");
 var ObjectId = require("mongodb").ObjectId;
 var PDFDocument = require("pdfkit");
 
-let totalItems;
-const ITEMS_PER_PAGE = 3;
-var page = 1;
+let totalProducts;
+var page_counter = 1;
 
 var StatusError = require("./../util/status_error.js");
 var fileHelper = require("./../util/file.js");
 const Product = require("./../models/products.js");
 const Order = require("./../models/orders.js");
 
+const ITEMS_PER_PAGE = 3;
+
 
 const GetMainPage = (req,res,next) => {
 
-     page = parseInt(req.query.page);
+     page_counter = parseInt(req.query.page);
 
      Product.find({userId:req.user._id})
       .count()
       .then((products_)=>{
-        totalItems = products_;
+        totalProducts = products_;
         return Product.find({userId:req.user._id})
-        .skip((page - 1) * ITEMS_PER_PAGE)
+        .skip((page_counter - 1) * ITEMS_PER_PAGE)
         .limit(ITEMS_PER_PAGE)
       })
      .then((products)=>{
       res.render(path.join(rootDir,"views","admin.ejs"),
       {
         products:products,
-        totalProducts:totalItems,
-        hasPrev: page > 1,
-        prev:parseInt(page - 1),
-        hasNext: Math.ceil(ITEMS_PER_PAGE * page) < totalItems,
-        last:Math.ceil(totalItems / ITEMS_PER_PAGE),
-        next:parseInt(page + 1),
+        totalProducts:totalProducts,
+        hasPrev: page_counter > 1,
+        prev:parseInt(page_counter - 1),
+        hasNext: Math.ceil(ITEMS_PER_PAGE * page_counter) < totalProducts,
+        last:Math.ceil(totalProducts / ITEMS_PER_PAGE),
+        next:parseInt(page_counter + 1),
         first:1,
-        page:page
+        page:page_counter
       });
 
     }).catch((err)=>{
@@ -220,10 +221,11 @@ const AddProduct = async (req,res,next) =>{
     var products = new Product(schema);
 
     products.save().then((data)=>{
+
       Product.find().then((r)=>{console.log(r.length)}).then(()=>{
-      console.log(data);
-      res.redirect("/admin/add_product")
-    });
+        res.redirect("/admin/add_product")
+      });
+
     }).catch((err)=>{
       StatusError(next,err,500);
     });
@@ -236,7 +238,6 @@ module.exports.GetProducts = GetProducts;
 module.exports.GetOrderPage = GetOrderPage;
 module.exports.DownloadOrder = DownloadOrder;
 module.exports.DeleteOneProductClient = DeleteOneProductClient;
-
 module.exports.FindOneProduct = FindOneProduct;
 module.exports.EditOneProduct = EditOneProduct;
 module.exports.AddProduct = AddProduct;

@@ -70,6 +70,7 @@ const PostUserLogin = (req,res,next) => {
         }).catch((err)=>{
           StatusError(next,err,500);
         });
+
       }
       else{
 
@@ -97,6 +98,7 @@ const PostUserLogin = (req,res,next) => {
       },
       validationErrors:errors.array()
      }
+
    );
 
   }
@@ -127,17 +129,17 @@ const PostNewPassword = (req,res,next)=>{
   const new_password = req.body.password;
   const userId = req.body.userId;
 
-  let resetUser;
+  let resetInfo;
 
   User.findOne({_id:userId}).then((user)=>{
 
-    resetUser = user;
+    resetInfo = user;
 
     bcrypt.hash(new_password,12).then((hash)=>{
-      resetUser.password = hash;
-      resetUser.resetToken = null;
-      resetUser.resetTokenExpiration = null;
-      resetUser.save();
+      resetInfo.password = hash;
+      resetInfo.resetToken = null;
+      resetInfo.resetTokenExpiration = null;
+      resetInfo.save();
     }).then(result =>{
       res.redirect('/login')
     }).catch(err =>{

@@ -1,7 +1,10 @@
-var path = require("path");
+const path = require("path");
 const pdf = require('pdfkit');
+const ObjectId = require("mongodb").ObjectId;
 const stripe = require("stripe")("sk_test_51OjAfEL9aEOLpUqjCLjitVLvOalLj9CCZEpk9SPkxZnmh2xJZSsB8Fp8mrkAO8lNUaogi51OVptQ9Tc56el67Skg008Rlc9dP2");
-
+const rootDir = require("./../util/path.js");
+const fileHelper = require("./../util/file.js");
+const StatusError = require("./../util/status_error.js");
 const Product = require("./../models/products.js");
 const Cart = require("../models/cart.js");
 const Order = require("../models/orders.js");
@@ -9,18 +12,12 @@ const User = require("../models/user.js");
 const PlaceholderImages = require("./../data/items_placeholder_other_rated.js");
 const Reviews = require("./../data/reviews.js");
 
-const fileHelper = require("./../util/file.js");
-var rootDir = require("./../util/path.js");
-const StatusError = require("./../util/status_error.js");
-
-
-const ObjectId = require("mongodb").ObjectId;
-
 function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+  return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 const GetSearchResults = (req,res,next) => {
+
   var input = req.body.input.toLowerCase();
 
   Product.find({}).then((all_products)=>{
@@ -39,6 +36,7 @@ const GetSearchResults = (req,res,next) => {
      res.json(similar_products);
 
   });
+
 }
 
 function RedirectIfNotAuthenticated(req,res){
@@ -322,11 +320,6 @@ const ToggleCatagories = (req,res,next) => {
     res.json(updated_catagories);
 
   })
-  //  Product.find().then( (all_products) =>{
-  //    console.log(all_products.length);
-  //   var new_catagories = OrganizeCatagories(all_products);
-  //   console.log(new_catagories);
-  // });
 
 }
 
@@ -338,15 +331,7 @@ const GetHomePage = async (req,res,next) => {
     var top_deals = [];
     var highest_product = null;
     var new_catagories =  OrganizeCatagories(all_products);
-    // if(all_products.length > 5){
-    //
-    //   highest_product = FindHighestDiscount(all_products);
-    //
-    //   top_deals.push(highest_product);
-    //
-    //   top_deals = OrganizeDiscounts(top_deals);
-    //
-    // }else{
+
     top_deals = [...all_products];
 
     var cart;
@@ -492,7 +477,6 @@ module.exports.GetOrders = GetOrders;
 module.exports.GetCatagories = GetCatagories;
 module.exports.ToggleCatagories = ToggleCatagories;
 module.exports.GetSearchResults = GetSearchResults;
-
 module.exports.DeleteCart = DeleteCart;
 module.exports.GetHomePage = GetHomePage;
 module.exports.GetProducts = GetProducts;

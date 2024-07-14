@@ -1,27 +1,23 @@
-var left_arrow = document.querySelector(".arrow_banner--left ");
-var right_arrow = document.querySelector(".arrow_banner--right");
-
+var left_arrow_element = document.querySelector(".arrow_banner--left ");
+var right_arrow_element = document.querySelector(".arrow_banner--right");
+var banner_element = document.querySelector('.products_banner');
 
 var offset_counter = 0;
-var offset_pos = 0;
-var offset_para = 650;
+var offset_increment = 650;
+var offsetLeftProp;
 
-
-
-function scrollInElement(multi){
-  offset_pos = document.querySelector('.products_banner').offsetLeft;
-  document.querySelector('.products_banner').scrollLeft += (offset_para * multi);
+function scrollInElement(multiplier){
+  offsetLeftProp = banner_element.offsetLeft;
+  banner_element.scrollLeft += (Math.abs(offset_increment) * multiplier);
 }
 
-
- right_arrow.addEventListener("click",(e)=>{
-
+ right_arrow_element.addEventListener("click",(e)=>{
    offset_counter++;
    scrollInElement(1);
  });
 
 
- left_arrow.addEventListener("click",(e)=>{
+ left_arrow_element.addEventListener("click",(e)=>{
    offset_counter--;
    scrollInElement(-1);
  });

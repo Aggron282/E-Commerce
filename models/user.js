@@ -36,23 +36,31 @@ const user = new Schema(
             type:Number,
             required:true
           }
+          
         }
+
       ]
+
     }
+
   }
+
 );
 
 user.methods.ClearCart = function(){
+
   this.cart = {
     items:[]
   }
+
   this.save();
+
 }
 
 user.methods.AddCart = function(id){
 
   Product.findById(id).then((item) =>{
-    console.log(item);
+
     if (this.cart.items.length <= 0) {
       this.cart = {
         items:[{
@@ -61,20 +69,25 @@ user.methods.AddCart = function(id){
           quantity:1
         }]
       }
-    //  console.log(this.cart);
+
       this.save();
+
       return;
-    }else{
+
+    }
+    else{
 
          var exisiting_product_index = this.cart.items.findIndex(prod => prod.prodId == id);
          var existing_product = this.cart.items[exisiting_product_index];
          var items = [...this.cart.items];
+
          var updated_product = {
            prodId:item._id,
            data:item,
            quantity:item.quantity
          };
-         console.log(updated_product)
+
+
          if(existing_product){
            updated_product.quantity = updated_product.quantity + 1;
            items[exisiting_product_index] = updated_product;
@@ -82,13 +95,16 @@ user.methods.AddCart = function(id){
            updated_product.quantity = 1;
            items.push(updated_product);
          }
+
          var updated_cart = {
            items:items
          }
-         console.log(updated_cart);
+
          this.cart = updated_cart;
          this.save();
+
         }
+
    })
 }
 
@@ -97,7 +113,7 @@ user.methods.deleteProduct = function(id){
     var updated_items = this.cart.items.filter((p) => {
       return p._id == new ObjectId(id)
     });
-    console.log(updated_items)
+
     var new_cart = {
       items:updated_items,
     };

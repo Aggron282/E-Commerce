@@ -1,55 +1,55 @@
 
-var showcase_banner = document.querySelector(".header");
-var bubbles = document.getElementsByClassName("bubble_showcase");
+var showcase_banner_element = document.querySelector(".header");
+var slideshow_bubble_element = document.getElementsByClassName("bubble_showcase");
+var slideshow_counter = 1;
+var slideshow_max_counter = 4;
 
 
+for(var i =0; i <slideshow_bubble_element.length; i++){
 
-var showcase_counter = 1;
-var max = 4;
-
-
-for(var i =0; i <bubbles.length; i++){
-
-  bubbles[i].addEventListener("click",(e)=>{
-    toggle_counter(e);
+  slideshow_bubble_element[i].addEventListener("click",(e)=>{
+    ToggleCounter(e);
   });
 
 }
 
-function toggle_counter(e){
+function ToggleCounter(e){
 
-  var index = e.target.getAttribute("index");
+  var bubble_slideshow_counter = e.target.getAttribute("index");
 
-  showcase_counter = index;
+  slideshow_counter = bubble_slideshow_counter;
 
-
-  if(showcase_counter < 1){
-    showcase_counter = max;
-  }else if(showcase_counter > max){
-    showcase_counter = index;
+  if(slideshow_counter < 1){
+    slideshow_counter = slideshow_max_counter;
+  }
+  else if(slideshow_counter > slideshow_max_counter){
+    slideshow_counter = bubble_slideshow_counter;
   }
 
-  for(var i =1; i < max; i++){
+  for(var i =1; i < slideshow_max_counter; i++){
 
-    var banner_ = document.querySelector(`.header--${i}`);
-    banner_.classList.remove(`active`);
-    banner_.classList.add(`inactive`);
+    var banner_element = document.querySelector(`.header--${i}`);
+
+    banner_element.classList.remove(`active`);
+    banner_element.classList.add(`inactive`);
 
   }
 
 
-  for(var i =0; i <bubbles.length; i++){
+  for(var i =0; i <slideshow_bubble_element.length; i++){
 
-    if(index != bubbles[i].getAttribute("index")){
-      bubbles[i].classList.remove("bubble_showcase--active");
-    }else if(index == bubbles[i].getAttribute("index")){
-      bubbles[i].classList.add("bubble_showcase--active");
+    if(bubble_slideshow_counter != slideshow_bubble_element[i].getAttribute("index")){
+      slideshow_bubble_element[i].classList.remove("bubble_showcase--active");
+    }
+    else if(bubble_slideshow_counter == slideshow_bubble_element[i].getAttribute("index")){
+      slideshow_bubble_element[i].classList.add("bubble_showcase--active");
     }
 
   }
 
-  var new_banner = document.querySelector(`.header--${showcase_counter}`);
-  new_banner.classList.remove(`inactive`);
-  new_banner.classList.add(`active`)
+  var new_banner_element = document.querySelector(`.header--${slideshow_counter}`);
+
+  new_banner_element.classList.remove(`inactive`);
+  new_banner_element.classList.add(`active`)
 
 }

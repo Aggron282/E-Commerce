@@ -1,16 +1,21 @@
 
-var toggle_buttons = document.getElementsByClassName("catagory_arrow");
-var product_boxes = document.getElementsByClassName("product_box");
+var toggle_buttons_elements = document.getElementsByClassName("catagory_arrow");
+var product_boxes_elements = document.getElementsByClassName("product_box");
 var catagories = null;
-var counter = 0;
-var increase = 4;
+var page_counter = 0;
+var increase_increment = 4;
 
-for(var i = 0; i < toggle_buttons.length; i ++){
-  toggle_buttons[i].addEventListener("click",async (e)=>{
-    var counter = e.target.getAttribute("counter");
-    var catagory = e.target.getAttribute("catagory");
-    ToggleCatagories(counter,catagory);
+for(var i = 0; i < toggle_buttons_elements.length; i ++){
+
+  toggle_buttons_elements[i].addEventListener("click",async (e)=>{
+
+    var page_counter_attribute = e.target.getAttribute("counter");
+    var catagory_attribute = e.target.getAttribute("catagory");
+
+    ToggleCatagories(page_counter,catagory);
+
   });
+
 }
 
 
@@ -20,27 +25,28 @@ function RenderItems(catagory){
   var img = "./images/catagory_3.png";
   var price = "[N/A]";
   var description = "";
-  var populate = document.querySelector("#_"+catagory.catagory);
-
-  populate.innerHTML = "";
-
   var html = ``;
+
+  var populate_el = document.querySelector("#_"+catagory.catagory);
+
+  populate_el.innerHTML = "";
 
    for(var i = 0; i <= 3; i++) {
 
-    var i_ = i + catagory.counter;
+    var current_catagory_counter = i + catagory.counter;
 
-    if(catagory.items[i_]){
-       name = catagory.items[i_].title.substring(0, 30) + "...";
-       img = "./"+catagory.items[i_].thumbnail
-       price = catagory.items[i_].price
-       description = catagory.items[i_].description.substring(0, 100) + "...";
+    if(catagory.items[current_catagory_counter])
+    {
+       name = catagory.items[current_catagory_counter].title.substring(0, 30) + "...";
+       img = "./"+catagory.items[current_catagory_counter].thumbnail
+       price = catagory.items[current_catagory_counter].price
+       description = catagory.items[current_catagory_counter].description.substring(0, 100) + "...";
      }
 
      html += `
      <div class="col-3 no-margin-left">
 
-       <div class= "product_box fix_x width-100" catagory = ${catagory.catagory} it = ${i_} >
+       <div class= "product_box fix_x width-100" catagory = ${catagory.catagory} it = ${current_catagory_counter} >
 
         <p class="catagory_name">${ name }</p>
 
@@ -49,7 +55,7 @@ function RenderItems(catagory){
          <div class="product_text_box">
            <p class="product_description_display">${description}</p>
            <p class="catagory_price_new ">$ ${ price }</p>
-           <a href = ${"/product/"+catagory.items[i_]._id} >
+           <a href = ${"/product/"+catagory.items[current_catagory_counter]._id} >
             <p class="product_detail fix_y">See Details</p>
            </a>
          </div>
@@ -63,23 +69,24 @@ function RenderItems(catagory){
 
 }
 
-async function ToggleCatagories(counter,catagory) {
+async function ToggleCatagories(page_counter,catagory) {
 
-  const options = {
-  method: "POST",
-  body:JSON.stringify({
-    "counter":`${counter}`,
-    "catagory":`${catagory}`
-  }),
-  headers: {'Content-Type': 'application/json'}
-};
+  const api_options =
+  {
+    method: "POST",
+    body:JSON.stringify({
+      "counter":`${increase_increment}`,
+      "catagory":`${catagory}`
+    }),
+    headers: {'Content-Type': 'application/json'}
+  };
 
-  axios.post("/catagories",options).then(async(res)=>{
+  axios.post("/catagories",api_options).then(async(res)=>{
 
-    var current = await res.data.current;
+    var items_in_catagories = await res.data.current;
 
-    if(current){
-      RenderItems(current);
+    if(items_in_catagories){
+      RenderItems(items_in_catagories);
     }
 
   });
