@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+
   <head>
     <meta charset="utf-8">
     <title></title>
@@ -8,8 +9,8 @@
     <link href ='./css/main.css' rel="stylesheet"/>
     <link href ='./css/detail.css' rel="stylesheet"/>
     <link href ='./../css/admin.css' rel="stylesheet"/>
-
   </head>
+
   <body>
 
     <main class="container-fluid relative padding-5">
@@ -18,10 +19,10 @@
 
         <div class="main_interface active">
 
-
-
           <div class="row all_products_row margin-top-5 ">
+
             <p class="all_products_title"> All Your Products</p>
+
              <% if(products.length > 0) {%>
 
                 <% for(var i =0; i < products.length; i++){ %>
@@ -31,12 +32,16 @@
                       <div class="product_container" prodId = <%= products[i]._id %> >
 
                           <img class="width-50 margin-left-25" src = /<%= products[i].thumbnail %> />
+
                           <p class="product_name" ><%=products[i].title  %></p>
                           <p class="product_price" >$<%= products[i].price %>.99</p>
+
                           <% var new_description = "" %>
+
                           <% if (products[i].description.length > 25) { %>
                             <% new_description = products[i].description.substring(0, 24) + "..."; %>
                           <% } %>
+
                           <p class="product_description" ><%= new_description  %></p>
 
                           <div class="row">
@@ -46,10 +51,8 @@
                             </div>
 
                             <div class="col-6">
-                              <!-- <form action = "/product/delete" method="POST" > -->
                                 <input type='hidden' value =  <%= products[i]._id %> name = "id" />
                                 <button  class="btn delete_button" type="button" > Delete </button>
-                              <!-- </form> -->
                             </div>
 
                           </div>
@@ -59,21 +62,29 @@
                   </div>
 
                 <%}%>
+
                 <section class = "">
+
                     <% if(page != 1){ %>
+
                       <% if(page > 2){%>
                         <a class="pagination active" href = <%= `/admin/add_product/?page=`+1 %> > First Page </a>
                       <%} %>
+
                       <a class="pagination" href = <%= `/admin/add_product/?page=`+prev %> > <%= prev %> </a>
                       <a class="pagination active" href = <%=`/admin/add_product/?page=`+page %> > <%= page %> </a>
+
                     <%}else{%>
 
                       <a class="pagination" href = <%= `/admin/add_product/?page=`+1 %> > <%= 1 %> </a>
+
                     <%}%>
+
                     <a class="pagination" href = <%= `/admin/add_product/?page=`+next %> > <%= next %> </a>
+
                     <% if(page !== last){ %>
-                    <a class="pagination" href = <%= `/admin/add_product/?page=`+last %> > Last Page</a>
-                  <%}%>
+                      <a class="pagination" href = <%= `/admin/add_product/?page=`+last %> > Last Page</a>
+                    <%}%>
 
                 </section>
 

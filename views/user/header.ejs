@@ -3,7 +3,9 @@
     <div class="row return_row no_padding" >
 
       <div class="col-1 no_margin no-padding ">
-      <a href = "/">    <img src = "./images/new_logo.png" class=" margin-top-7_5 logo" alt = "logo" class="logo"/> </a>
+        <a href = "/">
+          <img src = "./images/new_logo.png" class=" margin-top-7_5 logo" alt = "logo" class="logo"/>
+         </a>
       </div>
 
       <div class="col-2 no_margin  no-padding margin-top-2_5">
@@ -11,68 +13,102 @@
       </div>
 
       <div class="col-4  no-padding margin-top-2_5">
+
           <div>
+
               <span style="width:10%;float:left;background:white;border-left:1px solid #e6e6e6;border-radius:0px;height:45px"class="form-control">
+
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
                   </svg>
-                </span>
+
+              </span>
 
               <input class="form-control no-border search_all "   placeholder = "Search for Item">
 
           </div>
+
       </div>
-      <% console.log(isAuthenticated) %>
+
       <% if (! isAuthenticated){ %>
+
       <div class="col-2 no_margin no-padding margin-top-2_5">
           <p class="return_to "style="padding-left:10%">Hello! Sign in to <br /><span style="font-weight:bold"> <a href="/login">Customer</a> |  Admin </span></p>
       </div>
+
       <% }else{ %>
+
         <div class="col-2 no_margin no-padding margin-top-2_5">
+
             <p class="return_to"style="font-size:16px;padding-left:10%">Welcome Back!<br />
+
               <a href = "/logout" >
+
                 <span style="text-align:center;font-weight:bold">
                   Logout
-                  </span>
-                  </a>
-                </p>
+                </span>
+
+              </a>
+
+            </p>
 
         </div>
+
       <%}%>
+
       <div class="col-1" style="padding:0%;margin-left:-2.5%;margin-top:2%;">
           <p class="return_to">Your Orders </p>
       </div>
 
-
       <div class="col-1 return_col relative no-padding margin-top-2_5" >
+
         <% if(isAuthenticated){ %>
+
           <a href="/cart">
+
             <img src="./images/cart.png" class="return_cart" />
 
             <div class="bubble_cart_return">
-                <!-- <p class="margin-top-20 white" ><%= cart.items.length %> </p> -->
+
+              <% if(cart){ %>
+
+                  <% if(cart.items.length > 0) { %>
+                    <p class="margin-top-20 white" ><%= cart.items.length %> </p>
+                 <% }else{ %>
+                   <p class="margin-top-20 white" >0</p>
+                  <%}%
+              <% } %>
+
             </div>
+
           </a>
+
             <%}else{%>
+
               <a href = "/create_account">
-                <button class="btn create_account" >Create Account </button>
+                <button class="btn create_account" > Create Account </button>
               </a>
-              <%}%>
+
+            <%}%>
 
       </div>
 
-
    </div>
 
-
 </div>
+
 <div class = "sub_banner">
 
     <% if(catagories){ %>
+
       <% if(catagories.length > 0 ){ %>
+
         <% for(var i = 0; i < catagories.length; i++){ %>
             <a href = "#"><p class="sub_catagory"><%= catagories[i].catagory %> </p></a>
         <% } %>
-        <%}%>
+
+        <% } %>
+
     <% } %>
+
  </div>

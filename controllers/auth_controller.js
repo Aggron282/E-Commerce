@@ -1,7 +1,7 @@
 var path = require("path");
 var bcrypt = require("bcrypt");
-const nodemailer = require("nodemailer");
-const crypto = require("crypto");
+//const nodemailer = require("nodemailer");
+//const crypto = require("crypto");
 const {validationResult} = require("express-validator");
 
 var User = require("./../models/user.js")
