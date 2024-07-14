@@ -23,13 +23,7 @@ const GetUserLoginPage = (req,res) => {
   });
 
 }
-//
-// const transporter = nodemailer.createTransport(sendgridTransport({
-//   auth:{
-//     api_key:"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"
-//   }
-// }));
-//
+
 const PostUserLogin = (req,res,next) => {
 
   var username = req.body.username;
@@ -136,17 +130,21 @@ const PostNewPassword = (req,res,next)=>{
     resetInfo = user;
 
     bcrypt.hash(new_password,12).then((hash)=>{
+
       resetInfo.password = hash;
       resetInfo.resetToken = null;
       resetInfo.resetTokenExpiration = null;
       resetInfo.save();
+
     }).then(result =>{
       res.redirect('/login')
-    }).catch(err =>{
+    })
+    .catch(err =>{
       StatusError(next,err,500);
     });
 
-  }).catch((err)=>{
+  })
+  .catch((err)=>{
     StatusError(next,err,500);
   });
 
@@ -169,7 +167,8 @@ const GetNewPassword = (req,res,next)=>{
       res.redirect("/login");
     }
 
-  }).catch((err)=>{
+  })
+  .catch((err)=>{
     StatusError(next,err,500);
   });
 
@@ -205,21 +204,9 @@ const PostResetEmail = (req,res,next) =>{
 
       return user;
 
-    }).then((user)=>{
+    })
+    .then((user)=>{
 
-   //  transporter.sendMail({
-   //   to:email,
-   //   from:"info@allstarcommercestore.com",
-   //   subject:"Reset Password",
-   //   html:`Hello ${user.name}, We wanted to let you know that your All-Star ECommerce password was reset.
-   //
-   //    If you did not perform this action, you can recover access by entering ${email} into the form at http://localhost:3003/reset_password/${token}
-   //
-   //    If you run into problems, please contact support by visiting https://allstarcommercestore.com/contact
-   //
-   //    Please do not reply to this email with your password. We will never ask for your password, and we strongly discourage you from sharing it with anyone.`
-   //
-   // }).then((feedback)=>{
 
     res.redirect("/login")
 
@@ -261,21 +248,11 @@ const CreateAccount = (req,res) => {
         });
 
         new_user.save();
+
         req.user = new_user;
 
     }).then(result =>{
-      // console.log(result);
-      //  return transporter.sendMail({
-      //   to:username,
-      //   from:"info@allstarcommercestore.com",
-      //   subject:"Created Account",
-      //   html:"You have signed up!"
-      //
-      // }).then(()=>{
-      //   res.redirect("/login");
-      // }).catch(err=>{console.log(err)});
       res.redirect("/login");
-
     });
 
     }else{
