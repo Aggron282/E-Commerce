@@ -3,7 +3,10 @@
   <%- include("./header.ejs") %>
 
   <main class="cart container-fluid">
-    <div class="cart_container padding-5 ">
+    <div class="overlay_content inactive">
+      <%- include("./../layouts/user/home/search_overlay.ejs") %>
+    </div>
+    <div class="cart_container  main_content padding-5 ">
       <p class=" cart_heading width-100"> Your Cart</p>
 
       <div class="row">
@@ -47,7 +50,11 @@
     </div>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 <script src="./js/long_banner.js"></script>
 <script src="./js/slideshow.js"></script>
+<script src="./js/search_results.js"></script>
+
 
 <%- include("./../layouts/end.ejs") %>

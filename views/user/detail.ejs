@@ -35,7 +35,11 @@
 </div> -->
 
 <%- include("./header.ejs") %>
-<main>
+<div class="overlay_content inactive">
+  <%- include("./../layouts/user/home/search_overlay.ejs") %>
+</div>
+<main class="main_content">
+
   <a href = "/"> </a>
   <div class="row">
 
@@ -73,6 +77,9 @@
   </div>
 
 </main>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src = "./../js/search_results.js" ></script>
 
 
 <%- include("./../layouts/end.ejs") %>

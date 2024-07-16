@@ -12,6 +12,35 @@ const User = require("../models/user.js");
 const PlaceholderImages = require("./../data/items_placeholder_other_rated.js");
 const Reviews = require("./../data/reviews.js");
 
+var default_catagories = [
+    {
+      catagory:"Sportswear",
+      items:[],
+      counter:0,
+    },
+    {
+      catagory:"Fashion",
+      items:[],
+      counter:0,
+    },
+    {
+      catagory:"Electronics",
+      items:[],
+      counter:0
+    },
+    {
+      catagory:"Home",
+      items:[],
+      counter:0
+    },
+    {
+      catagory:"Cookware",
+      items:[],
+      counter:0
+    },
+]
+
+
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -57,33 +86,6 @@ function RedirectIfNotAuthenticated(req,res){
 
 }
 
-var default_catagories = [
-    {
-      catagory:"Sportswear",
-      items:[],
-      counter:0,
-    },
-    {
-      catagory:"Fashion",
-      items:[],
-      counter:0,
-    },
-    {
-      catagory:"Electronics",
-      items:[],
-      counter:0
-    },
-    {
-      catagory:"Home",
-      items:[],
-      counter:0
-    },
-    {
-      catagory:"Cookware",
-      items:[],
-      counter:0
-    },
-]
 
 async function FindHighestDiscount(products){
 
@@ -156,10 +158,8 @@ const DeleteCartItem = async (req,res,next) => {
 
     var id = req.body._id;
 
-    req.user.deleteProduct(id).then((response)=>{
+    req.user.deleteProduct(id,(response)=>{
       res.redirect("/cart");
-    }).catch((err)=>{
-      StatusError(next,err,500);
     });
 
 }
@@ -221,27 +221,33 @@ const AddOrder = async(req,res,next) =>{
 
    var id = req.params._id;
 
-   RedirectIfNotAuthenticated(req,res);
+  Product.find().then(async (all_products) =>{
 
-   Product.findById(id).then((product)=>{
+     RedirectIfNotAuthenticated(req,res);
+     var new_catagories = OrganizeCatagories(all_products);
 
-     if(!product){
-       res.redirect("/")
-     }
-     else{
+     Product.findById(id).then((product)=>{
 
-       res.render(path.join(rootDir,"views","user","detail.ejs"),{
-         item:product,
-         catagories:null,
-         cart:req.user.cart,
-         isAuthenticated:req.session.isAuthenticated
-       });
+       if(!product){
+         res.redirect("/")
+       }
+       else{
+         console.log(new_catagories);
+         res.render(path.join(rootDir,"views","user","detail.ejs"),{
+           item:product,
+           catagories:new_catagories,
+           root:"..",
+           cart:req.user.cart,
+           isAuthenticated:req.session.isAuthenticated
+         });
 
-     }
+       }
 
-   }).catch((err)=>{
-    StatusError(next,err,500);
-   });
+     }).catch((err)=>{
+      StatusError(next,err,500);
+     });
+
+   })
 
  }
 
@@ -252,8 +258,11 @@ const AddToCart = async (req,res,next)=>{
   var product = req.body;
 
   Product.findById(id_).then((data)=>{
+
     req.user.AddCart(data);
+
     res.redirect(`/product/${id_}`);
+
   }).catch((err)=>{
     StatusError(next,err,500);
   });
@@ -317,6 +326,7 @@ const ToggleCatagories = (req,res,next) => {
     }else{
       cart = null
     }
+
     res.json(updated_catagories);
 
   })
@@ -350,6 +360,7 @@ const GetHomePage = async (req,res,next) => {
       },
       catagories:new_catagories,
       cart:cart,
+      root:".",
       reviews:Reviews,
       isAuthenticated:req.session.isAuthenticated
     })
@@ -409,6 +420,7 @@ const GetCartPage = async (req,res) =>{
   res.render(path.join(rootDir,"views","user","cart.ejs"),{
     items:items,
     cart:cart,
+    root:"..",
     catagories:default_catagories,
     total_price:total_price,
     isAuthenticated:req.session.isAuthenticated

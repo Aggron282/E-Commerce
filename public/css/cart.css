@@ -1,40 +1,53 @@
 .cart_box{
   border-bottom:1px solid #e6e6e6;
   padding-bottom:5%;
-
 }
+
 .cart_heading{
   color:black;
   font-size:20px;
   padding:2%;
 }
+
 .cart_text{
   width:50%;
   color:black;
   font-size:18px;
   float: left;
 }
+
 .cart_image{
   width:100%;
 }
+
 .cart_title{
   text-align: left;
 }
+
+.cart_number{
+  font-size:13px;
+  font-weight: bold;
+}
+
 .cart_price{
   text-align: right;
 }
+
 .total_number{
   font-size:19px;
 }
+
 .total_price{
   font-size:20px;
   font-weight:700;
 }
+
 .total_price_container{
   position: fixed;
   margin-left: 5%;
   padding-bottom:5% !important;
 }
+
 .checkout_button{
   background:#FFD814;
   color:black;
@@ -44,10 +57,12 @@
   border:1px solid black;
   transition: all .4s;
 }
+
 .checkout_button:hover{
   background:black;
   color:white;
 }
+
 .total_price_container{
   border:1px solid #e6e6e6;
   padding:2%;
@@ -55,6 +70,7 @@
   text-align: center;
   color:black;
 }
+
 .delete_button{
   border:1px solid black;
   color:black;
@@ -64,9 +80,9 @@
   background:white;
   font-size:15px;
   transition: all .4s;
-
   font-weight: normal;
 }
+
 .delete_button:hover{
   background:black;
   color:black;

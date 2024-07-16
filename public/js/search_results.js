@@ -61,7 +61,7 @@ search_bar_element.addEventListener("keyup",(e)=>{
 
   if(e.keyCode == 13 && !hasSearched){
 
-      var input = search_bar.value;
+      var input = search_bar_element.value;
 
       const options = {
         method: "POST",

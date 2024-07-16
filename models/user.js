@@ -36,7 +36,7 @@ const user = new Schema(
             type:Number,
             required:true
           }
-          
+
         }
 
       ]
@@ -108,19 +108,27 @@ user.methods.AddCart = function(id){
    })
 }
 
-user.methods.deleteProduct = function(id){
+user.methods.deleteProduct = function(id,cb){
+  
+    var new_items = [];
 
-    var updated_items = this.cart.items.filter((p) => {
-      return p._id == new ObjectId(id)
-    });
+    for(var i =0; i <this.cart.items.length; i++){
+
+      if(id != this.cart.items[i].prodId ){
+        new_items.push(this.cart.items[i]);
+      }
+
+    }
 
     var new_cart = {
-      items:updated_items,
+      items:new_items,
     };
 
     this.cart = new_cart;
 
     this.save();
+
+    cb("Delete One Product");
 
 }
 
