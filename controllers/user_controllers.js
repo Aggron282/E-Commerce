@@ -251,17 +251,34 @@ const AddOrder = async(req,res,next) =>{
 
  }
 
+
+const GetCurrentCart = (req,res,next)=>{
+
+    if(req.user){
+
+      if(req.user.cart){
+        res.json(req.user.cart);
+      }else{
+        res.json({error:"No Cart"})
+      }
+      
+    }
+    else{
+      res.json({error:"No User"})
+    }
+
+}
+
 const AddToCart = async (req,res,next)=>{
 
-  var id = req.body.id;
+console.log(req.body);
+  var id = req.body.productId;
   var id_ = id.replace("/","");
   var product = req.body;
-
   Product.findById(id_).then((data)=>{
-
-    req.user.AddCart(data);
-
-    res.redirect(`/product/${id_}`);
+      req.user.AddCart(data);
+      res.json(data);
+    // res.redirect(`/product/${id_}`);
 
   }).catch((err)=>{
     StatusError(next,err,500);
@@ -490,6 +507,8 @@ module.exports.GetCatagories = GetCatagories;
 module.exports.ToggleCatagories = ToggleCatagories;
 module.exports.GetSearchResults = GetSearchResults;
 module.exports.DeleteCart = DeleteCart;
+module.exports.GetCurrentCart = GetCurrentCart;
+
 module.exports.GetHomePage = GetHomePage;
 module.exports.GetProducts = GetProducts;
 module.exports.AddToCart = AddToCart;

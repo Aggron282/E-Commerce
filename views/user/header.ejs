@@ -93,9 +93,9 @@
               <% if(cart){ %>
 
                   <% if(cart.items.length > 0) { %>
-                    <p class="margin-top-20 white cart_number" ><%= cart.items.length %> </p>
+                    <p id="cart_number" > <%= cart.items.length %> </p>
                  <% }else{ %>
-                   <p class="margin-top-20 white" >0</p>
+                   <p id="cart_number">0</p>
                   <%}%>
               <% } %>
 
@@ -125,7 +125,10 @@
       <% if(catagories.length > 0 ){ %>
 
         <% for(var i = 0; i < catagories.length; i++){ %>
-            <a href = "#"><p class="sub_catagory"><%= catagories[i].catagory %> </p></a>
+
+              <p class="sub_catagory"><%= catagories[i].catagory %>
+                <span class="sub_underline"></span>
+              </p>
         <% } %>
 
         <% } %>

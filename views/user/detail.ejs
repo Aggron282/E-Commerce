@@ -56,10 +56,7 @@
 
             <p class="product_detail--sold <%= inactive %>"><%= qty %></p>
             <br />
-                    <form action = "/cart" method = "POST">
-                      <input type="hidden" name="id" value = <%=item._id %>/>
-                      <button class="detail_button" type="submit" >Add to Cart</button>
-                    </form>
+                      <button product_id = "<%= item._id %>" class="detail_button"  id= "add_cart_button">Add to Cart</button>
             <br />
             <p class="product_detail--description">
               <%= item.description %>
@@ -80,6 +77,33 @@
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src = "./../js/search_results.js" ></script>
+<script>
+
+ var cart_button = document.querySelector("#add_cart_button");
+ var cart_number = document.querySelector(".bubble_cart_return");
+
+ cart_button.addEventListener("click",(e)=>{
+   var product_id = e.target.getAttribute("product_id");
+   axios.post("/cart",{productId:product_id},{header:{"Content-Type":"application/json"}}).then((res)=>{
+
+     if(!res){
+       alert("Product Is No Longer In Inventory");
+       return
+     }
+     if(res.data){
+       axios.get("/cart/cart_data").then((res)=>{
+         if(res){
+           if(res.error){
+             console.log(res.error);
+           }else{
+             cart_number.innerHTML = `<p class="margin-top-20 white" id="cart_number" > ${res.data.items.length} </p>`;
+           }
+         }
+       })
+     }
+   })
+ })
+</script>
 
 
 <%- include("./../layouts/end.ejs") %>

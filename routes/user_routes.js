@@ -13,7 +13,7 @@ router.get("/get_products",userControllers.GetProducts);
 router.get("/product/:_id",userControllers.GetProductDetail);
 router.get("/orders/",userControllers.GetOrders);
 router.get("/catagories",userControllers.GetCatagories);
-
+router.get("/cart/cart_data",userControllers.GetCurrentCart);
 router.post("/cart",userControllers.AddToCart);
 router.post("/cart/delete",userControllers.DeleteCartItem);
 router.post("/delete/cart",userControllers.AddToCart);

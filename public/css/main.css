@@ -7,6 +7,57 @@
 .no_margin{
   margin:0px;
 }
+
+#cart_number{
+  font-size:16px;
+  color:white;
+  margin-top:5%;
+  font-family:"Montserrat";
+  animation: cart_bubble 1 .5s ease-in;
+}
+
+a{
+  color:inherit;
+  text-decoration: inherit;
+}
+.sub_underline{
+  width:0px;
+  position: absolute;
+  top:150%;
+  height:1px;
+  background:white;
+  transition: all .4s;
+  left:0;
+  z-index: 12;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+.sub_catagory:hover .sub_underline{
+  width:100%;
+  transition: all .4s;
+
+}
+
+a:hover{
+  font-style: none;
+  text-decoration: none !important
+}
+
+@keyframes cart_bubble {
+  0%{
+    transform:scale(1)
+  }
+  30%{
+    transform:scale(2);
+  }
+  100%{
+    transform:scale(1);
+  }
+}
+
 .sub_banner{
   position: relative;
   z-index: 99;
@@ -16,17 +67,11 @@
   width:100%;
   overflow:hidden;
 }
-.sub_catagory:hover{
-  text-decoration: underline;
-}
-.sub_catagory:before{
-  content:"";
-}
-.sub_catagory:after{
-  content: "";
-}
+
+
 .sub_catagory{
   padding:0px;
+  position: relative;
   height:20px;
   float: left;
   color:white;
@@ -670,6 +715,52 @@ top:30%;
   left:5%;
   top:10%;
   filter: invert(59%) sepia(9%) saturate(3567%) hue-rotate(179deg) brightness(88%) contrast(91%);
+}
+
+.signup_button:hover{
+  background:black;
+  color:white;
+  transform:scale(1.1);
+
+}
+.google_login_button:hover{
+  background:orangered !important;
+  transform:scale(1.05);
+  border-color:orangered;
+
+}
+.product_detail {
+  transition: all .3s;
+  border:1px white solid;
+}
+.product_detail:hover{
+  border-color:black;
+}
+.google_login_button{
+  transition: .5s all;
+  transform:scale(1);
+
+}
+.login_button:hover {
+  background:white;
+  color:black !important;
+  transform:scale(1.1);
+}
+.signup_button{
+  transition: all .3s;
+  transform:scale(1);
+}
+.login_button{
+  transition: all .3s;
+  transform:scale(1);
+}
+.header_button {
+  transition: all .3s;
+  transform:scale(1);
+}
+
+.header_button:hover{
+  transform:scale(1.2);
 }
 
 .product_type{
