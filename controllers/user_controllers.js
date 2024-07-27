@@ -37,7 +37,7 @@ var default_catagories = [
       catagory:"Cookware",
       items:[],
       counter:0
-    },
+    }
 ]
 
 
@@ -56,7 +56,6 @@ const GetSearchResults = (req,res,next) => {
      for(var i = 0; i < all_products.length; i ++){
 
       if(all_products[i].title.toLowerCase().includes(input) ){
-
          similar_products.push(all_products[i]);
        }
 
@@ -261,7 +260,7 @@ const GetCurrentCart = (req,res,next)=>{
       }else{
         res.json({error:"No Cart"})
       }
-      
+
     }
     else{
       res.json({error:"No User"})
@@ -315,9 +314,10 @@ function catagoryMatch(catagories, catagory_needed,counter) {
         catagories_[i].counter = 0;
 
       }
-        current = catagories_[i];
 
-        return {all:catagories_,current:current};
+      current = catagories_[i];
+
+      return {all:catagories_,current:current};
 
     }
 
@@ -396,6 +396,11 @@ const GetProducts = async (req,res,next) =>{
     StatusError(next,err,500);
   });
 
+
+}
+
+const GetOrganizedCatagories = (req,res,next) => {
+  var new_catagories = OrganizeCatagories();
 }
 
 const DeleteCart= (req,res)=>{
@@ -408,49 +413,100 @@ const GetCartPage = async (req,res) =>{
   var total_price = 0;
   var cart = null;
   var items = null;
-
+  var session = null;
   RedirectIfNotAuthenticated(req,res);
 
-  if(req.user){
+
 
     if(req.user.cart){
 
       cart = req.user.cart;
+      var existing_items = [];
 
       if(cart.items.length > 0){
 
         items  = cart.items;
 
-        for(var i =0; i <req.user.cart.items.length; i ++ ){
+        for(var i =0; i <items.length; i ++ ){
 
           var item = req.user.cart.items[i];
+          var found = false
+
+          if(existing_items.length <= 0){
+            existing_items.push(item);
+          }
+          else{
+
+                for(var k =0; k < existing_items.length; k ++ )
+                {
+
+                    if(existing_items[k].data.title == item.data.title){
+                      existing_items[k].data.quantity += 1;
+                      found = true;
+                    }
+
+                }
+
+                if(!found){
+                  existing_items.push(item);
+                }
+
+          }
+
+
           total_price += item.data.price  * item.quantity;
 
         }
 
+        var line_items =  req.user.cart.items.map((p)=>{
+            return {
+              quantity: p.quantity,
+              price_data:{
+                unit_amount:p.data.price * 100,
+                product_data:{
+                  name: p.data.title,
+                  description:p.data.description
+                },
+                currency:"usd",
+            }
+          }
+
+        })
+
+        var config = {
+         payment_method_types: ["card"],
+         line_items:line_items,
+         mode:"payment",
+         success_url:req.protocol + "://" + req.get("host") + "/checkout/success",
+         cancel_url:req.protocol + "://" + req.get("host") + "/checkout/cancel"
+       };
+
+        var session_data =  await stripe.checkout.sessions.create(config);
+        session = session_data.id;
+
       }
 
-    }
 
 }
 
   res.render(path.join(rootDir,"views","user","cart.ejs"),{
-    items:items,
+    items:existing_items,
     cart:cart,
     root:"..",
     catagories:default_catagories,
     total_price:total_price,
+    session_id:session,
     isAuthenticated:req.session.isAuthenticated
   })
 
 }
 
 const GetCheckoutPage = async (req,res) =>{
+
   var user = req.user;
   var item;
 
-//  console.log(user.cart.items);
-RedirectIfNotAuthenticated(req,res);
+  RedirectIfNotAuthenticated(req,res);
 
   var total_price = 0;
 
@@ -492,23 +548,25 @@ RedirectIfNotAuthenticated(req,res);
       total_price:total_price,
       sessionId: session.id,
       isAuthenticated:req.session.isAuthenticated
-    })
+    });
 
   });
 
 }
 
+
+
 module.exports.DeleteCartItem = DeleteCartItem;
 module.exports.GetCartPage = GetCartPage;
 module.exports.GetAdminPage = GetAdminPage;
-module.exports.GetCheckoutPage = GetCheckoutPage;
+// module.exports.GetCheckoutPage = GetCheckoutPage;
 module.exports.GetOrders = GetOrders;
 module.exports.GetCatagories = GetCatagories;
 module.exports.ToggleCatagories = ToggleCatagories;
 module.exports.GetSearchResults = GetSearchResults;
 module.exports.DeleteCart = DeleteCart;
 module.exports.GetCurrentCart = GetCurrentCart;
-
+module.exports.GetOrganizedCatagories = GetOrganizedCatagories;
 module.exports.GetHomePage = GetHomePage;
 module.exports.GetProducts = GetProducts;
 module.exports.AddToCart = AddToCart;

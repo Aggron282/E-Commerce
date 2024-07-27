@@ -3,11 +3,13 @@ var userControllers = require("./../controllers/user_controllers.js");
 var isAuth = require("./../middleware/isAuth.js");
 
 router.get("/",userControllers.GetHomePage);
-router.get("/checkout/cancel",userControllers.GetCheckoutPage);
+// router.get("/checkout/cancel",userControllers.GetCheckoutPage);
 router.get("/checkout/success",userControllers.AddOrder);
-router.get("/cart/purchase",userControllers.GetCheckoutPage);
+// router.get("/cart/purchase",userControllers.GetCheckoutPage);
 router.get("/cart/pay",userControllers.AddOrder);
 router.get("/cart",userControllers.GetCartPage);
+router.get("/cart/cancel",userControllers.GetCartPage);
+router.get("/cart/purchase",userControllers.GetCartPage);
 router.get("/user/",userControllers.GetAdminPage);
 router.get("/get_products",userControllers.GetProducts);
 router.get("/product/:_id",userControllers.GetProductDetail);

@@ -23,7 +23,7 @@
                     <div class="col-6">
                       <p class="cart_title cart_text width-100"> <%= items[i].data.title %> </p>
                       <p class="cart_price cart_text width-100"> $<%= items[i].data.price %>.99 </p>
-                      <p class="cart_quantity cart_text width-100"> Qty: <%= items[i].qty %> </p>
+                      <p class="cart_quantity cart_text width-100"> Qty: <%= items[i].data.quantity %> </p>
                       <form method = "POST" action = "/cart/delete" >
                         <input  type="hidden" name = "_id" value= <%= items[i].data._id %> />
                         <button class="delete_button" type="submit"> Delete </button>
@@ -41,7 +41,9 @@
             <div class="total_price_container">
                 <p class="total_price">Total Price</p>
                 <p class="total_number">$ <%= total_price %> .99</p>
-                <a href = "/cart/purchase"> <button class="checkout_button"> Proceed to Checkout </button> </a>
+                <button class="checkout_button" id="order_button"> Buy Now</button>
+                <script src="https://js.stripe.com/v3/"></script>
+
             </div>
         </div>
 
@@ -52,9 +54,24 @@
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-<script src="./js/long_banner.js"></script>
 <script src="./js/slideshow.js"></script>
+<script src = "./js/cart.js" ></script>
+<script src = "./js/util.js" ></script>
 <script src="./js/search_results.js"></script>
+<script src = "./js/catagory_render.js" ></script>
+<script >
+
+  var stripe = Stripe("pk_test_51OjAfEL9aEOLpUqjiSrhltnG3aHmrvWEppeBUnNx9OR1oXRGA4GaLJEaU3Z1fKEXd89z0uZhd04ONLoB3NQpdTmt00u5Ujogny")
+  var order_button = document.getElementById("order_button");
+
+  order_button.addEventListener("click",(e)=>{
+      stripe.redirectToCheckout({
+        sessionId:"<%= session_id %>",
+
+      })
+  });
+
+</script>
 
 
 <%- include("./../layouts/end.ejs") %>

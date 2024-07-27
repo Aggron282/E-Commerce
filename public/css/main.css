@@ -8,6 +8,82 @@
   margin:0px;
 }
 
+.profile_icon{
+  width:70%;
+  position: absolute;
+}
+.profile_icon:hover{
+  filter:brightness(rgba(255,255,255));
+}
+.profile_col:hover .profile_dropdown_list{
+  visibility:  visible;
+  height:auto;
+  opacity:1;
+}
+.profile_col{
+
+  position: absolute;
+  top: 15%;
+  width: 10%;
+  right: 0%;
+  z-index:9999999;
+
+}
+
+
+
+.profile_dropdown_list{
+  visibility:  collapse;
+  width:130%;
+  box-shadow:0px 0px 20px rgba(0,0,0,.5);
+  z-index:9999999;
+  opacity:0;
+  background:white;
+  border-radius:10px;
+  transition: all .5s;
+  position: absolute;
+  left:-5%;
+}
+
+.profile_dropdown_list .dropdown_item {
+  border-bottom:1px solid #e6e6e6;
+  font-size:16px;
+  width:100%;
+  padding:10px;
+  font-family: "Montserrat";
+  transition:  .5s all;
+}
+.dropdown_item p {
+  text-align: center;
+}
+.profile_dropdown_list .logout{
+  background:orangered !important;
+  color:black !important;
+  font-size:20px;
+  text-align: center;
+  transition:  .5s all;
+}
+.logout:hover{
+  background:black !important;
+}
+.profile_dropdown_list .logout {
+  background:red;
+  padding:5px;
+}
+
+.dropdown_item:hover {
+  background:black;
+  color:white;
+}
+
+.dropdown_item:hover p{
+  color:white;
+}
+
+.profile_dropdown_list_active{
+  visibility:visible;
+}
+
 #cart_number{
   font-size:16px;
   color:white;
@@ -60,7 +136,7 @@ a:hover{
 
 .sub_banner{
   position: relative;
-  z-index: 99;
+  z-index: 9;
   background: black;
   padding:5px;
   bottom:10px;
@@ -167,10 +243,10 @@ a{
   border:none;
 }
 .return_cart{
-  width:40%;margin-left:20%;filter:brightness(199)
+  width:100%;margin-left:20%;filter:brightness(199)
 }
 .return_cart_bubble{
-  background:#242424;color:white;text-align:center;border-radius:50%;height:30px;width:30px;font-size:10px;position:absolute;top:30%;right:5%
+  background:#242424;color:white;text-align:center;border-radius:50%;height:40px;width:40px;font-size:10px;position:absolute;top:30%;right:5%
 }
 .product_form_row{
   width:90%;margin-left:5%
@@ -222,6 +298,9 @@ a{
   margin-left:5%;
 }
 
+.return_col{
+  margin-left:5%;margin-top:1.5%
+}
 .item_search_bar{
   width:10%;float:left;background:white;border-left:1px solid #e6e6e6;border-radius:0px;height:45px
 }
@@ -340,7 +419,7 @@ a{
   overflow-y:hidden;overflow-x:scroll;clear:both;width:100%;z-index:99;position:relative;margin-bottom:5%;padding:0%;height:40vh
 }
 .return_cart{
-  width:40%;margin-left:20%;filter:brightness(199)
+  width:50%;margin-left:20%;filter:brightness(199)
 }
 .bubble_cart_return{
   background:#242424;color:white;text-align:center;border-radius:50%;height:30px;width:30px;font-size:10px;position:absolute;top:20%;right:25%
@@ -653,10 +732,13 @@ top:30%;
 }
 
 .inactive{
-  height:0 !important;
-  width:0;
-  opacity:0;
-  transition: all .5;
+  overflow: hidden;
+      visibility: collapse;
+      height: 0 !important;
+      width: 0;
+      opacity: 0;
+      transition: all .5;
+  }
 }
 .active{
   opacity:1;

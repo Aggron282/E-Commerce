@@ -6,6 +6,35 @@
   animation:search .5s 1 ease-in;
 }
 
+.exit_search{
+    transition: all .3s;
+    font-size:20px;
+    background:white;
+    display: inline;
+    padding:5px;
+    border-radius:5px;
+    border:2px solid white;
+}
+.catagory_container_sub .catagory_name{
+  font-size:25px;
+  font-weight:250;
+}
+.search_overlay_row{
+  padding-bottom:2.5%;
+}
+.search_page_overlay{
+  padding-bottom:5% !important;
+}
+.search_overlay_row{
+  margin-top:2.5%;
+}
+
+.exit_search:hover{
+  background:black;
+  color:white;
+
+}
+
 .search_page_overlay{
   position: absolute;
   padding-bottom:20%;
@@ -41,4 +70,111 @@
   border-radius:0px;
   width:90%;
   height:45px
+}
+
+.catagory_search{
+  padding:5%;
+  position: relative;
+  margin-top:-20% !important;
+  width:100%;
+}
+
+.sub_catagory_container_item{
+    margin-top:5%;
+    margin-left:2.5%;
+    padding-bottom:10%;
+    position: relative;
+    border: 1px solid #e6e6e6;
+}
+
+.sub_catagory_container_item img{
+width:100px;
+height:100px;
+  margin-left:25%;
+}
+
+.exit_search{
+  transform:scale(1);
+  transition: .5s ease-in;
+z-index: 99;
+position: relative;
+}
+.height_container{
+  height:150px;
+}
+.sub_catagory_container_item{
+  position: relative;
+}
+.sub_catagory_container_item .title{
+  font-size:16px;
+  text-align: center;
+  font-family: "Amazon Ember"
+}
+
+.sub_catagory_container_item .price{
+  font-size:20px;
+  text-align: center;
+  letter-spacing: 2px;
+  font-weight:300;
+  font-family: "Amazon Ember";
+  position: absolute;
+  width:100%;
+  left:0%;
+  bottom:15%;
+}
+
+.arrow_catagory_sub--right:hover img{
+  transform:rotateY(-180deg) scale(1.3) !important;
+
+}
+
+.arrow_catagory_sub--left img{
+    left:37.5%;
+    filter:brightness(0);
+}
+
+.arrow_catagory_sub:hover{
+  background:#e6e6e6;
+  transition: .4s all;
+}
+
+.arrow_catagory_sub:hover img{
+  transform:scale(1.3);
+  transition: .4s all;
+}
+
+.arrow_catagory_sub img{
+  width:20px;
+  height:20px;
+  z-index:99;
+  position: absolute;
+  transition: all .4s;
+  filter:brightness(0);
+}
+
+.arrow_catagory_sub--right img{
+  transform:rotateY(-180deg) scale(1);
+  right:45%;
+}
+
+.product_detail_catagory{
+  width:70%;
+  position: absolute;
+  top:85%;
+  margin-left:10%;
+  background:white;
+  transition: .5s all;
+  border:1px solid black;
+}
+
+.product_detail_catagory:hover{
+  color:white;
+  background:black;
+}
+
+.arrow_catagory_sub_container{
+  position: absolute;
+  z-index:99;
+  bottom:0%;
+  width:100%;
 }

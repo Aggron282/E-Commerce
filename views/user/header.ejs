@@ -22,7 +22,7 @@
         </p>
       </div>
 
-      <div class="col-3  no-padding margin-top-2_5">
+      <div class="col-4  no-padding margin-top-2_5">
 
           <div>
 
@@ -56,33 +56,13 @@
 
       </div>
 
-
-
-      <% }else{ %>
-
-        <div class="col-1 order_col margin-left-5" style="margin-left:7.5%">
-            <p class="header_button">Your Orders </p>
-        </div>
-
-        <div class="col-1 order_col margin-left-5" style="margin-left:1%" >
-
-          <a href = "/logout" >
-
-            <div class=" header_button text-center">
-              Logout
-            </div>
-
-          </a>
-
-        </div>
-
-      <%}%>
-
-
-
+      <% } %>
 
         <% if(isAuthenticated){ %>
-          <div class="col-1 return_col relative no-padding margin-top-2_5"style="margin-left:7.5%" >
+          <div class="col-1 order_col margin-left-5">
+              <p class="header_button">Your Orders </p>
+          </div>
+          <div class="col-1 return_col relative no-padding margin-top-2_5" >
 
           <a href="/cart">
 
@@ -102,37 +82,58 @@
             </div>
 
           </a>
+        </div>
+        <div class="profile_col margin-left-10"  >
 
+          <div class="dropdown_list relative">
+            <img class="profile_icon" src = <%= `./${root}/images/profile_img.png` %>>
+            <div class="profile_dropdown_list">
+              <div class="dropdown_item">
+                <p class="dropdown_title">Update Location</p>
+              </div>
+              <div class="dropdown_item">
+                <p class="dropdown_title">Edit Profile</p>
+              </div>
+              <div class="dropdown_item">
+                <p class="dropdown_title">Orders</p>
+              </div>
+              <div class="dropdown_item logout">
+                <p class="dropdown_title ">Logout</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
             <%}else{%>
               <div class="col-2 relative no-padding margin-top-2_5" style="margin-left:5%" >
 
               <a href = "/create_account">
                 <button class=" header_button" > Create Account </button>
               </a>
-
+              </div>
             <%}%>
-
-      </div>
-
-   </div>
 
 </div>
 
+   </div>
+
+
 <div class = "sub_banner">
-    <% console.log(catagories) %>
+
     <% if(catagories){ %>
 
       <% if(catagories.length > 0 ){ %>
 
-        <% for(var i = 0; i < catagories.length; i++){ %>
+         <% for(var i = 0; i < catagories.length; i++){ %>
 
-              <p class="sub_catagory"><%= catagories[i].catagory %>
-                <span class="sub_underline"></span>
+              <p class="sub_catagory" data = <%= catagories[i].catagory %> ><%= catagories[i].catagory %>
+                <span class="sub_underline" data = <%= catagories[i].catagory %>  ></span>
               </p>
-        <% } %>
+
+         <% } %>
 
         <% } %>
 
-    <% } %>
+     <% } %>
 
  </div>

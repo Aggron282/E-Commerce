@@ -4,17 +4,27 @@ var exit_element = document.querySelector(".exit_search");
 var search_overlay_element = document.querySelector(".search_page_overlay");
 var search_bar_element = document.querySelector(".search_all");
 var search_overlay_row_element = document.querySelector(".search_overlay_row");
-
 var hasSearched = false;
 var hasChanged = false;
-
 var fixed_time = 1000;
 
 
 function RenderItem(result){
 
   var name = result.title.substring(0, 30) + "..."
-  var img = "./"+result.thumbnail
+  var url = window.location.href;
+  var num_of_slashed = url.split('/').length-1;
+  var url_img_mod = "./";
+
+  if(num_of_slashed > 1){
+
+    for(var i = 0; i < num_of_slashed - 1; i++){
+      url_img_mod += "../";
+    }
+
+  }
+
+  var img = url_img_mod+result.thumbnail
   var price = result.price
   var description = result.description.substring(0, 100) + "..."
 
@@ -47,6 +57,12 @@ exit_element.addEventListener("click",(e)=>{
 
   hasSearched = false;
 
+  ExitModal();
+
+})
+
+function ExitModal(){
+
   search_overlay_element.classList.add("search_inactive");
   overlay_content_element.classList.add("inactive");
   main_content_element.classList.add("active");
@@ -54,8 +70,17 @@ exit_element.addEventListener("click",(e)=>{
   search_overlay_element.classList.remove("search_active");
   overlay_content_element.classList.remove("active");
   main_content_element.classList.remove("inactive");
+}
 
-})
+function RevealModal(){
+  search_overlay_element.classList.remove("search_inactive");
+  main_content_element.classList.remove("active");
+  overlay_content_element.classList.remove("inactive");
+
+  search_overlay_element.classList.add("search_active");
+  overlay_content_element.classList.add("active");
+  main_content_element.classList.add("inactive");
+}
 
 search_bar_element.addEventListener("keyup",(e)=>{
 
@@ -79,14 +104,7 @@ search_bar_element.addEventListener("keyup",(e)=>{
 
         hasSearched = true;
 
-        search_overlay_element.classList.remove("search_inactive");
-        main_content_element.classList.remove("active");
-        overlay_content_element.classList.remove("inactive");
-
-        search_overlay_element.classList.add("search_active");
-        overlay_content_element.classList.add("active");
-        main_content_element.classList.add("inactive");
-
+        RevealModal();
 
         for(var i = 0; i <data.length; i ++){
           html+= RenderItem(data[i]);
