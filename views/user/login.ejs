@@ -17,16 +17,22 @@
     <div class="login_container">
 
                 <div class="authentication_container">
+
+                    <p class="type_title"> <%= type %> </p>
+
                     <div class="intro_container">
+
                       <img class="logo_login" src = "./../images/new_logo--2.png" />
 
-                    <p class="login_title">Login to Your Account</p>
-                    <p class="login_subtitle">To buy products, you must login with E-Commerce or through Google</p>
-                  </div>
+                      <p class="login_title">Login to Your Account</p>
+                      <p class="login_subtitle">To buy products, you must login with E-Commerce or through Google</p>
+
+                   </div>
+
                   <div class="form_container">
 
 
-                    <form action = "/login" method = "POST">
+                    <form action = <%= url %> method = "POST">
                       <div class="login_row">
                         <label>
                             Username

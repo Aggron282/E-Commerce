@@ -14,6 +14,7 @@
 
   <div class="container-fluid">
     <div class="login_container">
+        <p class="type_title"> <%= type %> </p>
         <div class="row">
             <div class="col-4">
 
@@ -21,7 +22,7 @@
             <div class="col-4">
                 <div class="login_mod padding-bottom-10">
                     <p class="login_title">Get Started</p>
-                    <form action = "/create_account" method = "POST">
+                    <form action = <%= url %> method = "POST">
                       <div class="login_row">
                         <label>
                             Full Name

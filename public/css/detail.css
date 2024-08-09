@@ -31,7 +31,14 @@ body{
   opacity:1;
   transform: translate(0px) scale(1.05) !important;
 }
-
+.modal_wrapper{
+  left: 5%;
+    z-index: 99;
+    height: 100vh;
+    position: absolute;
+    top: -2.5% !important;
+    width: 100%;
+}
 .product_detail--price{
   color:black;
   font-size:1.3rem;
@@ -47,6 +54,7 @@ color:red !important
 .product_detail--description{
   width:75%;
   font-size:1rem;
+  margin-top:5%;
   color:black;
 }
 .product_detail_image{

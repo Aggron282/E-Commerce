@@ -15,8 +15,9 @@ var user_routes = require("./routes/user_routes.js");
 var admin_routes = require("./routes/admin_routes.js");
 var auth_routes = require("./routes/auth_routes.js");
 var rootDir = require("./util/path.js");
+var Admin = require("./models/admin.js");
 
-
+var Products = require("./models/products.js");
 
 var StoreSession =  new MongoDBStore({
   uri:"mongodb+srv://mawile12:sableye12@cluster0.mv38jgm.mongodb.net/shop?",
@@ -40,6 +41,45 @@ const fileStorage = multer.diskStorage({
 // app.use(csrf);
 app.use(session({secret:"43489438994388948949842894389",saveUninitialized:false,store:StoreSession}));
 app.use(multer({storage:fileStorage}).single("thumbnail"));
+
+
+function SetDefaultAdmin(){
+
+  Admin.find({}).then((default_admin)=>{
+
+    if(default_admin.length > 0){
+      return default_admin[0];
+    }
+    else{
+
+      Products.find({}).then((prods)=>{
+
+        var config =   {
+            name:"marc",
+            email:"e2wim@gmail.com",
+            password:"294902",
+            user_id:"66b32d8202ede594203991ed",
+            products:prods,
+            resetToken:"",
+            resetTokenExpiration:"",
+          }
+
+        var new_admin = new Admin(config);
+
+        console.log(new_admin);
+
+        new_admin.save();
+
+        return new_admin;
+
+      });
+
+    }
+
+  });
+
+}
+
 app.use((req,res,next)=>{
 
   if(req.session.user){
@@ -47,15 +87,44 @@ app.use((req,res,next)=>{
       req.user = user;
       next();
     });
-  }else{
+  }
+  else{
+    req.user = null;
     next();
   }
+
+});
+
+app.use(async (req,res,next)=>{
+
+  if(req.session.admin){
+
+    Admin.findById(req.session.admin._id).then(async (admin)=>{
+
+        if(!admin){
+          req.admin = await SetDefaultAdmin(req,res,next);
+          next();
+        }else{
+          req.admin = admin;
+          next();
+        }
+
+      })
+
+  }
+  else{
+    req.admin = await SetDefaultAdmin();
+    next();
+  }
+
 });
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname,"public")));
+
 app.use("/images",express.static(path.join(__dirname,"images")))
+
 app.use(cors());
 
 app.use(user_routes);
@@ -68,28 +137,25 @@ app.get("/error",((req,res)=>{
   )
 }));
 
-
-
-
-
-
 app.use((error,req,res,next)=>{
+
   res.locals.error = error;
+
   const status = error.status || 500;
-  console.log(error);
+
   res.status(500).render(path.join(rootDir,"views","error.ejs"),{
     errMessage:error,
     error:error,
     statusCode:error.statusCode
-  })
+  });
+
 });
 
 app.use((req,res)=>{
   res.render(
     path.join(rootDir,"views","404.ejs")
-  )
+  );
 });
-
 
 mongoose.connect("mongodb+srv://mawile12:sableye12@cluster0.mv38jgm.mongodb.net/shop?retryWrites=true&w=majority").then((s)=>{
 
@@ -118,6 +184,8 @@ mongoose.connect("mongodb+srv://mawile12:sableye12@cluster0.mv38jgm.mongodb.net/
 
     app.listen(port,()=>{
       console.log("Running on localhost:"+port)
-    })
+    });
+
   });
+
 }).catch(err => console.log(err));

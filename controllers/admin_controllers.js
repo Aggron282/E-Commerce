@@ -12,18 +12,22 @@ var fileHelper = require("./../util/file.js");
 const Product = require("./../models/products.js");
 const Order = require("./../models/orders.js");
 
-const ITEMS_PER_PAGE = 3;
+const ITEMS_PER_PAGE = 4;
 
 
 const GetMainPage = (req,res,next) => {
 
-     page_counter = parseInt(req.query.page);
+    page_counter = 1;
 
-     Product.find({userId:req.user._id})
+     if(!req.admin){
+       res.redirect("/admin/login")
+       return;
+     }
+     Product.find({userId:req.admin._id})
       .count()
       .then((products_)=>{
         totalProducts = products_;
-        return Product.find({userId:req.user._id})
+        return Product.find({userId:req.admin._id})
         .skip((page_counter - 1) * ITEMS_PER_PAGE)
         .limit(ITEMS_PER_PAGE)
       })
@@ -33,6 +37,7 @@ const GetMainPage = (req,res,next) => {
         products:products,
         totalProducts:totalProducts,
         hasPrev: page_counter > 1,
+        isAdmin:true,
         prev:parseInt(page_counter - 1),
         hasNext: Math.ceil(ITEMS_PER_PAGE * page_counter) < totalProducts,
         last:Math.ceil(totalProducts / ITEMS_PER_PAGE),
@@ -42,6 +47,7 @@ const GetMainPage = (req,res,next) => {
       });
 
     }).catch((err)=>{
+      console.log(err);
       StatusError(next,err,500);
     });
 
@@ -49,7 +55,7 @@ const GetMainPage = (req,res,next) => {
 
 const DeleteOneProduct = (req,res,next) =>{
 
-  var id = req.body.id;
+  var id = req.body._id;
 
   Product.deleteOne({_id:new ObjectId(id)}).then((response)=>{
 
@@ -59,7 +65,7 @@ const DeleteOneProduct = (req,res,next) =>{
       console.log("Could not Delete");
     }
 
-    res.redirect("/admin/add_product");
+    res.json(true);
 
   }).catch((err)=>{
     StatusError(next,err,500);
@@ -97,6 +103,18 @@ const GetProducts = async (req,res,next) =>{
 
 }
 
+
+const GetProductsData = async (req,res,next) =>{
+
+  var products = Product.find({}).then((data)=>{
+    res.json(data);
+  }).catch((err)=>{
+    StatusError(next,err,500);
+  });
+
+}
+
+
 const FindOneProduct = async (req,res,next) =>{
 
   var _id = req.params.id;
@@ -110,6 +128,32 @@ const FindOneProduct = async (req,res,next) =>{
     }).catch((err)=>{
       StatusError(next,err,500);
     });
+
+}
+
+const GetProductDetail = async (req,res,next) =>{
+
+  var id = req.params._id;
+
+    Product.findById(id).then((product)=>{
+      console.log(product);
+      if(!product){
+        res.redirect("/admin")
+      }
+      else{
+        res.render(path.join(rootDir,"views","user","detail.ejs"),{
+          item:product,
+          root:"../..",
+          isAdmin:true
+        });
+
+      }
+
+    }).catch((err)=>{
+      console.log(err);
+     StatusError(next,err,500);
+    });
+
 
 }
 
@@ -220,7 +264,7 @@ const AddProduct = async (req,res,next) =>{
 
     var products = new Product(schema);
 
-    products.save().then((data)=>{
+     products.save().then((data)=>{
 
       Product.find().then((r)=>{console.log(r.length)}).then(()=>{
         res.redirect("/admin/add_product")
@@ -235,6 +279,8 @@ const AddProduct = async (req,res,next) =>{
 module.exports.DeleteOneProduct = DeleteOneProduct;
 module.exports.GetMainPage = GetMainPage;
 module.exports.GetProducts = GetProducts;
+module.exports.GetProductsData = GetProductsData;
+module.exports.GetProductDetail = GetProductDetail;
 module.exports.GetOrderPage = GetOrderPage;
 module.exports.DownloadOrder = DownloadOrder;
 module.exports.DeleteOneProductClient = DeleteOneProductClient;

@@ -1,0 +1,111 @@
+
+
+  .admin_navbar{
+    width:100%;
+    padding:10px;
+    overflow: auto;
+    box-shadow: 0px 0px 10px rgba(0,0,0.5);
+  }
+.logo_container:hover {
+  transform: scale(1.1);
+  border-color:white !important;
+}
+.logo_container{
+  transition: .2s all;
+  transform: scale(1);
+
+}
+  .logo--admin{
+    width:70px;
+    height:70px;
+    float:left;
+    position: relative;
+    bottom:10px;
+  }
+  .main_content{
+    padding-bottom:5%;
+  }
+
+    .delete_perm{
+      color:red;
+      background:white;
+      border-color:white;
+      width:50%;
+      margin-left: 25%;
+      letter-spacing: 2px;
+      padding:10px;
+      font-size:30px;
+      border-width:0px;
+      font-weight:200;
+      box-shadow: 0px 0px 0px;
+      margin-top:5%;
+      border:none;
+      transition: .3s all;
+      border-bottom:2px solid white;
+    }
+    .delete_perm:hover{
+      border-color:red;
+    }
+
+  .nav_container{
+    float:left;
+    margin-left:5%;
+    text-align: center;
+    font-size:25px;
+    font-weight: 250;
+    color:black;
+    border-bottom:1.5px solid white;
+    padding-bottom:5px;
+    transition: .4s all;
+    font-family: "Amazon Ember";
+  }
+
+  .product_container{
+    position: relative;
+  }
+
+  .nav_container:hover{
+    border-color:black;
+  }
+
+  .logo_container{
+    display: inline;
+    margin-right:5%;
+    text-align: left;
+  }
+
+  .edit_delete_container_active{
+    visibility: visible !important;
+    z-index: 200 !important;
+  }
+
+  .edit_delete_container{
+    position: absolute;
+    top:0%;
+    visibility: hidden;
+    z-index: -200;
+    background:white;
+    box-shadow:0px 0px 10px rgba(0,0,0,.5);
+    text-align: center;
+    color:black;
+    right:-10%;
+  }
+
+  .edit_delete_container *{
+    visibility: hidden;
+  }
+
+  .edit_delete_container_active *{
+    visibility: visible;
+  }
+
+  .inner_edit{
+    padding:10px;
+    transition: all .4s;
+    border-bottom: 1px solid #e6e6e6;
+    width:100%;
+  }
+  .inner_edit:hover{
+    background:black;
+    color:white;
+  }

@@ -1,46 +1,39 @@
+
+<% if(!isAdmin){ %>
 <%- include("./../layouts/head.ejs") %>
-<!-- <div class="navbar">
-
-  <div class="row detail_row" >
-
-    <div class="col-1 no-padding">
-        <img src = "./../images/amazon.png" class="margin-top-7_5 width-100" alt = "logo" class="logo"/>
-    </div>
-
-    <div class="col-2 no-padding" >
-        <p class="deliver_address">Delivering to Scottdale Arizona<br /> <span> Update Location </span></p>
-    </div>
-
-    <div class="col-4 no-padding">
-        <input class="form-control no-border"  placeholder = "Search for Item">
-    </div>
-
-    <div class="col-2 no-padding" >
-        <p class="deliver_to">Hello! Sign in to <br /><span class="bold"> Accounts |  Admin </span></p>
-    </div>
-
-    <div class="col-1 no-padding sign_in_col">
-        <p class="returns_orders">Return / Orders </p>
-    </div>
-
-    <div class="col-1 no-padding relative" >
-        <img src="./../images/cart.png" class="cart_icon" />
-        <div class="bubble_cart">
-          <p class="margin-top-20">0</p>
-        </div>
-    </div>
-
+<%}else{%>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://fonts.cdnfonts.com/css/amazon-ember" rel="stylesheet">
+    <link href ='./../../../css/main.css' rel="stylesheet"/>
+    <link href ='./../../../css/detail.css' rel="stylesheet"/>
+    <link href ='./../../../css/main.css' rel="stylesheet"/>
+    <link href ='./../../../css/detail.css' rel="stylesheet"/>
+    <link href ='./../../../css/review.css' rel="stylesheet"/>
+    <link href ='./../../../css/cart.css' rel="stylesheet"/>
+    <link href ='./../../../css/search.css' rel="stylesheet"/>
+    <link href ='./../../../css/catagory_products.css' rel="stylesheet"/>
+    <link href ='./../../../css/admin.css' rel="stylesheet"/>
+    <link href = "./../../../css/admin_header.css" rel= "stylesheet"/>
+  </head>
+<%}%>
+<% if(!isAdmin){ %>
+  <%- include("./header.ejs") %>
+  <div class="overlay_content inactive">
+    <%- include("./../layouts/user/home/search_overlay.ejs") %>
   </div>
+<%}else{ %>
+  <%- include("./../layouts/admin/admin_header.ejs") %>
+<%}%>
 
-</div> -->
 
-<%- include("./header.ejs") %>
-<div class="overlay_content inactive">
-  <%- include("./../layouts/user/home/search_overlay.ejs") %>
-</div>
-<main class="main_content">
+<main class="main_content relative">
+  <% if(isAdmin){ %>
+    <%- include("./../layouts/admin/product_form.ejs") %>
+  <%}%>
 
-  <a href = "/"> </a>
   <div class="row">
 
     <div class="col-7">
@@ -50,13 +43,17 @@
             <p class="product_detail--name"> <%= item.title %> </p>
             <p class="product_detail--type"> <%= item.catagory %> </p>
             <p class="product_detail--price"> $<%= item.price %>.99 </p>
-
+            <span class="product_id" id="product_id_hash" _id = "<%= item._id %>" ></span>
             <% var inactive = item.quantity > 0 ? "" : "sold_out" %>
             <% var qty = item.quantity > 0 ? "Qty:"+item.quantity : "This Product is Currently Sold Out" %>
 
             <p class="product_detail--sold <%= inactive %>"><%= qty %></p>
             <br />
-                      <button product_id = "<%= item._id %>" class="detail_button"  id= "add_cart_button">Add to Cart</button>
+           <% if(!isAdmin) {%>
+              <button product_id = "<%= item._id %>" class="detail_button"  id= "add_cart_button">Add to Cart</button>
+            <%}else{%>
+              <button _id = "<%= item._id %>" class="detail_button edit_button_p"  id= "edit_button_product">Edit</button>
+            <%}%>
             <br />
             <p class="product_detail--description">
               <%= item.description %>
@@ -68,43 +65,50 @@
     </div>
 
     <div class="col-4">
-      <img class="product_detail_image" src = <%= `./../${item.thumbnail}` %> />
+      <% if (!isAdmin) {%>
+        <img class="product_detail_image" src = <%= `./../${item.thumbnail}` %> />
+      <%}else{%>
+        <img class="product_detail_image" src = <%= `./../../../${item.thumbnail}` %> />
+      <%}%>
     </div>
 
   </div>
-
+  <button class="delete_perm"> Delete </button>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src = "./../js/search_results.js" ></script>
-<script>
+<% if(!isAdmin) {%>
+  <script src = "./../js/search_results.js" ></script>
+  <script src = "./../js/cart.js" ></script>
+  <script src = "./../js/catagory_render.js" ></script>
+  <script src = "./../js/util.js" ></script>
 
- var cart_button = document.querySelector("#add_cart_button");
- var cart_number = document.querySelector(".bubble_cart_return");
+<% }else{%>
+  <script src = "./../../../js/admin/edit_product.js" ></script>
+  <script src = "./../../../js/util.js" ></script>
+  <script>
+      var delete_perm = document.querySelector(".delete_perm");
+      var id_element = document.querySelector("#product_id_hash");
 
- cart_button.addEventListener("click",(e)=>{
-   var product_id = e.target.getAttribute("product_id");
-   axios.post("/cart",{productId:product_id},{header:{"Content-Type":"application/json"}}).then((res)=>{
+      delete_perm.addEventListener("click",(e)=>{
 
-     if(!res){
-       alert("Product Is No Longer In Inventory");
-       return
-     }
-     if(res.data){
-       axios.get("/cart/cart_data").then((res)=>{
-         if(res){
-           if(res.error){
-             console.log(res.error);
-           }else{
-             cart_number.innerHTML = `<p class="margin-top-20 white" id="cart_number" > ${res.data.items.length} </p>`;
-           }
-         }
-       })
-     }
-   })
- })
-</script>
-<script src = "./../js/util.js" ></script>
-<script src = "./../js/catagory_render.js" ></script>
+        var prompt_requirement = 'DELETE';
+        var product_prompt = prompt( `Type ${prompt_requirement} to delete product (There is no way to add product back once deleted)`);
+
+        if(product_prompt == prompt_requirement){
+            var _id = id_element.getAttribute("_id");
+            axios.post("/product/delete",_id).then((result)=>{
+              console.log(result);
+            }).catch((err)=>{console.log(err)});
+        }else{
+          alert("Canceled")
+        }
+
+      })
+
+      ToggleEdit(true);
+  </script>
+<%}%>
+
 
 <%- include("./../layouts/end.ejs") %>

@@ -5,8 +5,24 @@ var bcrypt = require("bcrypt");
 const {validationResult} = require("express-validator");
 
 var User = require("./../models/user.js")
+var Admin = require("./../models/admin.js")
+
 var rootDir = require("./../util/path.js");
 const StatusError = require("./../util/status_error.js");
+
+const ADMIN_LOGIN_CONFIG = {
+  login_url:"/admin/login",
+  create_url:"/admin/create_account",
+  home_url:"/admin",
+  type:"Admin"
+}
+
+const USER_LOGIN_CONFIG = {
+  login_url:"/login",
+  create_url:"/create_account",
+  home_url:"/",
+  type:"User"
+}
 
 // const sendgridTransport = require("nodemailer-sendgrid-transport");
 
@@ -18,9 +34,109 @@ const GetUserLoginPage = (req,res) => {
       email:"",
       password:""
     },
+    type:"User",
+    url:"/login",
     validationErrors:[]
 
   });
+
+}
+
+const GetAdminLoginPage = async (req,res) => {
+  await RenderLogin(req,res,ADMIN_LOGIN_CONFIG,null);
+}
+
+function GetLoginInfo(req){
+
+  var username = req.body.username;
+  var password = req.body.password;
+
+  var errors = validationResult(req);
+
+  return {
+    errors:errors,
+    username:username,
+    password:password
+  }
+
+}
+
+
+function RenderLogin(req,res,config,input_config){
+
+  var user_input_config = {
+    email:"",
+    password:""
+  };
+
+  if(input_config)
+  {
+
+     user_input_config = {
+      email:input_config.username,
+      password:input_config.password
+    }
+
+  }
+
+  res.render(path.join(rootDir,"views","user","login.ejs"),{
+    userInput:user_input_config,
+    type:config.type,
+    url:config.login_url,
+    validationErrors:[]
+  });
+
+}
+
+const PostAdminLogin = async (req,res,next) => {
+
+  var config = await GetLoginInfo(req);
+
+  console.log(config);
+
+  if(config.errors.isEmpty()){
+
+    Admin.findOne({email:config.username}).then((found_user)=>{
+      if(found_user){
+
+        // bcrypt.compare(config.password,found_user.password).then((isFound)=>{
+          if(found_user.password == config.password){
+            console.log("Succeed")
+            req.session.isAuthenticatedAdmin = true;
+            req.session.admin = found_user;
+            req.session.save((err)=>{
+              res.redirect(ADMIN_LOGIN_CONFIG.home_url);
+              return;
+            });
+            return;
+          }else{
+            //res.status(401);
+            RenderLogin(req,res,ADMIN_LOGIN_CONFIG,config);
+            return;
+          }
+
+        // }).catch((err)=>{
+        //   console.log(err);
+        //   StatusError(next,err,500);
+        // });
+
+      }
+      else{
+        //res.status(401);
+        RenderLogin(req,res,ADMIN_LOGIN_CONFIG,config);
+        return;
+      }
+
+    });
+
+  }
+  else{
+
+    res.status(202);
+    RenderLogin(req,res,ADMIN_LOGIN_CONFIG,config);
+    return;
+
+  }
 
 }
 
@@ -56,7 +172,8 @@ const PostUserLogin = (req,res,next) => {
                 email:username,
                 password:password
               },
-
+              type:"User",
+              url:"/create_account",
               validationErrors:[]
 
             });
@@ -292,10 +409,31 @@ const GetCreateAccountPage = (req,res) => {
 
 }
 
+const GetAdminCreateAccountPage = (req,res) => {
 
-module.exports.GetUserLoginPage = GetUserLoginPage;
+  res.render(path.join(rootDir,"views","user","create_account.ejs"),{
+
+    userInput:{
+      email:"",
+      password:"",
+      name:""
+    },
+    type:"Admin",
+    url:"/admin/create_account",
+    validationErrors:[]
+
+  });
+
+}
+
+
+module.exports.GetAdminLoginPage = GetAdminLoginPage;
+module.exports.GetAdminCreateAccountPage = GetAdminCreateAccountPage;
+module.exports.PostAdminLogin = PostAdminLogin;
 module.exports.PostUserLogin = PostUserLogin;
 module.exports.Logout = Logout;
+module.exports.GetUserLoginPage = GetUserLoginPage;
+
 module.exports.GetNewPassword = GetNewPassword;
 module.exports.GetResetPage = GetResetPage;
 module.exports.PostNewPassword = PostNewPassword;

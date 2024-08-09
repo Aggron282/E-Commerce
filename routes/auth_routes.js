@@ -38,19 +38,18 @@ router.post(
 );
 
 router.get("/login",auth_controller.GetUserLoginPage);
-
+router.post("/login",check("username").isEmail().normalizeEmail(),body("password").trim(),auth_controller.PostUserLogin);
 router.get("/logout",auth_controller.Logout);
-
 router.get("/create_account",auth_controller.GetCreateAccountPage);
 
 router.get("/reset",auth_controller.GetResetPage);
-
 router.get("/reset_password/:token",auth_controller.GetNewPassword);
 
-router.post("/login",check("username").isEmail().normalizeEmail(),body("password").trim(),auth_controller.PostUserLogin);
+router.post("/admin/login",auth_controller.PostAdminLogin);
+router.get("/admin/login",auth_controller.GetAdminLoginPage);
+router.get("/admin/create_account",auth_controller.GetAdminCreateAccountPage);
 
 router.post("/reset",auth_controller.PostResetEmail);
-
 router.post("/reset_password",auth_controller.PostNewPassword);
 
 

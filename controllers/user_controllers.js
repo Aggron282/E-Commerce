@@ -171,7 +171,7 @@ const GetAdminPage = (req,res) => {
   else
   {
     res.render(path.join(rootDir,"views","user","user_admin.ejs"),{
-      isAuthenticated:req.session.isAuthenticated
+      isAuthenticated:req.session.isAuthenticatedAdmin
     });
   }
 
@@ -198,8 +198,7 @@ const AddOrder = async(req,res,next) =>{
       name:user.name
     }
 
-    const new_order = new Order(
-      {
+    const new_order = new Order({
         products:product_data,
         user:user_data
       });
@@ -222,7 +221,7 @@ const AddOrder = async(req,res,next) =>{
 
   Product.find().then(async (all_products) =>{
 
-     RedirectIfNotAuthenticated(req,res);
+    // RedirectIfNotAuthenticated(req,res);
      var new_catagories = OrganizeCatagories(all_products);
 
      Product.findById(id).then((product)=>{
@@ -231,10 +230,10 @@ const AddOrder = async(req,res,next) =>{
          res.redirect("/")
        }
        else{
-         console.log(new_catagories);
          res.render(path.join(rootDir,"views","user","detail.ejs"),{
            item:product,
            catagories:new_catagories,
+           isAdmin:false,
            root:"..",
            cart:req.user.cart,
            isAuthenticated:req.session.isAuthenticated
@@ -243,6 +242,7 @@ const AddOrder = async(req,res,next) =>{
        }
 
      }).catch((err)=>{
+       console.log(err);
       StatusError(next,err,500);
      });
 
