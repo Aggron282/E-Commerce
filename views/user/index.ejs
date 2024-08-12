@@ -1,24 +1,29 @@
 <%- include("./../layouts/head.ejs") %>
 <main>
-
+  <div class="profile_wrapper"></div>
   <%- include("./header.ejs") %>
 
   <div class="overlay_content inactive">
     <%- include("./../layouts/user/home/search_overlay.ejs") %>
   </div>
 
+  <div class="profile_change_overlay">
+    <%- include("./profile.ejs") %>
+    <%- include("./update_location.ejs") %>
+  </div>
+
   <div class="main_content active">
-    <%- include("./../layouts/user/home/showcase.ejs") %>
+      <%- include("./../layouts/user/home/showcase.ejs") %>
 
     <div class="relative">
       <%- include("./../layouts/user/home/main_showcased_products.ejs") %>
     </div>
 
-    <%- include("./../layouts/user/home/banner.ejs") %>
+     <%- include("./../layouts/user/home/banner.ejs") %>
 
-    <%- include("./../layouts/user/home/fashion_products.ejs") %>
+     <%- include("./../layouts/user/home/fashion_products.ejs") %>
 
-    <%-include("./../layouts/user/home/reviews.ejs") %>
+     <%-include("./../layouts/user/home/reviews.ejs") %>
 
   </div>
 
@@ -31,6 +36,7 @@
 <script src = "./js/slideshow.js" ></script>
 <script src = "./js/long_banner.js" ></script>
 <script src = "./js/catagory_render.js" ></script>
-
+<script src = "./js/edit_profile.js" ></script>
+<script src = "./js/update_location.js" ></script>
 
 <%- include("./../layouts/end.ejs") %>

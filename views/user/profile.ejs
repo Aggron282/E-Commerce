@@ -1,0 +1,34 @@
+<div class="profile_container">
+
+    <p class="exit_profile">X</p>
+
+    <form  class="profile_form_" action ="<%= action %>" method = "POST">
+
+        <div class="profile_img_container">
+
+            <div class="edit_img">
+                <p> Edit Profile Image </p>
+                <input class="inactive_profile_input edit_img" type = "file" name = "thumbnail">
+            </div>
+
+        </div>
+
+        <label class="profile_label"> Full Name </label>
+        <input class="profile_input profile_input--name " name = "name" placeholder  = "Enter Full Name" >
+
+        <label class="profile_label"> Username </label>
+        <input class="profile_input profile_input--username" name = "username" placeholder = "Enter Username" >
+
+        <label class="profile_label"> Password </label>
+        <input class="profile_input profile_input--password" name = "password" type="password" placeholder = "Enter Password" >
+
+        <label class="profile_label"> Confirm Password </label>
+        <input class="profile_input profile_input--confirm" name = "confirm" type="password" placeholder = "Confirm Password" >
+
+        <button class="submit_profile"> Update Changes </button>
+
+    </form>
+
+    <img class="profile_img_" src = "./../imgs/profile_img.png">
+
+  </div>

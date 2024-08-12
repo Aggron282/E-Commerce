@@ -19,8 +19,9 @@ p {
   padding-bottom:5%;
   padding-top:5%;
 }
+
 .arrow_banner{
-  filter: brightness(.5);
+    filter: brightness(.5);
     width: 5%;
     position: absolute;
      box-shadow: none;
@@ -29,35 +30,39 @@ p {
     z-index: 99;
     transition: all .3s;
 }
+
 .arrow_banner:hover{
   filter: brightness(0);
-
 }
+
 .arrow_banner_container{
-  position: absolute;
+    position: absolute;
     width: 100%;
     padding: 1%;
     left: 0%;
     top: 50%;
     z-index: 999
 }
+
 .catagory_product_name{
   font-size:16px;
   text-align: center;
   font-weight: bold;
-
 }
+
 .catagory_products{
   padding-bottom:10%;
-
 }
+
 .no-margin-left{
   margin-left:0% !important;
 }
+
 .catagory_image{
   width:100%;
   margin:0 auto;
 }
+
 .catagory_detail{
   font-size: 18px;
   font-weight:400;
@@ -67,13 +72,16 @@ p {
   transition: all .5s;
   border-bottom:1px solid #e6e6e6;
 }
+
 .catagory_price{
   text-align: left;
   font-size:16px;
 }
+
 .catagory_detail:hover{
-border-color:limegreen;
+  border-color:limegreen;
 }
+
 .banner_title{
   font-size:30px;
   width:30%;

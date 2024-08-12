@@ -3,18 +3,32 @@ var path = require("path");
 var rootDir = require("./../util/path.js");
 var adminControllers = require("./../controllers/admin_controllers.js");
 var isAuth = require("./../middleware/isAuthAdmin.js");
+var multer = require("multer");
 
-router.post("/admin/add_product",isAuth,adminControllers.AddProduct);
-router.post("/product/edit",isAuth,adminControllers.EditOneProduct);
+const upload = multer({dest:"images/"});
+
+// Admin Product Changes
+router.post("/admin/product/edit",isAuth,adminControllers.EditOneProduct);
 router.post("/product/delete",isAuth,adminControllers.DeleteOneProduct);
+router.post("/admin/product/add",isAuth,adminControllers.AddProduct);
+router.delete("/admin/delete_product/:_id",isAuth,adminControllers.DeleteOneProductByParams);
+
+// Admin URL Pages
 router.get("/admin",isAuth,adminControllers.GetMainPage);
-router.get("/admin/get_products",isAuth,adminControllers.GetProducts);
-router.get("/edit/:id",isAuth,adminControllers.FindOneProduct);
 router.get("/user_orders",isAuth,adminControllers.GetOrderPage);
-router.get("/admin/add_product",isAuth,adminControllers.GetMainPage);
-router.get("/user_orders/:orderId",isAuth,adminControllers.DownloadOrder);
+router.get("/admin/product/detail/:_id",isAuth,adminControllers.GetProductDetailPage);
+
+// Admin Queries
+router.get("/admin/profile/data",isAuth,adminControllers.GetAdminData);
+router.get("/edit/:id",isAuth,adminControllers.GetOneProductByParams);
 router.get("/admin/products/all",isAuth,adminControllers.GetProductsData);
-router.delete("/admin/delete_product/:_id",isAuth,adminControllers.DeleteOneProductClient);
-router.get("/admin/product/detail/:_id",isAuth,adminControllers.GetProductDetail);
+router.post("/admin/product/one/",isAuth,adminControllers.GetOneProduct);
+
+// Admin Profile Changes
+router.post("/admin/profile/edit",isAuth,adminControllers.EditAdmin);
+
+// Admin Downloads
+router.get("/user_orders/:orderId",isAuth,adminControllers.DownloadOrder);
+
 
 module.exports = router;

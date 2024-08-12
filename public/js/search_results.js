@@ -4,17 +4,24 @@ var exit_element = document.querySelector(".exit_search");
 var search_overlay_element = document.querySelector(".search_page_overlay");
 var search_bar_element = document.querySelector(".search_all");
 var search_overlay_row_element = document.querySelector(".search_overlay_row");
+
 var hasSearched = false;
 var hasChanged = false;
+
 var fixed_time = 1000;
 
 
-function RenderItem(result){
+//------------------------------------  Render and Build HTML  --------------------
+
+function BuiltItemHTML(result){
 
   var name = result.title.substring(0, 30) + "..."
   var url = window.location.href;
   var num_of_slashed = url.split('/').length-1;
   var url_img_mod = "./";
+  var img = url_img_mod+result.thumbnail
+  var price = result.price
+  var description = result.description.substring(0, 100) + "..."
 
   if(num_of_slashed > 1){
 
@@ -23,10 +30,6 @@ function RenderItem(result){
     }
 
   }
-
-  var img = url_img_mod+result.thumbnail
-  var price = result.price
-  var description = result.description.substring(0, 100) + "..."
 
   var html =`
     <div class="col-3 no-margin-left">
@@ -53,14 +56,24 @@ function RenderItem(result){
 
 }
 
-exit_element.addEventListener("click",(e)=>{
+function RenderSearchProductsToHTML(){
 
-  hasSearched = false;
+  var html = ``;
 
-  ExitModal();
+  hasSearched = true;
 
-})
+  RevealModal();
 
+  for(var i = 0; i <data.length; i ++){
+    html += BuiltItemHTML(data[i]);
+  }
+
+  search_overlay_row_element.innerHTML = html;
+
+}
+
+
+//------------------------------------ Toggle Modal  --------------------
 function ExitModal(){
 
   search_overlay_element.classList.add("search_inactive");
@@ -70,9 +83,11 @@ function ExitModal(){
   search_overlay_element.classList.remove("search_active");
   overlay_content_element.classList.remove("active");
   main_content_element.classList.remove("inactive");
+
 }
 
 function RevealModal(){
+
   search_overlay_element.classList.remove("search_inactive");
   main_content_element.classList.remove("active");
   overlay_content_element.classList.remove("inactive");
@@ -80,40 +95,40 @@ function RevealModal(){
   search_overlay_element.classList.add("search_active");
   overlay_content_element.classList.add("active");
   main_content_element.classList.add("inactive");
+
 }
 
+
+//------------------------------------ EventListeners  --------------------
 search_bar_element.addEventListener("keyup",(e)=>{
 
   if(e.keyCode == 13 && !hasSearched){
 
       var input = search_bar_element.value;
 
-      const options = {
-        method: "POST",
-        body:{
-          input:input
-        },
-        headers: {'Content-Type': 'application/json'}
-      };
-
-
       axios.post("/search/product/",{input:input}).then((results)=>{
 
-        var html = ``;
         var data = results.data;
-
-        hasSearched = true;
-
-        RevealModal();
-
-        for(var i = 0; i <data.length; i ++){
-          html+= RenderItem(data[i]);
-        }
-
-        search_overlay_row_element.innerHTML = html;
+        RenderSearchProductsToHTML(data);
 
       });
 
   }
 
 })
+
+exit_element.addEventListener("click",(e)=>{
+
+  hasSearched = false;
+  ExitModal();
+
+})
+
+
+// const options = {
+//   method: "POST",
+//   body:{
+//     input:input
+//   },
+//   headers: {'Content-Type': 'application/json'}
+// };

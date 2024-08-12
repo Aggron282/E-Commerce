@@ -31,15 +31,15 @@
 
                   <div class="form_container">
 
-
-                    <form action = <%= url %> method = "POST">
+                    <% console.log(url) %>
+                    <form method = "POST" action = <%= url %> >
                       <div class="login_row">
                         <label>
                             Username
                         </label>
                         <input
-                        class ="login_form "
-                        value ="<%= userInput.email %>"  name = "username" placeholder = "Enter Username"/>
+                        class ="login_form"
+                        value ="<%= userInput.email %>"  name = "email" placeholder = "Enter Username"/>
                       </div>
                       <div class="login_row">
                         <label>
@@ -58,6 +58,7 @@
                   </form>
 
                 </div>
+
               </div>
 
             </div>
@@ -68,12 +69,12 @@
 
 <script>
 
-  function signOut() {
-    var auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function () {
-      console.log('User signed out.');
-    });
-  }
+  // function signOut() {
+  //   var auth2 = gapi.auth2.getAuthInstance();
+  //   auth2.signOut().then(function () {
+  //     console.log('User signed out.');
+  //   });
+  // }
 
 </script>
 

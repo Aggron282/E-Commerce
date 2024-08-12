@@ -1,18 +1,22 @@
 <div class= "modal_wrapper inactive">
 
     <div class="modal_container">
+
       <p class="exit_modal">X</p>
+
         <div class="shopping_line_container">
+
           <% if(!isAdmin) {%>
             <img class="shopping_line width-100" src="./../images/l.png"/>
             <%}else{%>
               <img class="shopping_line width-100" src="./../../../images/l.png"/>
             <%}%>
+
         </div>
 
         <p class="modal_title_add"> Add a New Product </p>
 
-        <form method="POST" action="/admin/add_product" id = "product_form" enctype="multipart/form-data">
+        <form id = "product_form" method = "POST" enctype="multipart/form-data">
 
           <div class="row product_form_row">
 
@@ -41,7 +45,7 @@
             </div>
 
             <div class="col-4">
-              <input type='file' class=" width-100 input_form image_input" name="thumbnail"  placeholder="Image URL">
+              <input type='file' class="width-100 input_form image_input"  name="thumbnail"  placeholder="Image URL">
             </div>
 
             <div class="col-6">
@@ -50,9 +54,8 @@
             </div>
 
 
-
             <div class="col-6 ">
-              <button type="submit"class="add_product_btn"> Submit</button>
+              <button type="submit"class="add_product_btn" > Submit</button>
             </div>
 
           </div>

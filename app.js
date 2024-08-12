@@ -1,6 +1,5 @@
 var express = require("express");
 var ejs = require("ejs");
-var app = express();
 var cors = require("cors");
 var bodyParser = require("body-parser");
 const csrf = require('csrf');
@@ -9,22 +8,28 @@ var path = require("path");
 var session = require("express-session");
 var multer = require("multer");
 var mongoose = require("mongoose");
+
+var app = express();
+
 var MongoDBStore = require('connect-mongodb-session')(session);
+
 var port = 3003 ;
+
 var user_routes = require("./routes/user_routes.js");
 var admin_routes = require("./routes/admin_routes.js");
 var auth_routes = require("./routes/auth_routes.js");
-var rootDir = require("./util/path.js");
-var Admin = require("./models/admin.js");
 
+var rootDir = require("./util/path.js");
+
+var Admin = require("./models/admin.js");
+var User = require("./models/user.js");
 var Products = require("./models/products.js");
 
 var StoreSession =  new MongoDBStore({
   uri:"mongodb+srv://mawile12:sableye12@cluster0.mv38jgm.mongodb.net/shop?",
   collection:"session"
 });
-// var db = require("./util/db.js");
-var User = require("./models/user.js");
+
 app.set("views","views")
 app.set("view engine","ejs");
 
@@ -66,8 +71,6 @@ function SetDefaultAdmin(){
 
         var new_admin = new Admin(config);
 
-        console.log(new_admin);
-
         new_admin.save();
 
         return new_admin;
@@ -83,10 +86,12 @@ function SetDefaultAdmin(){
 app.use((req,res,next)=>{
 
   if(req.session.user){
+
     User.findById(req.session.user._id).then((user)=>{
       req.user = user;
       next();
     });
+
   }
   else{
     req.user = null;
@@ -104,15 +109,15 @@ app.use(async (req,res,next)=>{
         if(!admin){
           req.admin = await SetDefaultAdmin(req,res,next);
           next();
-        }else{
+        }
+        else{
           req.admin = admin;
           next();
         }
 
       })
 
-  }
-  else{
+  }else{
     req.admin = await SetDefaultAdmin();
     next();
   }
@@ -132,9 +137,7 @@ app.use(admin_routes);
 app.use(auth_routes);
 
 app.get("/error",((req,res)=>{
-  res.render(
-    path.join(rootDir,"views","error.ejs")
-  )
+  res.render(path.join(rootDir,"views","error.ejs"));
 }));
 
 app.use((error,req,res,next)=>{
@@ -152,9 +155,7 @@ app.use((error,req,res,next)=>{
 });
 
 app.use((req,res)=>{
-  res.render(
-    path.join(rootDir,"views","404.ejs")
-  );
+  res.render(path.join(rootDir,"views","404.ejs"));
 });
 
 mongoose.connect("mongodb+srv://mawile12:sableye12@cluster0.mv38jgm.mongodb.net/shop?retryWrites=true&w=majority").then((s)=>{

@@ -13,9 +13,11 @@
       <% var left = 0; %>
 
       <% for (var i =0; i < items.placeholder.length; i++){%>
+
         <div class="product_item" style=<%=`left:`+left+"%" %>>
             <img class="item_image" src = <%=`./../images/${items.placeholder[i]} ` %>/>
         </div>
+
         <%  left += 17.5; %>
 
       <%}%>

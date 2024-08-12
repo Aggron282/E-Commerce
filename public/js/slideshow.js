@@ -1,15 +1,19 @@
-
 var showcase_banner_element = document.querySelector(".header");
 var slideshow_bubble_element = document.getElementsByClassName("bubble_showcase");
+
 var slideshow_counter = 1;
 var slideshow_max_counter = 4;
 
 
-for(var i =0; i <slideshow_bubble_element.length; i++){
+function Init(){
 
-  slideshow_bubble_element[i].addEventListener("click",(e)=>{
-    ToggleCounter(e);
-  });
+  for(var i =0; i <slideshow_bubble_element.length; i++){
+
+    slideshow_bubble_element[i].addEventListener("click",(e)=>{
+      ToggleCounter(e);
+    });
+
+  }
 
 }
 
@@ -35,7 +39,6 @@ function ToggleCounter(e){
 
   }
 
-
   for(var i =0; i <slideshow_bubble_element.length; i++){
 
     if(bubble_slideshow_counter != slideshow_bubble_element[i].getAttribute("index")){
@@ -53,3 +56,5 @@ function ToggleCounter(e){
   new_banner_element.classList.add(`active`)
 
 }
+
+Init();

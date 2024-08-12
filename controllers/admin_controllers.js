@@ -1,79 +1,204 @@
 var path = require("path");
-var rootDir = require("./../util/path.js");
 var fs = require("fs");
-var ObjectId = require("mongodb").ObjectId;
 var PDFDocument = require("pdfkit");
 
-let totalProducts;
-var page_counter = 1;
+var ObjectId = require("mongodb").ObjectId;
 
 var StatusError = require("./../util/status_error.js");
 var fileHelper = require("./../util/file.js");
+var rootDir = require("./../util/path.js");
+
 const Product = require("./../models/products.js");
 const Order = require("./../models/orders.js");
+var Admin = require("./../models/admin.js")
 
-const ITEMS_PER_PAGE = 4;
+let totalProducts;
 
+//--------------------------------------------------------------------------------
+// Get Data Functions
+const GetAdminData = (req,res)=>{
 
-const GetMainPage = (req,res,next) => {
+  if(!req.admin){
+    res.redirect("/login");
+    return;
+  }
+  else{
+    res.json(req.admin);
+  }
 
-    page_counter = 1;
+}
 
-     if(!req.admin){
-       res.redirect("/admin/login")
-       return;
-     }
-     Product.find({userId:req.admin._id})
-      .count()
-      .then((products_)=>{
-        totalProducts = products_;
-        return Product.find({userId:req.admin._id})
-        .skip((page_counter - 1) * ITEMS_PER_PAGE)
-        .limit(ITEMS_PER_PAGE)
-      })
-     .then((products)=>{
-      res.render(path.join(rootDir,"views","admin.ejs"),
-      {
-        products:products,
-        totalProducts:totalProducts,
-        hasPrev: page_counter > 1,
-        isAdmin:true,
-        prev:parseInt(page_counter - 1),
-        hasNext: Math.ceil(ITEMS_PER_PAGE * page_counter) < totalProducts,
-        last:Math.ceil(totalProducts / ITEMS_PER_PAGE),
-        next:parseInt(page_counter + 1),
-        first:1,
-        page:page_counter
-      });
+//--------------------------------------------------------------------------------
+// Change Admin Profile
+const EditAdmin = (req,res) => {
+
+  var data  = req.body;
+
+  if(!req.admin){
+    res.redirect("/admin/login");
+    return;
+  }
+
+  const filter = { _id : new ObjectId(req.admin._id) };
+  const update = {$set:{ username : data.username, name:data.name, password:data.password } };
+
+  Admin.findOneAndUpdate(filter,update).then((response)=>{
+      req.admin = response;
+  });
+
+}
+
+//--------------------------------------------------------------------------------
+// Get Product Data
+
+const GetProductsData = async (req,res,next) =>{
+
+  if(!req.admin._id){
+    res.redirect("/admin/login");
+  }
+
+  res.json(req.admin.products);
+}
+
+const GetOneProductByParams = async (req,res,next) =>{
+
+  var _id = req.params.id;
+
+  var products = Product.findById(_id).then((data)=>{
+
+      var new_product = data;
+
+      return res.json(new_product);
 
     }).catch((err)=>{
-      console.log(err);
       StatusError(next,err,500);
     });
 
 }
 
-const DeleteOneProduct = (req,res,next) =>{
+const GetOneProduct = (req,res,next) => {
 
-  var id = req.body._id;
+  var _id = req.body._id;
+  var isFound = false;
 
-  Product.deleteOne({_id:new ObjectId(id)}).then((response)=>{
+  if(!req.admin){
+    res.redirect("/admin/login");
+    return;
+  }
 
-    if(response){
-      console.log("Deleted Successfully");
-    }else{
-      console.log("Could not Delete");
-    }
+  for(var i =0; i < req.admin.products.length; i++){
 
-    res.json(true);
+    if(JSON.stringify(_id) == JSON.stringify(req.admin.products[i]._id)){
+        isFound = true;
+        break;
+     }
 
-  }).catch((err)=>{
-    StatusError(next,err,500);
+  }
+
+  if(isFound){
+    res.json(req.admin.products[i]);
+  }
+  else{
+    res.json(false);
+  }
+
+}
+
+//--------------------------------------------------------------------------------
+// Get URL Pages
+const GetMainPage = (req,res,next) =>{
+
+    res.render(path.join(rootDir,"views","admin.ejs"),{
+      products:req.admin.products,
+      totalProducts:totalProducts,
+      isAdmin:true,
+      action:"/admin/profile/edit"
+    });
+
+}
+
+const GetProductDetailPage = async (req,res,next) =>{
+
+  var id = req.params._id;
+
+    Product.findById(id).then((product)=>{
+      if(!product){
+        res.redirect("/admin")
+      }
+      else{
+        res.render(path.join(rootDir,"views","user","detail.ejs"),{
+          item:product,
+          root:"../..",
+          isAdmin:true
+        });
+
+      }
+
+    }).catch((err)=>{
+     StatusError(next,err,500);
+    });
+
+
+}
+
+const GetOrderPage =(req,res,next)=>{
+
+  Order.find({"user.userId":req.user._id}).then((orders)=>{
+    res.render(path.join(rootDir,"views","layouts","admin","orders.ejs"),{orders:orders});
   });
 
 }
 
-const DeleteOneProductClient = (req,res,next) =>{
+//--------------------------------------------------------------------------------
+// Admin Products Changes
+const DeleteOneProduct = (req,res,next) =>{
+
+  var id = req.body._id;
+
+  Admin.findOne({_id:new ObjectId(req.admin._id)}).then((admin)=>{
+
+      var new_admin = admin;
+      var new_products = []
+
+      for(var i = 0; i < admin.products.length; i ++){
+
+          if(id == admin.products[i]._id){
+            console.log("Same Product");
+          }
+          else{
+            new_products.push(admin.products[i]);
+          }
+
+      }
+
+     new_admin.products = new_products;
+
+     Admin.replaceOne({_id:new ObjectId(req.admin._id)},new_admin).then((admin)=>{
+
+        req.admin = new_admin;
+
+        Product.deleteOne({_id:new ObjectId(id)}).then((response)=>{
+
+          if(response){
+            console.log("Deleted Successfully");
+          }
+          else{
+            console.log("Could not Delete");
+          }
+
+          res.json(true);
+
+        });
+
+      });
+
+    }).catch((err)=>{
+      StatusError(next,err,500);
+  });
+
+}
+
+const DeleteOneProductByParams = (req,res,next) =>{
 
   var id = req.params.id;
 
@@ -93,106 +218,87 @@ const DeleteOneProductClient = (req,res,next) =>{
 
 }
 
-const GetProducts = async (req,res,next) =>{
-
-  var products = Product.find({}).then((data)=>{
-    res.redirect("/admin/add_product")
-  }).catch((err)=>{
-    StatusError(next,err,500);
-  });
-
-}
-
-
-const GetProductsData = async (req,res,next) =>{
-
-  var products = Product.find({}).then((data)=>{
-    res.json(data);
-  }).catch((err)=>{
-    StatusError(next,err,500);
-  });
-
-}
-
-
-const FindOneProduct = async (req,res,next) =>{
-
-  var _id = req.params.id;
-
-  var products = Product.findById(_id).then((data)=>{
-
-      var new_product = data;
-
-      return res.json(new_product);
-
-    }).catch((err)=>{
-      StatusError(next,err,500);
-    });
-
-}
-
-const GetProductDetail = async (req,res,next) =>{
-
-  var id = req.params._id;
-
-    Product.findById(id).then((product)=>{
-      console.log(product);
-      if(!product){
-        res.redirect("/admin")
-      }
-      else{
-        res.render(path.join(rootDir,"views","user","detail.ejs"),{
-          item:product,
-          root:"../..",
-          isAdmin:true
-        });
-
-      }
-
-    }).catch((err)=>{
-      console.log(err);
-     StatusError(next,err,500);
-    });
-
-
-}
-
 const EditOneProduct = async (req,res,next) =>{
 
   var body = req.body;
+  var new_admin = req.admin;
+  var products = [...new_admin.products];
 
-  Product.findById(body._id).then((product)=>{
+  var found_product = await Product.findOne({_id:new ObjectId(body._id)});
+  var new_product = {...found_product._doc};
+  new_product.title = body.title;
+  new_product.thumbnail = body.thumbnail;
+  new_product.description = body.description;
+  new_product.price = body.price;
+  new_product.banner = body.banner;
+  new_product.catagory = body.catagory;
+  new_product.quantity = body.quantity;
+  new_product.userId = req.admin._id;
+  new_product.discount = body.discount;
 
-    product.title = body.title;
-    product.thumbnail = body.thumbnail;
-    product.description = body.description;
-    product.price = body.price;
-    product.banner = body.banner;
-    product.catagory = body.catagory;
-    product.quantity = body.quantity;
-    product.userId = 0;
-    product.discount = body.discount;
+  var new_products = products.map((p)=>{
 
-    var products = new Product(product);
 
-    products.save().then((data)=>{
-      res.redirect("/admin/add_product");
-    });
+    if(JSON.stringify(p._id) == JSON.stringify(new_product._id)){
+      return p = new_product;
+    }
 
-  }).catch((err)=>{
-    StatusError(next,err,500);
+    return p;
+
+  });
+
+  var new_admin_ = new Admin(new_admin);
+  var product = new Product(new_product);
+
+  const filter = { _id : new ObjectId(new_admin_._id) };
+  const update = {$set:{ products : new_products}};
+
+  Admin.findOneAndUpdate(filter,update,{new: true,useFindAndModify:false}).then((err,doc)=>{
+
+    new_admin_.products = new_products;
+
+    req.session.admin = new_admin_;
+
+    // Admin.findOne({_id:new ObjectId(new_admin_._id)}).then(async (a)=>{console.log(a.products[0].title)})
+
+    // var admin_ = await Admin.findOne({_id:new ObjectId(new_admin_._id)});
+
+    // await product.save();
+
+    res.json({admin:req.session.admin});
+
   });
 
 }
 
-const GetOrderPage =(req,res,next)=>{
+const AddProduct = async (req,res,nect) => {
 
-  Order.find({"user.userId":req.user._id}).then((orders)=>{
-    res.render(path.join(rootDir,"views","layouts","admin","orders.ejs"),{orders:orders});
-  });
+  var body  =   req.body;
+  console.log("SS");
+  console.log(req.thumbnail,req.body);
+
+  var schema = {
+    title:body.title,
+    quantity:body.quantity,
+    description:body.description,
+    price:body.price,
+    discount:body.discount,
+    catagory:body.catagory,
+    banner:body.banner,
+    thumbnail:"",
+    userId:req.user
+  }
+
+  var products = new Product(schema);
+  return;
+  res.json(schema);
 
 }
 
+
+
+//--------------------------------------------------------------------------------
+// Get Order Data
 const DownloadOrder = (req,res,next) =>{
 
   const order_id = req.params.orderId;
@@ -246,44 +352,21 @@ const DownloadOrder = (req,res,next) =>{
 
 }
 
-const AddProduct = async (req,res,next) =>{
 
-    var body  = req.body;
+module.exports.EditAdmin = EditAdmin;
 
-    var schema = {
-      title:body.title,
-      quantity:body.quantity,
-      description:body.description,
-      price:body.price,
-      discount:body.discount,
-      catagory:body.catagory,
-      banner:body.banner,
-      thumbnail:req.file.path,
-      userId:req.user
-    }
-
-    var products = new Product(schema);
-
-     products.save().then((data)=>{
-
-      Product.find().then((r)=>{console.log(r.length)}).then(()=>{
-        res.redirect("/admin/add_product")
-      });
-
-    }).catch((err)=>{
-      StatusError(next,err,500);
-    });
-
-}
-
-module.exports.DeleteOneProduct = DeleteOneProduct;
-module.exports.GetMainPage = GetMainPage;
-module.exports.GetProducts = GetProducts;
-module.exports.GetProductsData = GetProductsData;
-module.exports.GetProductDetail = GetProductDetail;
-module.exports.GetOrderPage = GetOrderPage;
-module.exports.DownloadOrder = DownloadOrder;
-module.exports.DeleteOneProductClient = DeleteOneProductClient;
-module.exports.FindOneProduct = FindOneProduct;
 module.exports.EditOneProduct = EditOneProduct;
 module.exports.AddProduct = AddProduct;
+module.exports.DeleteOneProductByParams = DeleteOneProductByParams;
+module.exports.DeleteOneProduct = DeleteOneProduct;
+
+module.exports.GetMainPage = GetMainPage;
+module.exports.GetOrderPage = GetOrderPage;
+module.exports.GetProductDetailPage = GetProductDetailPage;
+
+module.exports.GetProductsData = GetProductsData;
+module.exports.GetAdminData = GetAdminData;
+module.exports.GetOneProduct = GetOneProduct;
+module.exports.GetOneProductByParams = GetOneProductByParams;
+
+module.exports.DownloadOrder = DownloadOrder;

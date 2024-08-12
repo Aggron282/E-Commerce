@@ -1,65 +1,178 @@
 var add_product = document.getElementsByClassName("add_p");
-var isModalOn = false;
 var main_interface = document.querySelector(".main_interface");
 var modal_wrapper = document.querySelector(".modal_wrapper");
 var edit_button = document.getElementsByClassName("edit_button_p");
+var delete_button_p = document.getElementsByClassName("delete_button_p");
+var product_form = document.querySelector("#product_form");
 var exit_modal = document.querySelector(".exit_modal");
 var edit_delete = document.getElementsByClassName("edit_delete_container");
 var edit_delete_button  =  document.querySelector(".edit_delete_p");
-var canEdit = false;
 var catagory_products_admin_container = document.querySelector(".catagory_products_admin_container");
+
+var config = null;
+
 var CATAGORY_LIMIT = 5;
+var canEdit = false;
+var isModalOn = false;
 
 var organized_products = [];
 
-function ToggleEdit(canEdit_){
-  canEdit = canEdit_;
-}
-
+//----------------------------Init-----------
 async function Init(){
 
   organized_products = await OrganizeProducts();
-  console.log(organized_products);
+
   if(catagory_products_admin_container){
+    catagory_products_admin_container.innerHTML = "";
     RenderProductCatagories();
   }
+
   if(canEdit){
     AddEventToEditButtons();
   }
 
+  for(var i =0; i < add_product.length; i++){
+
+    add_product[i].addEventListener("click",()=>{
+      ToggleModal(true);
+      SetForm("/admin/product/add");
+    });
+
+  }
+
+
 }
 
 
-exit_modal.addEventListener("click",()=>{
-  ToggleModal(false);
-});
+//----------------------------Form Edit Functions-----------
+function SubmitForm(){
 
-function ToggleCanEdit(){
+  var title_ = document.querySelector(".name_input");
+  var price_ = document.querySelector(".price_input");
+  var description_ = document.querySelector(".description_input");
+  var catagory_ = document.querySelector(".catagory_input");
+  var quantity_ = document.querySelector(".quantity_input");
+  var discount_ = document.querySelector(".discount_input");
+  var banner_ = document.querySelector(".banner_input");
+  var id_ = document.querySelector(".id_input");
+  var thumbnail_ = document.querySelector(".image_input");
+  var thumbnail_value = "";
 
-  canEdit = !canEdit;
+  if(config){
 
-  if(canEdit){
-    edit_delete_button.classList.add("underline_active");
+    if(config.thumbnail){
+      thumbnail_value = config.thumbnail;
+    }
+    else{
+      thumbnail_value = thumbnail_.value;
+    }
+
   }
   else{
-    edit_delete_button.classList.remove("underline_active");
+      thumbnail_value = thumbnail_.value;
   }
 
-  AddEditAndDeleteFeature(canEdit);
+   config = {
+    banner:banner_.value,
+    discount:discount_.value,
+    catagory:catagory_.value,
+    title:title_.value,
+    _id:id_.value,
+    price:price_.value,
+    quantity:quantity_.value,
+    description:description_.value,
+    thumbnail:thumbnail_value
+  }
+
+  var FormErrors = CheckForm(config);
+
+  if(FormErrors.isErr){
+    alert(FormErrors.err_msg);
+    return null;
+  }else{
+    return config;
+  }
 
 }
 
-edit_delete_button.addEventListener("click",()=>{
-  ToggleModal(false);
-  ToggleCanEdit();
-});
+function CheckForm({banner,discount,catagory,title,_id,price,quantity,description,thumbnail}){
+
+    var err_msg = "Cannot Add Product for Following Reasons: \n";
+    var isErr = false;
+
+    if(catagory.length <= 0){
+      err_msg+= " Catagory field is empty \n";
+      isErr= true;
+    }
+
+    if(price.length <= 0){
+      err_msg+= " Price field is empty \n";
+      isErr= true;
+    }
+
+    if(title.length <= 2){
+      err_msg+= " Title field is too small \n";
+      isErr= true;
+    }
+
+    if(thumbnail.length <= 0){
+      err_msg+= " Thumbnail field is empty \n";
+      isErr= true;
+    }
+
+    if(description.length <= 0){
+      err_msg+= " Description field is empty \n";
+      isErr= true;
+    }
+
+    if(quantity.length <= 0){
+      err_msg+= " Quantity field is empty \n";
+      isErr= true;
+    }
+
+    return {
+      isErr:isErr,
+      err_msg:err_msg
+    }
+
+}
 
 function SetForm(action){
+
     var form = document.querySelector("#product_form");
+    var form_button = document.querySelector(".add_product_btn");
+
     form.setAttribute("action",action);
+
+    form.addEventListener("submit",(e)=>{
+
+      e.preventDefault();
+
+      var form_data = SubmitForm();
+
+      if(form_data){
+        form.submit();
+      }
+
+    });
+
+    form_button.addEventListener("click",(e)=>{
+
+      e.preventDefault();
+
+      var form_data = SubmitForm();
+
+      if(form_data){
+        form.submit();
+      }
+
+    });
+
 }
 
-function PopulateModal({_id,title,price,description,thumbnail,quantity,discount,banner,catagory}){
+
+//----------------------------Populate and Render Functions-----------
+function PopulateModal({_id,title,price,description,thumbnail,quantity,discount,banner,catagory},url){
 
     var title_ = document.querySelector(".name_input");
     var price_ = document.querySelector(".price_input");
@@ -69,79 +182,43 @@ function PopulateModal({_id,title,price,description,thumbnail,quantity,discount,
     var discount_ = document.querySelector(".discount_input");
     var banner_ = document.querySelector(".banner_input");
     var id_ = document.querySelector(".id_input");
+    var thumbnail_ = document.querySelector(".image_input");
+    var thumbnail_value = "";
+
+    ToggleCanEdit(false);
+
     title_.value = title;
     price_.value = price;
     id_.value = _id;
     description_.value = description;
-    catagory_.value  =catagory;
+    catagory_.value  = catagory;
     quantity_.value = quantity;
     discount_.value = discount;
     banner_.value = banner;
 
-    ToggleModal(true);
-    SetForm("/product/edit");
-
-}
-
-
-async function OrganizeProducts(){
-
-  var get_products = await axios.get("/admin/products/all");
-  var products = get_products.data;
-  var catagories = [];
-
-  for(var i = 0; i < products.length; i++){
-
-
-      if(catagories.length <= 0){
-        catagories.push(products[i].catagory);
-      }
-
-      var isFound = false
-
-      for(var l = 0; l < catagories.length; l++){
-
-        if(catagories[l] == products[i].catagory){
-          isFound = true;
-        }
-
-      }
-      if(!isFound){
-          catagories.push(products[i].catagory);
-      }
-
-  }
-
-    for(var i = 0; i < products.length; i++){
-
-      var config = {
-        counter:0,
-        catagory:products[i].catagory,
-        products:[products[i]]
-      }
-
-      if(organized_products.length <=0){
-        organized_products.push(config);
-      }
-      var isFound = false;
-      for(var k =0; k < organized_products.length; k++){
-    //    console.log(organized_products[k].catagory,products[i].catagory)
-      if(products[i].catagory == organized_products[k].catagory){
-          isFound = true;
-          organized_products[k].products.push(products[i]);
-        }
-      }
-      if(!isFound){
-        organized_products.push(config);
-      }
+    if(thumbnail){
+      thumbnail_value = thumbnail;
     }
 
-  return organized_products;
+     config = {
+      banner:banner,
+      discount:discount,
+      catagory:catagory,
+      title:title,
+      _id:_id,
+      price:price,
+      quantity:quantity,
+      description:description,
+      thumbnail:thumbnail_value
+    }
 
+    ToggleModal(true);
+
+    SetForm(url);
 
 }
 
- async function RenderProductCatagories(){
+async function RenderProductCatagories(){
 
   var html = ``;
 
@@ -156,6 +233,10 @@ async function OrganizeProducts(){
     for(var k = 0; k < CATAGORY_LIMIT; k++){
 
       var new_counter = k + organized_products[i].counter;
+
+      if(new_counter >= organized_products[i].products.length){
+        break;
+      }
 
       html += `
 
@@ -177,12 +258,15 @@ async function OrganizeProducts(){
           </div>
 
           <div class="edit_delete_container">
+
             <div class="inner_edit edit_button_p"  _id = "${organized_products[i].products[new_counter]._id}">
               Edit
             </div>
-            <div class="inner_edit delete_button_p">
+
+            <div class="inner_edit delete_button_p" _id = "${organized_products[i].products[new_counter]._id}">
               Delete
             </div>
+
           </div>
 
       </div>`
@@ -212,11 +296,76 @@ async function OrganizeProducts(){
       arrow_catagory_sub[i].addEventListener("click",(e)=>{
         ToggleCatagoryProducts(e);
       });
-    }
 
+    }
 
 }
 
+
+
+//----------------------------Products Organization Functions-----------
+async function OrganizeProducts(){
+
+  var organized_products = [];
+  var get_products = await axios.get("/admin/products/all");
+  var products = get_products.data;
+  var catagories = [];
+
+  for(var i = 0; i < products.length; i++){
+
+      if(catagories.length <= 0){
+        catagories.push(products[i].catagory);
+      }
+
+      var isFound = false
+
+      for(var l = 0; l < catagories.length; l++){
+
+        if(catagories[l] == products[i].catagory){
+          isFound = true;
+        }
+
+      }
+
+      if(!isFound){
+          catagories.push(products[i].catagory);
+      }
+
+  }
+
+    for(var i = 0; i < products.length; i++){
+
+      var isFound = false;
+
+      var config = {
+        counter:0,
+        catagory:products[i].catagory,
+        products:[products[i]]
+      }
+
+      if(organized_products.length <=0){
+        organized_products.push(config);
+        isFound = true;
+      }
+
+      for(var k =0; k < organized_products.length; k++){
+
+          if(products[i].catagory == organized_products[k].catagory){
+            isFound = true;
+            organized_products[k].products.push(products[i]);
+          }
+
+      }
+
+      if(!isFound){
+        organized_products.push(config);
+      }
+
+    }
+
+   return organized_products;
+
+}
 
 function ToggleCatagoryProducts(e){
 
@@ -251,6 +400,27 @@ function ToggleCatagoryProducts(e){
 
 }
 
+
+//----------------------------Toggle Modal and Edit Functions-----------
+function ToggleCanEdit(){
+
+  canEdit = !canEdit;
+
+  if(canEdit){
+    edit_delete_button.classList.add("underline_active");
+  }
+  else{
+    edit_delete_button.classList.remove("underline_active");
+  }
+
+  AddEditAndDeleteFeature(canEdit);
+
+}
+
+function ToggleEdit(canEdit_){
+  canEdit = canEdit_;
+}
+
 function ToggleModal(isOn){
 
 
@@ -259,7 +429,8 @@ function ToggleModal(isOn){
     modal_wrapper.classList.remove("inactive");
     main_interface.classList.remove("active");
     main_interface.classList.add("inactive");
-  }else{
+  }
+  else{
     modal_wrapper.classList.add("inactive");
     modal_wrapper.classList.remove("active");
     main_interface.classList.remove("inactive");
@@ -268,6 +439,8 @@ function ToggleModal(isOn){
 
 }
 
+
+//----------------------------Add Events To Element Functions-----------
 function AddEventToEditButtons(){
 
   for(var i =0; i < edit_button.length; i++){
@@ -276,27 +449,43 @@ function AddEventToEditButtons(){
 
         var id = e.target.getAttribute('_id');
 
-        var product = await axios.get("/edit/"+id);
+        var product = await axios.post("/admin/product/one/",{_id:id});
 
         product = product.data;
-        console.log(product);
-        PopulateModal(product);
+
+        PopulateModal(product,"/admin/product/edit");
+
+    });
+
+  }
+
+  for(var i =0; i < delete_button_p.length; i++){
+
+    delete_button_p[i].addEventListener("click",async (e)=>{
+
+      var prompt_requirement = 'DELETE';
+      var product_prompt = prompt(`Type ${prompt_requirement} to delete product (There is no way to add product back once deleted)`);
+
+      if(product_prompt == prompt_requirement){
+
+        var id = e.target.getAttribute('_id');
+        var product = await axios.post("/product/delete",{_id:id}).catch((err)=>{console.log(err)});
+
+        if(product){
+          alert("Deleted Product");
+          Init();
+        }
+
+      }
+      else{
+        alert("Canceled");
+      }
 
     });
 
   }
 
 }
-
-for(var i =0; i < add_product.length; i++){
-
-  add_product[i].addEventListener("click",()=>{
-    ToggleModal(true);
-    SetForm("/admin/add_product");
-  });
-
-}
-
 
 function AddEditAndDeleteFeature(canEdit){
 
@@ -316,5 +505,15 @@ function AddEditAndDeleteFeature(canEdit){
   }
 
 }
+
+exit_modal.addEventListener("click",()=>{
+  ToggleModal(false);
+});
+
+edit_delete_button.addEventListener("click",()=>{
+  ToggleModal(false);
+  ToggleCanEdit();
+});
+
 
 Init();

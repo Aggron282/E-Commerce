@@ -1,59 +1,84 @@
 
 <div class="catagory_products container-fluid">
 
-<% for(var k = 0; k < catagories.length; k++) { %>
-  <% var starting_counter = 0%>
-  <% var c = "Catagory"  %>
-  <% if(catagories[k].catagory){ %>
-    <% c = catagories[k].catagory %>
-    <% starting_counter = catagories[k].counter %>
-    <% console.log(starting_counter) %>
-   <%}%>
-<div class="catagory_row width-100" id = <%= c %>>
+  <% for(var k = 0; k < catagories.length; k++) { %>
 
-    <p class="catagory_title"> <%= c %> </p>
+    <% var starting_counter = 0%>
 
-  <div class="row items_row relative">
-    <div class="catagory_arrow catagory_arrow--left" catagory = <%= c %> counter = -1  >
-      <img src = "./../images/arrow.png" />
-    </div>
-    <div class="catagory_arrow catagory_arrow--right"  catagory = <%= c %> counter =1>
-      <img src = "./../images/arrow.png" />
-    </div>
-    <div class="catagory_populate" id = <%= `_${c}` %>>
-    <% for(var i = 0; i <= 3; i++) { %>
-    <% var i_ = i + starting_counter %>
-    <div class="col-3 no-margin-left">
-    <div class= "product_box fix_x width-100" catagory = <%= c %> it = <%= i_ %> >
-      <% var name = "Name Will Be Placed Here" %>
-      <% var img = "./images/catagory_3.png" %>
-      <% var price = "[N/A]" %>
-      <% var description = "" %>
-      <% if(catagories[k].items[i_]){ %>
-        <% name = catagories[k].items[i_].title.substring(0, 30) + "..."; %>
-        <% img = "./"+catagories[k].items[i_].thumbnail %>
-        <% price = catagories[k].items[i_].price %>
-        <% description = catagories[k].items[i_].description.substring(0, 100) + "...";  %>
-      <%}%>
-      <p class="catagory_name"><%= name %></p>
+    <% var c = "Catagory"  %>
 
-      <img class="product_image"src = "<%= img %>" />
+    <% if(catagories[k].catagory){ %>
 
-      <div class="product_text_box">
-        <p class="product_description_display"><%=description %></p>
-        <p class="catagory_price_new ">$ <%= price %></p>
+      <% c = catagories[k].catagory %>
 
-        <a href = <%="/product/"+catagories[k].items[i_]._id %>><p class="product_detail fix_y">See Details</p></a>
+      <% starting_counter = catagories[k].counter %>
 
+     <%}%>
+
+  <div class="catagory_row width-100" id = <%= c %>>
+
+      <p class="catagory_title"> <%= c %> </p>
+
+    <div class="row items_row relative">
+
+      <div class="catagory_arrow catagory_arrow--left" catagory = <%= c %> counter = -1  >
+        <img src = "./../images/arrow.png" />
       </div>
 
+      <div class="catagory_arrow catagory_arrow--right"  catagory = <%= c %> counter =1>
+        <img src = "./../images/arrow.png" />
+      </div>
+
+      <div class="catagory_populate" id = <%= `_${c}` %>>
+
+      <% for(var i = 0; i <= 3; i++) { %>
+
+          <% var i_ = i + starting_counter %>
+
+          <div class="col-3 no-margin-left">
+
+            <div class= "product_box fix_x width-100" catagory = <%= c %> it = <%= i_ %> >
+
+              <% var name = "Name Will Be Placed Here" %>
+
+              <% var img = "./images/catagory_3.png" %>
+
+              <% var price = "[N/A]" %>
+
+              <% var description = "" %>
+
+              <% if(catagories[k].items[i_]){ %>
+                <% name = catagories[k].items[i_].title.substring(0, 30) + "..."; %>
+                <% img = "./"+catagories[k].items[i_].thumbnail %>
+                <% price = catagories[k].items[i_].price %>
+                <% description = catagories[k].items[i_].description.substring(0, 100) + "...";  %>
+              <%}%>
+
+              <p class="catagory_name"><%= name %></p>
+
+              <img class="product_image"src = "<%= img %>" />
+
+              <div class="product_text_box">
+
+                <p class="product_description_display"><%=description %></p>
+                <p class="catagory_price_new ">$ <%= price %></p>
+
+                <a href = <%="/product/"+catagories[k].items[i_]._id %>><p class="product_detail fix_y">See Details</p></a>
+
+              </div>
+
+           </div>
+
+         </div>
+
+        <% } %>
+
+       </div>
+
+     </div>
+
     </div>
 
-  </div>
   <% } %>
-    </div>
- </div>
 
-</div>
-<% } %>
 </div>

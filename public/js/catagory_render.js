@@ -1,12 +1,15 @@
 var container_render = document.querySelector(".catagory_search");
 var catagory_buttons = document.getElementsByClassName("sub_catagory");
+
 var PAGE_LIMIT = 5;
 var PAGE_INCREMENT = 5;
+
 var counter = 0;
+
 var selected_catagory = null;
 
 
-var RenderHTMLToCatagory = (catagories,catagory_name) =>{
+function RenderHTMLToCatagory(catagories,catagory_name){
 
   var render_html =  `
   <div class="catagory_container_sub">
@@ -38,26 +41,11 @@ var RenderHTMLToCatagory = (catagories,catagory_name) =>{
       multiplier = parseInt(multiplier);
 
       ToggleCatagoryPage(multiplier);
-      RenderCatagories();
+      BuiltCatagoriesHTML();
 
     })
 
   }
-
-}
-
-for(var i = 0; i < catagory_buttons.length; i++){
-
-  catagory_buttons[i].addEventListener("click",(e)=>{
-
-    var catagory_name = e.target.getAttribute("data");
-
-    GetCatagories(catagory_name);
-    counter = 0;
-    RevealModal();
-
-
-  });
 
 }
 
@@ -89,15 +77,9 @@ function ToggleCatagoryPage(multiplier){
 
     }
 
-    console.log(counter);
-
 }
 
-function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-function RenderCatagories(){
+function BuiltCatagoriesHTML(){
 
   var html  = ``;
   var row = "<div class ='row'>";
@@ -152,3 +134,24 @@ function GetCatagories(catagory){
   })
 
 }
+
+function Init(){
+
+  for(var i = 0; i < catagory_buttons.length; i++){
+
+    catagory_buttons[i].addEventListener("click",(e)=>{
+
+      counter = 0;
+
+      var catagory_name = e.target.getAttribute("data");
+
+      GetCatagories(catagory_name);
+      RevealModal();
+
+    });
+
+  }
+
+}
+
+Init();

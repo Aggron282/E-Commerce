@@ -13,51 +13,72 @@
   <body>
 
   <div class="container-fluid">
+
     <div class="login_container">
+
         <p class="type_title"> <%= type %> </p>
+
         <div class="row">
+
+            <div class="col-4"></div>
+
             <div class="col-4">
 
-            </div>
-            <div class="col-4">
                 <div class="login_mod padding-bottom-10">
+
                     <p class="login_title">Get Started</p>
+
                     <form action = <%= url %> method = "POST">
+
                       <div class="login_row">
+
                         <label>
                             Full Name
                         </label>
-                        <input
-                        class =" login_form <%= validationErrors.find(e=>e.path == 'name') ? 'error_' :  ''  %>"
-                         name = "name" value = "<%= userInput.name %>" placeholder = "Enter Full Name"/>
+
+                        <input  class =" login_form <%= validationErrors.find(e=>e.path == 'name') ? 'error_' :  ''  %>"
+                          name = "name" value = "<%= userInput.name %>" placeholder = "Enter Full Name"/>
+
                       </div>
+
                       <div class="login_row">
+
                         <label>
                           Create Username
                         </label>
-                        <input
-                        class =" login_form <%= validationErrors.find(e=>e.path == 'username') ? 'error_' :  ''  %>"
-                        name = "username"  value = "<%= userInput.email %>" placeholder = "Enter Username"/>
+
+                        <input class =" login_form <%= validationErrors.find(e=>e.path == 'email') ? 'error_' :  ''  %>"
+                          name = "email"  value = "<%= userInput.email %>" placeholder = "Enter Username"/>
+
                       </div>
+
                       <div class="login_row">
+
                         <label>
                             Create Password
                         </label>
-                        <input name = "password"
-                        class ="login_form <%= validationErrors.find(e=>e.path == 'password') ? 'error_' :  ''  %>"
-                        value = "<%= userInput.password %>" type="password" placeholder = "Enter Password"/>
+
+                        <input name = "password"  class ="login_form <%= validationErrors.find(e=>e.path == 'password') ? 'error_' :  ''  %>"
+                         value = "<%= userInput.password %>" type="password" placeholder = "Enter Password"/>
+
                       </div>
 
                     <button class="login_button" type="submit">Create Account</button>
+
                   </form>
 
                 </div>
-            </div>
+
+             </div>
+
             <div class="col-4"></div>
+
         </div>
-    </div>
+
+     </div>
 
   </div>
 
   <script src = "./../js/util.js" ></script>
+
   </body>

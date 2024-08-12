@@ -1,15 +1,18 @@
 .product_detail--name{
-  font-size: 2rem;
+  font-size: 20px;
   color:black;
   font-weight: bold;
 }
+
 .product_detail_box{
   padding:2%;
   margin-top:2.5%;
 }
+
 body{
   background:white;
 }
+
 .product_detail--type{
   font-size:1.4rem;
   font-weight: normal;
@@ -26,11 +29,13 @@ body{
   opacity:.1;
   transition: all .2s
 }
+
 .detail_button:hover{
   background:black !important;
   opacity:1;
   transform: translate(0px) scale(1.05) !important;
 }
+
 .modal_wrapper{
   left: 5%;
     z-index: 99;
@@ -39,6 +44,7 @@ body{
     top: -2.5% !important;
     width: 100%;
 }
+
 .product_detail--price{
   color:black;
   font-size:1.3rem;
@@ -49,14 +55,16 @@ body{
 }
 
 .sold_out{
-color:red !important
+  color:red !important
 }
+
 .product_detail--description{
   width:75%;
   font-size:1rem;
   margin-top:5%;
   color:black;
 }
+
 .product_detail_image{
   width:100%;
   margin-top:25%;

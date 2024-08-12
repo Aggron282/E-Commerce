@@ -16,7 +16,6 @@ function scrollInElement(multiplier){
    scrollInElement(1);
  });
 
-
  left_arrow_element.addEventListener("click",(e)=>{
    offset_counter--;
    scrollInElement(-1);

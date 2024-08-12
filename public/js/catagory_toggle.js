@@ -1,22 +1,10 @@
-
 var toggle_buttons_elements = document.getElementsByClassName("catagory_arrow");
 var product_boxes_elements = document.getElementsByClassName("product_box");
+
 var catagories = null;
+
 var page_counter = 0;
 var increase_increment = 4;
-
-for(var i = 0; i < toggle_buttons_elements.length; i ++){
-
-  toggle_buttons_elements[i].addEventListener("click",async (e)=>{
-
-    var page_counter_attribute = e.target.getAttribute("counter");
-    var catagory_attribute = e.target.getAttribute("catagory");
-
-    ToggleCatagories(page_counter,catagory);
-
-  });
-
-}
 
 
 function RenderItems(catagory){
@@ -44,7 +32,7 @@ function RenderItems(catagory){
      }
 
      html += `
-     <div class="col-3 no-margin-left">
+      <div class="col-3 no-margin-left">
 
        <div class= "product_box fix_x width-100" catagory = ${catagory.catagory} it = ${current_catagory_counter} >
 
@@ -62,7 +50,8 @@ function RenderItems(catagory){
 
          </div>
 
-     </div>`
+      </div>`
+
  }
 
  populate.innerHTML = html;
@@ -71,8 +60,7 @@ function RenderItems(catagory){
 
 async function ToggleCatagories(page_counter,catagory) {
 
-  const api_options =
-  {
+  const api_options ={
     method: "POST",
     body:JSON.stringify({
       "counter":`${increase_increment}`,
@@ -92,3 +80,23 @@ async function ToggleCatagories(page_counter,catagory) {
   });
 
 }
+
+function Init(){
+
+  for(var i = 0; i < toggle_buttons_elements.length; i ++){
+
+    toggle_buttons_elements[i].addEventListener("click",async (e)=>{
+
+      var page_counter_attribute = e.target.getAttribute("counter");
+      var catagory_attribute = e.target.getAttribute("catagory");
+
+      ToggleCatagories(page_counter,catagory);
+
+    });
+
+  }
+
+}
+
+
+Init();
