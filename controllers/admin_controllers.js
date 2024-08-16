@@ -7,12 +7,16 @@ var ObjectId = require("mongodb").ObjectId;
 var StatusError = require("./../util/status_error.js");
 var fileHelper = require("./../util/file.js");
 var rootDir = require("./../util/path.js");
+var location = require("./../util/location.js");
+
 
 const Product = require("./../models/products.js");
 const Order = require("./../models/orders.js");
 var Admin = require("./../models/admin.js")
 
 let totalProducts;
+
+
 
 //--------------------------------------------------------------------------------
 // Get Data Functions
@@ -25,6 +29,41 @@ const GetAdminData = (req,res)=>{
   else{
     res.json(req.admin);
   }
+
+}
+
+const ConvertLocation = async (req,res) => {
+
+  var address = req.body.address;
+
+  var location_data = await location.ConvertLocation(address);
+
+  console.log(location_data);
+
+  res.json({location:location_data});
+
+}
+
+const ReverseConvertLocation = async (req,res) => {
+
+  var coords = req.body;
+  console.log(coords);
+  var location_data = await location.ReverseConvertLocation(coords);
+  var data = location_data;
+  console.log(data);
+  var formatted_address = {
+    zip:data.zipcode,
+    stateAbr:data.state_abbr,
+    city:data.city,
+    state:data.state
+  }
+
+  var coords = {
+    latitude:data.latitude,
+    longitude:data.longitude
+  }
+
+  res.json({address:formatted_address,coords:coords});
 
 }
 
@@ -58,6 +97,7 @@ const GetProductsData = async (req,res,next) =>{
   }
 
   res.json(req.admin.products);
+
 }
 
 const GetOneProductByParams = async (req,res,next) =>{
@@ -354,7 +394,8 @@ const DownloadOrder = (req,res,next) =>{
 
 
 module.exports.EditAdmin = EditAdmin;
-
+module.exports.ConvertLocation = ConvertLocation;
+module.exports.ReverseConvertLocation = ReverseConvertLocation;
 module.exports.EditOneProduct = EditOneProduct;
 module.exports.AddProduct = AddProduct;
 module.exports.DeleteOneProductByParams = DeleteOneProductByParams;

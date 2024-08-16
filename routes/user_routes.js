@@ -1,5 +1,6 @@
 var router = require("express").Router();
 var userControllers = require("./../controllers/user_controllers.js");
+var adminControllers = require("./../controllers/admin_controllers.js");
 var isAuth = require("./../middleware/isAuth.js");
 
 
@@ -33,6 +34,8 @@ router.post("/catagories",userControllers.ToggleCatagories);
 // Changes to User Profile
 router.post("/user/profile/edit",userControllers.EditProfile)
 
+router.post("/location/convert",isAuth,adminControllers.ConvertLocation);
+router.post("/location/convert",isAuth,adminControllers.ReverseConvertLocation);
 
 // Unused
 // router.get("/checkout/cancel",userControllers.GetCheckoutPage);

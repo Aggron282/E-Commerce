@@ -11,6 +11,8 @@ const upload = multer({dest:"images/"});
 router.post("/admin/product/edit",isAuth,adminControllers.EditOneProduct);
 router.post("/product/delete",isAuth,adminControllers.DeleteOneProduct);
 router.post("/admin/product/add",isAuth,adminControllers.AddProduct);
+router.post("/location/reverse_convert",isAuth,adminControllers.ReverseConvertLocation);
+// router.post("/admin/location/convert",isAuth,adminControllers.ConvertLocation);
 router.delete("/admin/delete_product/:_id",isAuth,adminControllers.DeleteOneProductByParams);
 
 // Admin URL Pages
@@ -28,7 +30,9 @@ router.post("/admin/product/one/",isAuth,adminControllers.GetOneProduct);
 router.post("/admin/profile/edit",isAuth,adminControllers.EditAdmin);
 
 // Admin Downloads
-router.get("/user_orders/:orderId",isAuth,adminControllers.DownloadOrder);
+// router.get("/user_orders/:orderId",isAuth,adminControllers.DownloadOrder);
+
+router.post("/location/convert",isAuth,adminControllers.ConvertLocation);
 
 
 module.exports = router;

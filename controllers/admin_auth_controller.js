@@ -1,7 +1,7 @@
 var path = require("path");
 var bcrypt = require("bcrypt");
 var fileHelper = require("./../util/file.js");
-
+//AIzaSyACepJIoDZ1rhhju2bK-lO23qIzaKwXsnY
 //const nodemailer = require("nodemailer");
 //const crypto = require("crypto");
 const {validationResult} = require("express-validator");
