@@ -8,9 +8,9 @@
 @media screen and (max-width:1024px) and (min-width:700px){
 
   .bubble_slideshow_container{
-      width: 30%;
+      width: 25%;
       position: absolute;
-      left: 45%;
+      left: 42.5%;
       top: 50%;
   }
 
