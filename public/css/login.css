@@ -157,7 +157,7 @@ form p{
 
   .authentication_container{
     position: relative;
-    top: -5px;
+    top: -25px !important;
   }
 
   .login_form{
