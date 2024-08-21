@@ -14,7 +14,7 @@ router.post("/admin/product/add",isAuth,adminControllers.AddProduct);
 router.delete("/admin/delete_product/:_id",isAuth,adminControllers.DeleteOneProductByParams);
 
 // Admin URL Pages
-router.get("/admin",adminControllers.GetMainPage);
+router.get("/admin",isAuth,adminControllers.GetMainPage);
 router.get("/user_orders",isAuth,adminControllers.GetOrderPage);
 router.get("/admin/product/detail/:_id",isAuth,adminControllers.GetProductDetailPage);
 
@@ -27,8 +27,6 @@ router.post("/admin/product/one/",isAuth,adminControllers.GetOneProduct);
 // Admin Profile Changes
 router.post("/admin/profile/edit",isAuth,adminControllers.EditAdmin);
 router.get("/product/reset/hard",isAuth,adminControllers.HardResetProducts)
-
-
 
 
 
