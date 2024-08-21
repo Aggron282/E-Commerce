@@ -203,7 +203,8 @@ p {
   }
 
   .ad_button{
-    padding:20px !important;
+    width:90% !important;
+    margin-left:5%;
     font-size:18px !important;
   }
 
