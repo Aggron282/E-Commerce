@@ -88,7 +88,6 @@ const PostAdminLogin = async (req,res,next) => {
 
     }).catch((err)=>{
       auth.RenderLogin(req,res,ADMIN_LOGIN_CONFIG,config,feedback);
-      console.log(err);
     });
 
   }

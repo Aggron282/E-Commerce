@@ -15,7 +15,7 @@ router.get("/cart/cart_data",userControllers.GetCurrentCart);
 router.get("/orders/",userControllers.GetOrders);
 
 // Page URLS
-router.get("/",userControllers.GetHomePage);
+router.get("/",isAuth,userControllers.GetHomePage);
 router.get("/product/:_id",userControllers.GetProductDetailPage);
 router.get("/cart/purchase",userControllers.GetCartPage);
 
@@ -34,11 +34,12 @@ router.post("/catagories",userControllers.ToggleCatagories);
 // Changes to User Profile
 router.post("/user/profile/edit",userControllers.EditProfile)
 
-router.post("/location/convert",isAuth,adminControllers.ConvertLocation);
-router.post("/location/convert",isAuth,adminControllers.ReverseConvertLocation);
 
-// Unused
-// router.get("/checkout/cancel",userControllers.GetCheckoutPage);
-// router.get("/cart/purchase",userControllers.GetCheckoutPage);
+router.post("/location/convert",adminControllers.ConvertLocation);
+router.post("/location/reverse_convert",adminControllers.ReverseConvertLocation);
+router.post("/user/location/update",userControllers.UpdateLocation);
+router.post("/admin/location/update",adminControllers.UpdateLocation);
+
+
 
 module.exports = router;

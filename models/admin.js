@@ -11,6 +11,10 @@ const admin = new Schema(
       type:String,
       required:true
     },
+    location:{
+      type:Object,
+      required:false
+    },
     email:{
       type:String,
       required:true
@@ -19,9 +23,13 @@ const admin = new Schema(
       type:String,
       required:true
     },
+    profileImg:{
+      type:String,
+      required:false
+    },
     products:{
       type:Array,
-      requried:true
+      required:true
     },
     resetToken:String,
     resetTokenExpiration:Date,

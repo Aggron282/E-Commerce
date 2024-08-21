@@ -47,11 +47,11 @@
 
               <% var description = "" %>
 
-              <% if(catagories[k].items[i_]){ %>
-                <% name = catagories[k].items[i_].title.substring(0, 30) + "..."; %>
-                <% img = "./"+catagories[k].items[i_].thumbnail %>
-                <% price = catagories[k].items[i_].price %>
-                <% description = catagories[k].items[i_].description.substring(0, 100) + "...";  %>
+              <% if(catagories[k].products[i_]){ %>
+                <% name = catagories[k].products[i_].title.substring(0, 30) + "..."; %>
+                <% img = "./"+catagories[k].products[i_].thumbnail %>
+                <% price = catagories[k].products[i_].price %>
+                <% description = catagories[k].products[i_].description.substring(0, 100) + "...";  %>
               <%}%>
 
               <p class="catagory_name"><%= name %></p>
@@ -63,7 +63,7 @@
                 <p class="product_description_display"><%=description %></p>
                 <p class="catagory_price_new ">$ <%= price %></p>
 
-                <a href = <%="/product/"+catagories[k].items[i_]._id %>><p class="product_detail fix_y">See Details</p></a>
+                <a href = <%="/product/"+catagories[k].products[i_]._id %>><p class="product_detail fix_y">See Details</p></a>
 
               </div>
 

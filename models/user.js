@@ -15,6 +15,23 @@ const user = new Schema(
       type:String,
       required:true
     },
+    location:{
+      address:{
+        type:String,
+        required:false
+      },
+      coords:{
+        latitude:{
+          type:Number,
+          required:false
+        },
+        longitude:{
+          type:Number,
+          required:false
+        }
+      },
+      required:false
+    },
     password:{
       type:String,
       required:true

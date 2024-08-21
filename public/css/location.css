@@ -87,3 +87,37 @@
   font-size: 23px;
   font-weight: 250;
 }
+
+
+@media screen and (max-width:1024px) and (min-width:700px){
+
+  .update_location_container {
+      width: 90%;
+      position: fixed;
+      top: 15%;
+      transform: translateX(1500px);
+      transition: all .4s;
+      padding: 1%;
+      left: 5%;
+      padding-bottom: 5%;
+      padding-top:5%;
+      border-radius: 10px;
+      background: white;
+      z-index: 9999999;
+  }
+  .update_location_container .title{
+    font-size:30px;
+    font-weight:300;
+  }
+
+  .location_button{
+    margin-top:2.5%;
+    margin-bottom:2.5%;
+  }
+  gmp-map{
+    height:350px !important;
+  }
+  .update_location_button{
+    margin-top:5%;
+  }
+}

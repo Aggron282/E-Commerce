@@ -69,3 +69,18 @@ body{
   width:100%;
   margin-top:25%;
 }
+
+@media screen and (max-width:1024px) and (min-width:700px){
+
+  .description_col {
+      width: 100%;
+      top: 400px !important;
+      position: absolute;
+    }
+
+  .img_col{
+      position: absolute;
+      top: -5%;
+  }
+
+}

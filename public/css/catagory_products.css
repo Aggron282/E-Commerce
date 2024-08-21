@@ -9,6 +9,8 @@ p {
   padding-left:2.5%;
 }
 
+
+
 .catagory_row{
   padding-top:5%;
   margin-top:2.5%;
@@ -87,4 +89,52 @@ p {
   width:30%;
   text-align: center;
   border-bottom:2px solid black;
+}
+
+
+
+@media screen and (max-width:1024px) and (min-width:700px){
+
+  .fix_x{
+    height: 30vh !important;
+  }
+
+  .product_box{
+    margin-top:25px;
+  }
+
+  .catagory_arrow{
+    width:60px;
+    height:60px;
+  }
+
+  .catagory_products{
+    padding-bottom:0%;
+  }
+
+  .catagory_row{
+    padding-bottom:10%;
+    padding-top:5%;
+    border-bottom:2px solid #e6e6e6;
+  }
+
+}
+
+.fix_x{
+  height:70vh;
+  position: relative;
+}
+
+.fix_y{
+  top:90%;
+  position: absolute;
+  width: 100%;
+  left:0%;
+}
+
+.fix_y {
+    top: 100%;
+    position: absolute;
+    width: 100%;
+    left: 0%;
 }

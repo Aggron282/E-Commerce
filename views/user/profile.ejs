@@ -2,7 +2,7 @@
 
     <p class="exit_profile">X</p>
 
-    <form  class="profile_form_" action ="<%= action %>" method = "POST">
+    <form  class="profile_form_" action ="<%= action %>" method = "POST" enctype="multipart/form-data">
 
         <div class="profile_img_container">
 
@@ -29,6 +29,13 @@
 
     </form>
 
-    <img class="profile_img_" src = "./../imgs/profile_img.png">
+    <% var class_ = "default_profile" %>
 
+    <% if(user){ %>
+      <% var img_ = user.profileImg ? `images/${user.profileImg}` : "/images/profile_img.png" %>
+      <% class_ = user.profileImg ? "" : "default_profile" %>
+      <img class="profile_img_ <%= class_ %>" src =" <%= img_ %>" >
+    <%}else{%>
+      <img class="profile_img_ <%= class_ %>" src =" /images/profile_img.png" >
+    <%}%>
   </div>

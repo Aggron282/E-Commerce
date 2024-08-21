@@ -1,10 +1,18 @@
 var geocode = require("node-geocoder");
 const reverse_geocode  = require('reverse-geocode');
 
+// const options = {
+//   formatter:null,
+//   apiKey:"AIzaSyACepJIoDZ1rhhju2bK-lO23qIzaKwXsnY"
+// }
+
 const options = {
-  formatter:null,
-  apiKey:"AIzaSyACepJIoDZ1rhhju2bK-lO23qIzaKwXsnY"
-}
+  provider: 'google',
+
+  // Optional depending on the providers
+  apiKey: 'AIzaSyACepJIoDZ1rhhju2bK-lO23qIzaKwXsnY', // for Mapquest, OpenCage, APlace, Google Premier
+  formatter: null // 'gpx', 'string', ...
+};
 
 const normal_geocoder = geocode(options);
 
@@ -16,11 +24,8 @@ const ReverseConvertLocation = async ({latitude,longitude}) => {
     return null;
   }
 
-  console.log(latitude,longitude);
-
-  var address = reverse_geocode.lookup(latitude,longitude,"us");
-
-  console.log(address);
+  const geocoder = geocode(options);
+  var address = await reverse_geocode.lookup(latitude,longitude,"us");
 
   return address;
 
@@ -28,21 +33,24 @@ const ReverseConvertLocation = async ({latitude,longitude}) => {
 
 const ConvertLocation =  async (place) =>{
 
-  const coords = await geocoder.geocode(place);
+  const data = await normal_geocoder.geocode(place);
 
-  if(coords.length <=0){
+  if(data.length <=0){
     return false;
   }
 
-  if(coords.length > 0){
+  if(data.length > 0){
 
-    latitude = coords[0].latitude;
-    longitude = coords[0].longitude;
+      latitude = data[0].latitude;
+      longitude = data[0].longitude;
 
-    return {
-      latitude:latitude,
-      longitude:longitude
-    }
+      return  {
+        coords: {
+          latitude:latitude,
+          longitude:longitude,
+        },
+        address:data[0].formattedAddress
+      }
 
   }
   else{

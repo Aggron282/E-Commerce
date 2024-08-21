@@ -17,35 +17,6 @@ const User = require("../models/user.js");
 const PlaceholderImages = require("./../data/items_placeholder_other_rated.js");
 const Reviews = require("./../data/reviews.js");
 
-var default_catagories = [
-    {
-      catagory:"Sportswear",
-      items:[],
-      counter:0,
-    },
-    {
-      catagory:"Fashion",
-      items:[],
-      counter:0,
-    },
-    {
-      catagory:"Electronics",
-      items:[],
-      counter:0
-    },
-    {
-      catagory:"Home",
-      items:[],
-      counter:0
-    },
-    {
-      catagory:"Cookware",
-      items:[],
-      counter:0
-    }
-]
-
-
 
 //----------------------------------------------------------------------------------------
 // Get Data Functions
@@ -55,6 +26,30 @@ const GetOrders = async(req,res)=>{
     res.json(orders);
   });
 
+}
+
+
+const UpdateLocation = (req,res) =>{
+
+  var data = req.body;
+  var address = data.address;
+  var coords = data.coords;
+
+  console.log(req.user._id)
+
+  User.findById(req.user._id).then((user_)=>{
+
+    console.log(user_)
+
+    user_.location = data;
+
+    var new_user = new User(user_);
+
+    new_user.save();
+
+    res.json({user:new_user});
+
+  }).catch(err => console.log(err));
 }
 
 const GetCurrentCart = (req,res,next)=>{
@@ -150,7 +145,7 @@ const EditProfile = (req,res) => {
 //----------------------------------------------------------------------------------------
 // Change User Cart Functions
 
-const DeleteCart= (req,res)=>{
+const DeleteCart = (req,res)=>{
   req.user.ClearCart();
 }
 
@@ -267,12 +262,12 @@ const GetHomePage = async (req,res,next) => {
 
   Product.find().then(async (all_products) =>{
 
-    var top_deals = [];
     var highest_product = null;
-    var new_catagories =  await product_util.OrganizeCatagories(default_catagories,all_products);
+    var new_catagories =  product_util.OrganizeCatagories(all_products);
 
-    top_deals = [...all_products];
+    var top_deals = product_util.OrganizeDiscounts(all_products);
 
+    // return;
     var cart;
 
     if(req.user){
@@ -282,21 +277,26 @@ const GetHomePage = async (req,res,next) => {
       cart = null
     }
 
-    res.render(path.join(rootDir,"views","user","index.ejs"),{
+    var feedback = {
       items:{
         top_deals:top_deals,
-        highest_deal: highest_product,
         placeholder:PlaceholderImages,
+        all:all_products
       },
       catagories:new_catagories,
       cart:cart,
+      user:req.user,
       root:".",
       action:"/user/profile/edit",
       reviews:Reviews,
+      isAdmin:false,
       isAuthenticated:req.session.isAuthenticated
-    })
+    };
+
+    res.render(path.join(rootDir,"views","user","index.ejs"),feedback)
 
  }).catch((err)=>{
+   console.log(err);
    StatusError(next,err,500);
  });
 
@@ -322,7 +322,7 @@ const GetProductDetailPage = async (req,res,next) =>{
 
   Product.find().then(async (all_products) =>{
 
-     var new_catagories = product_util.OrganizeCatagories(default_catagories,all_products);
+     var new_catagories = product_util.OrganizeCatagories(all_products);
 
      Product.findById(id).then((product)=>{
 
@@ -335,6 +335,8 @@ const GetProductDetailPage = async (req,res,next) =>{
            catagories:new_catagories,
            isAdmin:false,
            root:"..",
+           isAdmin:false,
+           user:req.user,
            cart:req.user.cart,
            isAuthenticated:req.session.isAuthenticated,
            action:"/user/profile/edit"
@@ -429,15 +431,23 @@ const GetCartPage = async (req,res) =>{
 
 }
 
-  res.render(path.join(rootDir,"views","user","cart.ejs"),{
-    items:existing_items,
-    cart:cart,
-    root:"..",
-    catagories:default_catagories,
-    total_price:total_price,
-    action:"/user/profile/edit",
-    session_id:session,
-    isAuthenticated:req.session.isAuthenticated
+Product.find().then(async (all_products) =>{
+
+   var new_catagories = product_util.OrganizeCatagories(all_products);
+
+    res.render(path.join(rootDir,"views","user","cart.ejs"),{
+      items:existing_items,
+      cart:cart,
+      user:req.user,
+      isAdmin:false,
+      root:"..",
+      catagories:new_catagories,
+      total_price:total_price,
+      action:"/user/profile/edit",
+      session_id:session,
+      isAuthenticated:req.session.isAuthenticated
+    })
+
   })
 
 }
@@ -470,7 +480,7 @@ const ToggleCatagories = (req,res,next) => {
 
 }
 
-
+module.exports.UpdateLocation = UpdateLocation;
 module.exports.DeleteCartItem = DeleteCartItem;
 module.exports.GetCartPage = GetCartPage;
 module.exports.GetOrders = GetOrders;

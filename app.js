@@ -132,9 +132,10 @@ app.use("/images",express.static(path.join(__dirname,"images")))
 
 app.use(cors());
 
-app.use(user_routes);
-app.use(admin_routes);
 app.use(auth_routes);
+app.use(admin_routes);
+app.use(user_routes);
+
 
 app.get("/error",((req,res)=>{
   res.render(path.join(rootDir,"views","error.ejs"));
@@ -145,6 +146,8 @@ app.use((error,req,res,next)=>{
   res.locals.error = error;
 
   const status = error.status || 500;
+
+  console.log(error);
 
   res.status(500).render(path.join(rootDir,"views","error.ejs"),{
     errMessage:error,

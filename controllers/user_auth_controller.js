@@ -42,27 +42,28 @@ const PostUserLogin = (req,res,next) => {
 
   var email = req.body.email;
   var password = req.body.password;
-  console.log(email,password);
+
   feedback.url = USER_LOGIN_CONFIG.login_url;
   feedback.userInput.email = email;
   feedback.userInput.password = password;
+
   var errors = validationResult(req);
-  console.log(errors);
 
   if(errors.isEmpty()){
-    console.log(errors);
+
     User.findOne({email:email}).then((found_user)=>{
-      console.log(found_user);
+
       if(found_user){
+
         if(found_user.password == password){
         // bcrypt.compare(password,found_user.password).then((isFound)=>{
-          // console.log(isFound)
+
           // if(isFound){
 
             req.session.isAuthenticated = true;
             req.session.user = found_user;
             // console.log(found_user);
-            console.log(found_user);
+            // console.log(found_user);
             req.session.save((err)=>{
               res.redirect(USER_LOGIN_CONFIG.home_url);
             });
@@ -85,7 +86,8 @@ const PostUserLogin = (req,res,next) => {
 
     });
 
-  }else{
+  }
+  else{
     res.redirect(USER_LOGIN_CONFIG.login_url);
   }
 

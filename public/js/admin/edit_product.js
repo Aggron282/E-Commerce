@@ -21,7 +21,7 @@ var organized_products = [];
 async function Init(){
 
   organized_products = await OrganizeProducts();
-
+  console.log("S");
   if(catagory_products_admin_container){
     catagory_products_admin_container.innerHTML = "";
     RenderProductCatagories();
@@ -310,7 +310,7 @@ async function OrganizeProducts(){
   var get_products = await axios.get("/admin/products/all");
   var products = get_products.data;
   var catagories = [];
-
+  console.log(get_products);
   for(var i = 0; i < products.length; i++){
 
       if(catagories.length <= 0){
@@ -515,5 +515,5 @@ edit_delete_button.addEventListener("click",()=>{
   ToggleCanEdit();
 });
 
-
+console.log("Hellpow worlds")
 Init();

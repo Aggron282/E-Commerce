@@ -50,7 +50,7 @@
 
   <div class="row">
 
-    <div class="col-7">
+    <div class="col-7 description_col">
 
         <div class="product_detail_box">
 
@@ -84,7 +84,7 @@
 
     </div>
 
-    <div class="col-4">
+    <div class="col-4 img_col">
 
       <% if (!isAdmin) {%>
         <img class="product_detail_image" src = <%= `./../${item.thumbnail}` %> />
@@ -96,7 +96,9 @@
 
   </div>
 
-  <button class="delete_perm"> Delete </button>
+  <% if(isAdmin){ %>
+    <button class="delete_perm"> Delete </button>
+  <%}%>
 
 </main>
 
@@ -113,6 +115,7 @@
   <script src = "./../../../js/admin/edit_product.js" ></script>
   <script src = "./../../../js/util.js" ></script>
   <script>
+
       var delete_perm = document.querySelector(".delete_perm");
       var id_element = document.querySelector("#product_id_hash");
 

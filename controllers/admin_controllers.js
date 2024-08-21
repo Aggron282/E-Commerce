@@ -17,7 +17,33 @@ var Admin = require("./../models/admin.js")
 let totalProducts;
 
 
+const HardResetProducts = (req,res) => {
 
+  if(!req.admin){
+    res.json(false);
+    return;
+  }
+
+  Product.deleteMany().then((delete_)=>{
+
+    if(!delete_){
+      res.json(false)
+      return;
+    }
+
+    var products = req.admin.products.map((p)=>{
+      delete p._id;
+      return p;
+    });
+
+    Product.insertMany(products).then((inster_)=>{
+      console.log(req.admin.products);
+      res.json({products:products});
+    });
+
+  });
+
+}
 //--------------------------------------------------------------------------------
 // Get Data Functions
 const GetAdminData = (req,res)=>{
@@ -38,8 +64,6 @@ const ConvertLocation = async (req,res) => {
 
   var location_data = await location.ConvertLocation(address);
 
-  console.log(location_data);
-
   res.json({location:location_data});
 
 }
@@ -47,10 +71,12 @@ const ConvertLocation = async (req,res) => {
 const ReverseConvertLocation = async (req,res) => {
 
   var coords = req.body;
-  console.log(coords);
+
   var location_data = await location.ReverseConvertLocation(coords);
+
   var data = location_data;
-  console.log(data);
+
+
   var formatted_address = {
     zip:data.zipcode,
     stateAbr:data.state_abbr,
@@ -63,7 +89,10 @@ const ReverseConvertLocation = async (req,res) => {
     longitude:data.longitude
   }
 
-  res.json({address:formatted_address,coords:coords});
+  console.log(coords,formatted_address);
+
+   res.json({address:formatted_address,coords:coords});
+   res.end();
 
 }
 
@@ -78,11 +107,14 @@ const EditAdmin = (req,res) => {
     return;
   }
 
+  console.log(req.file.filename);
+
   const filter = { _id : new ObjectId(req.admin._id) };
-  const update = {$set:{ username : data.username, name:data.name, password:data.password } };
+  const update = {$set:{ username : data.username, name:data.name, password:data.password, profileImg:req.file.filename} };
 
   Admin.findOneAndUpdate(filter,update).then((response)=>{
       req.admin = response;
+      res.redirect("/admin");
   });
 
 }
@@ -91,10 +123,6 @@ const EditAdmin = (req,res) => {
 // Get Product Data
 
 const GetProductsData = async (req,res,next) =>{
-
-  if(!req.admin._id){
-    res.redirect("/admin/login");
-  }
 
   res.json(req.admin.products);
 
@@ -115,6 +143,29 @@ const GetOneProductByParams = async (req,res,next) =>{
     });
 
 }
+
+const UpdateLocation = (req,res) =>{
+
+  var data = req.body;
+  var address = data.address;
+  var coords = data.coords;
+
+  Admin.findById(req.admin._id).then((admin_)=>{
+
+    console.log(admin_)
+
+    admin_.location = data;
+
+    var new_admin = new Admin(admin_);
+
+    new_admin.save();
+
+    res.json({admin:new_admin});
+
+  }).catch(err => console.log(err));
+
+}
+
 
 const GetOneProduct = (req,res,next) => {
 
@@ -152,6 +203,7 @@ const GetMainPage = (req,res,next) =>{
       products:req.admin.products,
       totalProducts:totalProducts,
       isAdmin:true,
+      user:req.admin,
       action:"/admin/profile/edit"
     });
 
@@ -169,6 +221,7 @@ const GetProductDetailPage = async (req,res,next) =>{
         res.render(path.join(rootDir,"views","user","detail.ejs"),{
           item:product,
           root:"../..",
+          user:req.admin,
           isAdmin:true
         });
 
@@ -266,8 +319,12 @@ const EditOneProduct = async (req,res,next) =>{
 
   var found_product = await Product.findOne({_id:new ObjectId(body._id)});
   var new_product = {...found_product._doc};
+  var thumbnail = new_product.thumbnail;
+  if( req.file &&  req.file.filename){
+     thumbnail = req.file.filename;
+  }
   new_product.title = body.title;
-  new_product.thumbnail = body.thumbnail;
+  new_product.thumbnail = thumbnail;
   new_product.description = body.description;
   new_product.price = body.price;
   new_product.banner = body.banner;
@@ -330,7 +387,7 @@ const AddProduct = async (req,res,nect) => {
   }
 
   var products = new Product(schema);
-  return;
+
   res.json(schema);
 
 }
@@ -400,10 +457,12 @@ module.exports.EditOneProduct = EditOneProduct;
 module.exports.AddProduct = AddProduct;
 module.exports.DeleteOneProductByParams = DeleteOneProductByParams;
 module.exports.DeleteOneProduct = DeleteOneProduct;
+module.exports.UpdateLocation = UpdateLocation;
 
 module.exports.GetMainPage = GetMainPage;
 module.exports.GetOrderPage = GetOrderPage;
 module.exports.GetProductDetailPage = GetProductDetailPage;
+module.exports.HardResetProducts = HardResetProducts;
 
 module.exports.GetProductsData = GetProductsData;
 module.exports.GetAdminData = GetAdminData;

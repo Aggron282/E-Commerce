@@ -1,8 +1,8 @@
 var location_choice = document.querySelector("#update_location");
-
 var location_modal = document.querySelector(".update_location_container");
 var exit_location =document.querySelector(".exit_location");
 var location_form = document.querySelector(".location_form");
+var update_location_url = location_form.getAttribute("action");
 var address_input = document.querySelector(".current_location_input");
 var location_button = document.querySelector(".update_location_button");
 var map_container = document.querySelector(".map_container");
@@ -13,12 +13,11 @@ var current_address_data;
 
 function RenderMapElement({latitude,longitude}){
 
-  var html = `<gmp-map center="${latitude}, ${longitude}" zoom="10"  id = "google_map" map-id="map_interface" style="height: 200px"></gmp-map>`;
+  var html = `<gmp-map center="${latitude}, ${longitude}" zoom="13"  id = "google_map" map-id="map_interface" style="height: 200px"></gmp-map>`;
 
   map_container.innerHTML = html;
 
 }
-
 
 var canEditLocation = false;
 
@@ -49,9 +48,21 @@ async function SubmitAndUpdateLocation(){
 
   var address = address_input.value;
   var data = await axios.post("/location/convert",{address:address});
-  var coords = data.data.location;
+  var new_location_data = data.data.location;
 
-  RenderMapElement(coords);
+  current_address_data = address;
+
+  RenderMapElement(new_location_data.coords);
+
+  var update_location = await axios.post(update_location_url,new_location_data);
+
+  console.log(update_location);
+
+  if(update_location.data){
+    alert("Location Updated");
+  }else{
+    alert("Error Occured");
+  }
 
 }
 
@@ -66,7 +77,7 @@ function GetCurrentLocation(){
       longitude:coords.longitude
     }
 
-    var data =  await axios.post("/location/reverse_convert",config);
+    axios.post("/location/reverse_convert",config).then((data)=>{
 
     var location_data = data.data;
 
@@ -77,13 +88,13 @@ function GetCurrentLocation(){
       longitude:location_data.coords.longitude
     }
 
-    console.log(location_data);
-
     address_input.value = address_formatted;
 
 
     RenderMapElement(new_coords);
 
+
+  }).catch(err=>{console.log("error")});
 
   });
 

@@ -2,72 +2,64 @@
 
   <div class="row margin-top-2_5-neg">
 
-  <% if(items.top_deals.length < 5 ){ %>
+    <% for(var i =0; i < 5; i++){ %>
+          <% if(items.top_deals[i]){ %>
+            <% new_name = items.top_deals[i].title.substring(0, 35) + "..."; %>
 
-      <% for(var i =0; i <5; i++){%>
+            <% var new_description = items.top_deals[i].description  %>
 
-        <div class="col-1-of-3">
-            <div class="product_box shadow_border">
+            <% if (items.top_deals[i].description.length > 105) { %>
+              <% new_description = items.top_deals[i].description.substring(0, 105) + "..."; %>
+            <% } %>
 
-                <p class="product_name">Top Ranked Deals</p>
+            <div class="col-1-of-3 margin-top-5 padding-top-2_5">
 
-                <img class="product_image"src = "./images/catagory_3.png"/>
+                <a href = "/product/<%=items.top_deals[i]._id%>">
 
-                <div class="product_text_box">
-                  <p class="product_id">[This could be your product!]</p>
-                  <p class="product_price product_price_original">[N/A]</p>
-                  <p class="product_price product_price_new">[N/A]</p>
-                  <a href = "#"><p class="product_price">See Details</p></a>
+                  <div class="product_box shadow_border relative">
+                    <div class="discount_tag"> <%= items.top_deals[i].discount %> %</div>
+                    <p class="product_name">Top Deals</p>
+                    <p class="product_name_sub"><%= new_name %></p>
+                    <img class="product_image" src = ./<%= items.top_deals[i].thumbnail %>>
+
+                    <div class="product_text_box">
+
+
+                      <p class="product_price product_price_original">$<%= items.top_deals[i].price  %>.99</p>
+
+
+                      <p class="product_price product_price_new">$<%= parseInt(items.top_deals[i].price - ((items.top_deals[i].price) * (items.top_deals[i].discount / 100)) ).toString(); %>.99</p>
+                        <p class="product_description_display"><%=new_description %></p>
+                        <p class="product_detail">See Details</p>
+                      </div>
+
+                </div>
+
+              </a>
+
+          </div>
+          <%}else{%>
+
+            <div class="col-1-of-3 margin-top-5 padding-top-2_5">
+                <div class="product_box shadow_border">
+
+                    <p class="product_name">Top Ranked Deals</p>
+
+                    <img class="product_image"src = "./images/catagory_3.png"/>
+
+                    <div class="product_text_box">
+                      <p class="product_id">[This could be your product!]</p>
+                      <p class="product_price product_price_original">[N/A]</p>
+                      <p class="product_price product_price_new">[N/A]</p>
+                      <a href = "#"><p class="product_price">See Details</p></a>
+                    </div>
+
                 </div>
 
             </div>
-
-        </div>
-
-    <%}%>
-
-  <%}else{ %>
-
-    <% for(var i =0; i < 5; i++){ %>
-
-        <% new_name = items.top_deals[i].title.substring(0, 35) + "..."; %>
-
-        <% var new_description = items.top_deals[i].description  %>
-
-        <% if (items.top_deals[i].description.length > 105) { %>
-          <% new_description = items.top_deals[i].description.substring(0, 105) + "..."; %>
-        <% } %>
-
-          <div class="col-1-of-3 margin-top-5 padding-top-2_5">
-
-              <a href = "/product/<%=items.top_deals[i].id%>">
-
-                <div class="product_box shadow_border">
-
-                  <p class="product_name">Top Deals</p>
-                  <p class="product_name_sub"><%= new_name %></p>
-                  <img class="product_image" src = ./<%= items.top_deals[i].thumbnail %>>
-
-                  <div class="product_text_box">
-
-                  <% if(items.top_deals[i].discount > 20){ %>
-                    <p class="product_price product_price_original">$<%= items.top_deals[i].price  %>.99</p>
-                  <%}%>
-
-                  <p class="product_price product_price_new">$<%= parseInt(items.top_deals[i].price / 2).toString(); %>.99</p>
-                    <p class="product_description_display"><%=new_description %></p>
-                    <p class="product_detail">See Details</p>
-                  </div>
-
-              </div>
-
-            </a>
-
-        </div>
-
+          <%}%>
       <%}%>
 
-    <%}%>
 
     <div class="col-1-of-3 margin-top-5 padding-2_5">
 
@@ -99,4 +91,4 @@
 
     </div>
 
-</div>
+  </div>

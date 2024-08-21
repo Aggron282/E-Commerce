@@ -9,8 +9,9 @@
     <gmp-map center="37.4220656,-122.0840897" zoom="10" map-id="DEMO_MAP_ID" style="height: 200px"></gmp-map>
   </div>
 
+  <% var update_url = isAdmin ? "/admin/location/update" : "/user/location/update" %>
 
-  <form class="location_form" action = "/user/location/update">
+  <form class="location_form" action = "<%= update_url %>">
 
     <input class="current_location_input" placeholder="Enter Address"  name = "address">
     <button class=" location_button update_location_button" type="Submit">Update Location</button>

@@ -124,3 +124,65 @@
   background:black;
   color:white;
 }
+
+@media screen and (max-width:1024px) and (min-width:700px){
+
+  .nav_container{
+    margin-left: 2.5%;
+  }
+
+  .logo_container{
+    margin-right: 2.5%;
+  }
+
+  .profile_icon{
+    margin-top: 10px ;
+  }
+  .dropdown_title{
+    font-size:25px;
+    font-weight:400;
+  }
+  .shopping_line{
+    transform: rotateZ(0deg) scaleX(1.4);
+    margin-top: 85%;
+    width: 100%;
+  }
+
+  .modal_container {
+    padding-bottom: 20% !important;
+    overflow: hidden;
+    position: relative;
+    top: 10%;
+    width: 90%;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0px 2px 20px black;
+    border: 1px solid #e6e6e6;
+    padding: 1%;
+    padding-bottom: 5%;
+  }
+
+  .product_input_col{
+    width:100%;
+  }
+
+  .modal_title_add {
+    text-align: center;
+    font-size: 30px;
+    font-weight: 600;
+  }
+
+  .add_product_btn {
+    margin-top: 5%;
+    font-size: 30px;
+    /* padding: 30px; */
+    background: black;
+    color: white;
+    padding: 10px;
+    font-size: 25px;
+    border-radius: 10px;
+    width: 100%;
+    border: none;
+  }
+
+}

@@ -13,12 +13,13 @@
   <body>
 
   <div class="container-fluid">
-    <% console.log(validationErrors) %>
+    <p class="type_title"> <%= type %> </p>
+
     <div class="login_container">
+
 
                 <div class="authentication_container">
 
-                    <p class="type_title"> <%= type %> </p>
 
                     <div class="intro_container">
 
@@ -31,7 +32,6 @@
 
                   <div class="form_container">
 
-                    <% console.log(url) %>
                     <form method = "POST" action = <%= url %> >
                       <div class="login_row">
                         <label>
