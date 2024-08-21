@@ -8,10 +8,10 @@
 @media screen and (max-width:1024px) and (min-width:700px){
 
   .bubble_slideshow_container{
-      width: 25%;
+      width: 30%;
       position: absolute;
       left: 45%;
-      top: 40%;
+      top: 50%;
   }
 
   .header_button_1{
