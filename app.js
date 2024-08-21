@@ -13,7 +13,7 @@ var app = express();
 
 var MongoDBStore = require('connect-mongodb-session')(session);
 
-var port = 3003 ;
+var port = process.env.PORT || 3003 ;
 
 var user_routes = require("./routes/user_routes.js");
 var admin_routes = require("./routes/admin_routes.js");
