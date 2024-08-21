@@ -4,6 +4,17 @@
   width:10%;position:absolute;left:45%;top:90%;
 }
 
+@media screen and (max-width:1377px) and (min-width:1024px) and (orientation:landscape){
+
+  .bubble_slideshow_container{
+
+      width:10% !important;
+      position:absolute;
+      left:45% !important;
+      top:90% !important;
+  }
+
+}
 
 @media screen and (max-width:1024px) and (min-width:700px){
 
