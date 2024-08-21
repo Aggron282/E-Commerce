@@ -213,8 +213,9 @@ p {
 @media screen and (max-width:1024px) and (min-width:700px){
 
   .items_banner_container{
-        margin-top: 10%;
+    margin-top: 10%;
   }
+
   .advertise_container .text_banner .title{
     font-size:35px;
     font-weight:600;
