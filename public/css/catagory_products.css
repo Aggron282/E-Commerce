@@ -190,6 +190,16 @@ p {
   margin-top:5%;
 }
 
+@media screen and (max-width:1377px) and (min-width:1024px) and (orientation:landscape){
+
+  .ad_button{
+    width:90% !important;
+    margin-left:5%;
+    margin-top:5%;
+    font-size:18px !important;
+  }
+
+}
 
 @media screen and (max-width:1024px) and (min-width:700px){
 
