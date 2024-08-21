@@ -96,7 +96,7 @@ p {
   width:100%;
   background-size:cover;
   overflow: hidden;
-  background-position: top;
+  background-position: bottom;
   box-shadow: 0px 0px 20px rgba(0,0,0,.5);
   background-image: url("./../images/advert.png");
 }
@@ -203,7 +203,6 @@ p {
   .advertise_container{
     padding-top:5%;
     padding-bottom:5%;
-    background-position: top;
   }
   .ad_icon{
     top:350px;
