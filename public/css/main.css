@@ -1359,15 +1359,18 @@ body {
 }
 
 .google_login_button {
-  border: 1px solid #38B6FF;
-  margin-top: 5%;
-  color: black;
-  font-weight: 400;
-  font-size: 18px;
-  border: 1px solid #38B6FF;
-  background: #38B6FF;
-  color: white;
-  padding: 2.5%;
+    margin-top: 1%;
+    margin-left: 25%;
+    width: 50%;
+    border: 1px solid #38B6FF;
+    margin-top: 5%;
+    color: black;
+    font-weight: 400;
+    font-size: 18px;
+    border: 1px solid #38B6FF;
+    background: #38B6FF;
+    color: white;
+    padding: 10px;
 }
 
 .google_login_logo {
@@ -1404,14 +1407,16 @@ body {
 }
 
 .login_button {
-  width: 80%;
-  margin: 0 auto;
-  margin-top: 5%;
-  border:1px solid #e6e6e6;
-  border-radius:5px;
-  border-bottom: 1px solid #e6e6e6;
-  text-align: center;
-  color: black;
+    width: 50% !important;
+    width: 80%;
+    margin: 0 auto;
+    /* margin-top: 5%; */
+    border: 1px solid #e6e6e6;
+    border-radius: 5px;
+    border-bottom: 1px solid #e6e6e6;
+    text-align: center;
+    color: black;
+    padding: 20px;
 }
 
 
