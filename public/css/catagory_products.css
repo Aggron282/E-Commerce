@@ -203,10 +203,10 @@ p {
   }
 
   .ad_button{
-    padding:20px;
-    font-size:18px;
+    padding:20px !important;
+    font-size:18px !important;
   }
-  
+
   .ad_icon{
     position: absolute;
     bottom:0%;
