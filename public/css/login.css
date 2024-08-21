@@ -39,6 +39,7 @@
   animation: appear 1 ease-in .75s;
   border-radius:10px;
   padding:5%;
+  margin-top:-5%;
   overflow: hidden;
   box-sizing: border-box;
 }
@@ -160,12 +161,13 @@ form p{
   letter-spacing: 3px;
   font-weight: 300;
   color: white;
+  margin-top:-4%;
   font-size: 30px;
   padding: 5%;
 }
 
 .create_account_col{
-  transform: translateY(-200px);
+  transform: translateY(-150px);
 }
 
 @media screen and (max-width:1024px) and (min-width:700px){
