@@ -152,6 +152,21 @@ form p{
   margin-top:2.5%;
 }
 
+.login_container{
+  background:linear-gradient(to bottom,#312755,#304472, #583d7d, #68b5de) !important;
+}
+
+.type_title {
+  letter-spacing: 3px;
+  font-weight: 300;
+  color: white;
+  font-size: 30px;
+  padding: 5%;
+}
+
+.create_account_col{
+  transform: translateY(-200px);
+}
 
 @media screen and (max-width:1024px) and (min-width:700px){
 
@@ -192,6 +207,7 @@ form p{
   .create_account_col .login_mod {
     box-shadow:0px 0px 10px rgba(0,0,0.4);
     padding-bottom:12.5%;
+    transform: translateY(150px);
   }
 
   .login_row label{
