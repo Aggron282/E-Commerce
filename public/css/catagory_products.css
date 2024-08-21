@@ -202,6 +202,11 @@ p {
     margin-top:5%;
   }
 
+  .ad_button{
+    padding:20px;
+    font-size:18px;
+  }
+  
   .ad_icon{
     position: absolute;
     bottom:0%;
