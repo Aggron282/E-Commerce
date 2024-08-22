@@ -167,3 +167,23 @@
   bottom:0%;
   width:100%;
 }
+
+
+/* <div class="discount_product_box shadow_border relative">
+
+  <div class="discount_product_tag"> <%= discount %> %</div>
+
+  <p class="discount_product_text discount_product_text--title">Top Deals</p>
+
+  <p class="discount_product_text discount_product_text--subtitle"><%= name %></p>
+
+  <img class="discount_product_image" src = "<%= thumbnail %>">
+
+  <div class="discount_product_detail_container">
+
+    <p class="discount_product_text discount_product_text--price">$<%= price_original  %>.99</p>
+
+    <p class="discount_product_text--price discount_product_text--price--new">$<%= price_new %>.99</p>
+      <p class="discount_product_text--description"><%= description %></p>
+      <p class="product_detail">See Details</p>
+    </div> */

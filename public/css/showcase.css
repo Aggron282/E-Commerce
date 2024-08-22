@@ -6,18 +6,6 @@
   top:90%;
 }
 
-.discount_tag{
-  background:orangered;
-  color:white;
-  font-size:18px;
-  text-align: center;
-  font-weight:350;
-  width:30%;
-  position: absolute;
-  right:0;
-  top:0;
-}
-
 .sub_underline{
   width:0px;
   position: absolute;
@@ -29,6 +17,11 @@
   z-index: 12;
 }
 
+.bubble_slideshow_row{
+  z-index:99;
+  position:relative;
+  bottom:100px
+}
 
 .header--1{
   margin-top:-2.5%;

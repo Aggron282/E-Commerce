@@ -1,0 +1,151 @@
+.advertise_container{
+  width:100%;
+  background-size:cover;
+  overflow: hidden;
+  background-position: bottom;
+  box-shadow: 0px 0px 20px rgba(0,0,0,.5);
+  background-image: url("./../images/advert.png");
+}
+
+
+.google_button{
+  width:90% !important;
+  margin-left:5% !important;
+  background:#38b6ff !important;
+  border-radius:0px !important;
+  position: relative;
+}
+
+.google_img{
+  width:30px;
+  left:0%;
+  bottom:5px;
+  position: absolute;
+}
+
+.signup_banner{
+  float:left;
+  width:40%;
+  background:linear-gradient(to bottom,#312755,#304472, #583d7d, #68b5de);
+  padding:20px;
+}
+
+.question{
+  color:white;
+  font-weight:600;
+  text-align: center;
+  font-size:25px;
+  margin-top:5%;
+}
+
+.text_banner{
+  position: relative;
+}
+
+.ad_button{
+  width:50%;
+  margin-left:25%;
+  background:white;
+  margin-top:2.5%;
+  color:black;
+  box-shadow:0px 0px 10px rgba(0,0,0,.5);
+  padding:10px;
+  border-radius:10px;
+}
+
+.login_ad{
+  background:none;
+  color:white;
+}
+
+.ad_button:hover{
+  background:black;
+  color:white;
+}
+
+.advertise_container .text_banner{
+  width:60%;
+  float:left;
+  padding:20px;
+}
+
+.advertise_container .text_banner .title{
+  font-size:40px;
+  font-weight:600;
+}
+
+.ad_text{
+  color:white;
+  text-align: center;
+  letter-spacing: 2px;
+}
+
+
+.ad_icon{
+  position: absolute;
+  bottom:0%;
+  width:70%;
+  top:300px;
+  left:20%;
+}
+
+.advertise_container .text_banner .subtitle{
+  font-size:35px;
+  font-weight:400;
+  margin-top:5%;
+
+}
+@media screen and (max-width:1377px) and (min-width:1024px) and (orientation:landscape){
+
+  .ad_button{
+    width:90% !important;
+    margin-left:5%;
+    margin-top:5%;
+    font-size:18px !important;
+  }
+
+  .advertise_container{
+    padding-top:5%;
+    padding-bottom:5%;
+  }
+
+  .ad_icon{
+    top:350px;
+  }
+
+}
+
+@media screen and (max-width:1024px) and (min-width:700px){
+
+
+    .advertise_container .text_banner .title{
+      font-size:35px;
+      font-weight:600;
+    }
+
+      .ad_button{
+        margin-top:7.5%;
+      }
+
+    .ad_button{
+      width:90% !important;
+      margin-left:5%;
+      font-size:18px !important;
+    }
+
+    .ad_icon{
+      position: absolute;
+      bottom:0%;
+      width:70%;
+      top:400px;
+      left:20%;
+    }
+
+    .advertise_container .text_banner .subtitle{
+      font-size:27px;
+      font-weight:400;
+      margin-top:10%;
+    }
+
+
+}

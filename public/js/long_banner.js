@@ -1,6 +1,6 @@
 var left_arrow_element = document.querySelector(".arrow_banner--left ");
 var right_arrow_element = document.querySelector(".arrow_banner--right");
-var banner_element = document.querySelector('.products_banner');
+var banner_element = document.querySelector('.items_banner_container--inner');
 
 var offset_counter = 0;
 var offset_increment = 650;

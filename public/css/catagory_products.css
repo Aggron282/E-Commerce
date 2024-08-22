@@ -10,82 +10,24 @@
   margin-top:2.5%;
 }
 
+.catagory_product_image{
+  width:100px;
+  height:35%;
+  margin-left:25%;
+}
+
 .catagory_box{
   box-shadow: 0px 0px 10px rgba(0,0,0,.5);
   padding-bottom:5%;
   padding-top:5%;
 }
 
-.product_detail {
+.catagory_product_detail {
   transition: all .3s;
   border:1px white solid;
-}
-
-.product_price_original{
-  text-decoration: line-through !important;
-}
-
-.product_name_sub{
-  font-weight: normal !important;
-  font-size:15px !important;
-}
-
-.product_box{
-  padding-bottom:2.5%;
-  text-transform:capitalize;
-}
-
-
-.products_banner{
-  overflow-y:hidden;
-  overflow-x:scroll;
-  clear:both;width:100%;
-  z-index:99;
-  position:relative;
-  margin-bottom:5%;
-  padding:0%;
-  height:40vh
-}
-
-.product_item{
-  width:20%;
-  padding:2%;
-  position:absolute;
-}
-
-.items_banner_container{
-  position:relative;
-  background:white;
-  padding:1%;
-  padding-bottom:0%;
-  margin-top:7.5%;
-}
-
-.arrow_banner_container{
-  position:absolute;
-  width:100%;
-  padding:1%;
-  left:0%;
-  z-index:999
-}
-
-.arrow_banner{
-  width:5%;
-  position:absolute;
-  box-shadow:0px 0px 20px black;
-  background:#ccc;
-  top:20% !important;
-   z-index:99;
-}
-
-.arrow_banner--right{
-  right:0%;
-  top:20%;
-  transform:rotate(180deg);
-}
-
-.arrow_banner--left{
-  left:0%;
+  width: 100%;
+  text-align: center;
+  left: 0%;
 }
 
 .arrow_box{
@@ -106,23 +48,8 @@
   transform:rotateY(180deg);
 }
 
-.arrow_banner_container{
-  transition: all .3s
-}
-
-.arrow--banner{
-  transition: all .5s;
-  opacity:.5;
-}
-
 .product_image{
   object-fit: contain;
-}
-
-.banner_title{
-  color:black;
-  font-size:20px;
-  font-weight:700
 }
 
 .item_image{
@@ -136,11 +63,6 @@
   width:100%;
 }
 
-.arrow--banner:hover{
-  opacity:1 !important;
-}
-
-
 .product_type{
   font-family: "Amazon Ember";
   font-size:30px;
@@ -149,32 +71,10 @@
   padding-left:5%;
 }
 
-.product_detail:hover{
+.catagory_product_detail:hover{
   border-color:black;
 }
 
-.arrow_banner{
-  filter: brightness(.5);
-  width: 5%;
-  position: absolute;
-  box-shadow: none;
-  background: none;
-  z-index: 99;
-  transition: all .3s;
-}
-
-.arrow_banner:hover{
-  filter: brightness(0);
-}
-
-.arrow_banner_container{
-  position: absolute;
-  width: 100%;
-  padding: 1%;
-  left: 0%;
-  top: 50%;
-  z-index: 999
-}
 
 .catagory_product_name{
   font-size:16px;
@@ -208,123 +108,6 @@
 
 .catagory_detail:hover{
   border-color:limegreen;
-}
-
-.banner_title{
-  font-size:30px;
-  width:30%;
-  text-align: center;
-  border-bottom:2px solid black;
-}
-
-
-.advertise_container{
-  width:100%;
-  background-size:cover;
-  overflow: hidden;
-  background-position: bottom;
-  box-shadow: 0px 0px 20px rgba(0,0,0,.5);
-  background-image: url("./../images/advert.png");
-}
-
-
-.advertise_container .text_banner{
-  width:60%;
-  float:left;
-  padding:20px;
-}
-.google_button{
-  width:90% !important;
-  margin-left:5% !important;
-  background:#38b6ff !important;
-  border-radius:0px !important;
-}
-
-.signup_banner{
-  float:left;
-  width:40%;
-  background:linear-gradient(to bottom,#312755,#304472, #583d7d, #68b5de);
-  padding:20px;
-}
-
-.question{
-  color:white;
-  font-weight:600;
-  text-align: center;
-  font-size:25px;
-  margin-top:5%;
-}
-
-.text_banner{
-  position: relative;
-}
-
-.ad_button{
-  width:50%;
-  margin-left:25%;
-  background:white;
-  margin-top:2.5%;
-  color:black;
-  box-shadow:0px 0px 10px rgba(0,0,0,.5);
-  padding:10px;
-  border-radius:10px;
-}
-
-.login_ad{
-  background:none;
-  color:white;
-}
-
-.ad_button:hover{
-  background:black;
-  color:white;
-}
-
-.google_button{
-  position: relative;
-}
-
-.google_img{
-  width:30px;
-  left:0%;
-  bottom:5px;
-  position: absolute;
-}
-
-.ad_text{
-  color:white;
-  text-align: center;
-  letter-spacing: 2px;
-}
-
-.advertise_container .text_banner .title{
-  font-size:40px;
-  font-weight:600;
-}
-
-.ad_icon{
-  position: absolute;
-  bottom:0%;
-  width:70%;
-  top:300px;
-  left:20%;
-}
-
-.advertise_container .text_banner .subtitle{
-  font-size:35px;
-  font-weight:400;
-  margin-top:5%;
-
-}
-
-.sub_banner{
-  position: relative;
-  z-index: 9;
-  background: black;
-  padding:5px;
-  bottom:10px;
-  width:100%;
-  overflow:hidden;
 }
 
 .sub_catagory{
@@ -389,50 +172,10 @@
   transition: all .4s;
 }
 
-.product_name_sub{
-  font-size:20px;
-}
-
-.product_box {
-  background: white;
-  text-align: center;
-  padding: 5%;
-  width:100%;
-}
-
-.product_description_display{
-  font-size:14px;
-  text-align:left;
-}
-
-.product_image {
-  width: 150px ;
-  height:150px ;
-  margin-left:5%;
-}
-
-.product_name {
-  font-weight: 600;
-  font-size: 16px;
-  text-align: left;
-  color: black;
-}
-
-.product_price {
-  font-size: 14px;
-  color: black;
-  text-align: left;
-}
-
 .product_id {
   font-size: 14px;
   color: black;
   text-align: left;
-}
-
-.product_text_box {
-  margin-top:2.5%;
-  padding-left: 2.5%;
 }
 
 .catagory_price_new{
@@ -444,16 +187,6 @@
   width:5%;
 }
 
-.products_banner {
-  background: white;
-  margin-top: 5%;
-  height: 200px;
-}
-
-.products_banner_image {
-  width: 100%;
-  height: 100%;
-}
 
 .showcase_container_products{
   margin-top:-30%;
@@ -482,72 +215,15 @@
 }
 
 
-@media screen and (max-width:1377px) and (min-width:1024px) and (orientation:landscape){
-
-  .ad_button{
-    width:90% !important;
-    margin-left:5%;
-    margin-top:5%;
-    font-size:18px !important;
-  }
-
-  .advertise_container{
-    padding-top:5%;
-    padding-bottom:5%;
-  }
-
-  .ad_icon{
-    top:350px;
-  }
-
-}
-
 @media screen and (max-width:1024px) and (min-width:700px){
 
-  .items_banner_container{
-    margin-top: 10%;
-  }
-
-  .advertise_container .text_banner .title{
-    font-size:35px;
-    font-weight:600;
-  }
-
-  .text_banner .subtitle{
-    margin-top:5%;
-  }
-
-  .ad_button{
-    width:90% !important;
-    margin-left:5%;
-    font-size:18px !important;
-  }
-
-  .ad_icon{
-    position: absolute;
-    bottom:0%;
-    width:70%;
-    top:400px;
-    left:20%;
-  }
-
-  .advertise_container .text_banner .subtitle{
-    font-size:27px;
-    font-weight:400;
-    margin-top:10%;
-  }
-
-  .fix_x{
+  .product_box--catagory {
     padding:10px;
     height: 40vh !important;
   }
 
-  .product_box{
+  .catagory_product_box{
     margin-top:25px;
-  }
-
-  .ad_button{
-    margin-top:7.5%;
   }
 
   .catagory_arrow{
@@ -569,21 +245,7 @@
 
 }
 
-.fix_x{
+.product_box--catagory {
   height:70vh;
   position: relative;
-}
-
-.fix_y{
-  top:90%;
-  position: absolute;
-  width: 100%;
-  left:0%;
-}
-
-.fix_y {
-  top: 100%;
-  position: absolute;
-  width: 100%;
-  left: 0%;
 }
