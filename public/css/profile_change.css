@@ -2,11 +2,11 @@
   position:relative;
 }
 
-.profile_container_active{
+.profile_container--active{
   transform:translateY(20px) !important;
 }
 
-.active_wr{
+.black_overlay--active{
   position: fixed;
   top:0%;
   height:300vh;
@@ -16,7 +16,7 @@
   z-index:888888;
 }
 
-.profile_container{
+.profile_change_container{
   position: fixed;
   top:0%;
   z-index:999999;
@@ -31,7 +31,7 @@
   box-shadow: 0px 0px 10px rgba(0,0,0,.5);
 }
 
-.exit_profile{
+.profile_change--exit{
   position: absolute;
   right:5%;
   top:5%;
@@ -40,12 +40,12 @@
   transition: all .3s;
 }
 
-.exit_profile:hover{
+.profile_change--exit:hover{
   font-weight:bold;
   color:red;
 }
 
-.submit_profile{
+.profile_change_button--submit{
   background:white;
   border-color:black;
   border-width:1.5px;
@@ -53,32 +53,29 @@
   transition: .4s all;
 }
 
-.default_profile{
+.profile_change_img--default{
   background:black !important;
 }
 
-.submit_profile:hover{
+.profile_change_button--submit:hover{
   background:black;
   color:white;
 }
 
-.profile_img_{
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, .5);
-      padding: 2px;
-      border: 1px solid black;
-      width: 30%;
-      float: right;
-      /* width: 20%; */
-      /* padding: 10%; */
-      top: 20%;
-      height:50%;
-      border-radius: 50%;
-      /* background: black; */
-      position: absolute;
-      right:5%;
+.profile_change_img--display{
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, .5);
+  padding: 2px;
+  border: 1px solid black;
+  width: 30%;
+  float: right;
+  top: 20%;
+  height:50%;
+  border-radius: 50%;
+  position: absolute;
+  right:5%;
 }
 
-.profile_label{
+.profile_change_label{
   color:black !important;
   font-size:18px;
   font-weight:300;
@@ -86,7 +83,7 @@
   margin-top:2.5%;
 }
 
-.profile_input{
+.profile_change_input{
   padding:10px;
   width:60%;
   background:white;
@@ -95,23 +92,18 @@
   border-color:#e6e6e6;
 }
 
-
-
-
-
-
 @media screen and (max-width:1024px) and (min-width:700px){
 
-  .profile_label {
-      font-size: 20px;
-      font-weight: 400;
+  .profile_change_label {
+    font-size: 20px;
+    font-weight: 400;
   }
 
   .profile_container {
-      padding-top: 5% !important;
-      top: 20%;
-      padding-bottom: 10%;
-      left: 5%;
+    padding-top: 5% !important;
+    top: 20%;
+    padding-bottom: 10%;
+    left: 5%;
   }
 
 }

@@ -1,15 +1,9 @@
-p {
-  font-family:"Amazon Ember";
-  color:black;
-}
 
 .catagory_title{
   color:black;
   font-size:25px;
   padding-left:2.5%;
 }
-
-
 
 .catagory_row{
   padding-top:5%;
@@ -22,15 +16,151 @@ p {
   padding-top:5%;
 }
 
+.product_detail {
+  transition: all .3s;
+  border:1px white solid;
+}
+
+.product_price_original{
+  text-decoration: line-through !important;
+}
+
+.product_name_sub{
+  font-weight: normal !important;
+  font-size:15px !important;
+}
+
+.product_box{
+  padding-bottom:2.5%;
+  text-transform:capitalize;
+}
+
+
+.products_banner{
+  overflow-y:hidden;
+  overflow-x:scroll;
+  clear:both;width:100%;
+  z-index:99;
+  position:relative;
+  margin-bottom:5%;
+  padding:0%;
+  height:40vh
+}
+
+.product_item{
+  width:20%;
+  padding:2%;
+  position:absolute;
+}
+
+.items_banner_container{
+  position:relative;
+  background:white;
+  padding:1%;
+  padding-bottom:0%;
+  margin-top:7.5%;
+}
+
+.arrow_banner_container{
+  position:absolute;
+  width:100%;
+  padding:1%;
+  left:0%;
+  z-index:999
+}
+
 .arrow_banner{
-    filter: brightness(.5);
-    width: 5%;
-    position: absolute;
-     box-shadow: none;
-    background: none;
-    /* top: 0% !important; */
-    z-index: 99;
-    transition: all .3s;
+  width:5%;
+  position:absolute;
+  box-shadow:0px 0px 20px black;
+  background:#ccc;
+  top:20% !important;
+   z-index:99;
+}
+
+.arrow_banner--right{
+  right:0%;
+  top:20%;
+  transform:rotate(180deg);
+}
+
+.arrow_banner--left{
+  left:0%;
+}
+
+.arrow_box{
+  top:10% !important
+}
+
+.arrow_showcase{
+  position:absolute;
+  width:4%;
+}
+
+.arrow_showcase--left{
+  left:-5%;
+}
+
+.arrow_showcase--right{
+  right:5%;
+  transform:rotateY(180deg);
+}
+
+.arrow_banner_container{
+  transition: all .3s
+}
+
+.arrow--banner{
+  transition: all .5s;
+  opacity:.5;
+}
+
+.product_image{
+  object-fit: contain;
+}
+
+.banner_title{
+  color:black;
+  font-size:20px;
+  font-weight:700
+}
+
+.item_image{
+  width:90%;
+  margin-top:-15%;
+}
+
+.arrow_box{
+  position:absolute;
+  top:20%;
+  width:100%;
+}
+
+.arrow--banner:hover{
+  opacity:1 !important;
+}
+
+
+.product_type{
+  font-family: "Amazon Ember";
+  font-size:30px;
+  color:black;
+  font-weight:bold;
+  padding-left:5%;
+}
+
+.product_detail:hover{
+  border-color:black;
+}
+
+.arrow_banner{
+  filter: brightness(.5);
+  width: 5%;
+  position: absolute;
+  box-shadow: none;
+  background: none;
+  z-index: 99;
+  transition: all .3s;
 }
 
 .arrow_banner:hover{
@@ -38,12 +168,12 @@ p {
 }
 
 .arrow_banner_container{
-    position: absolute;
-    width: 100%;
-    padding: 1%;
-    left: 0%;
-    top: 50%;
-    z-index: 999
+  position: absolute;
+  width: 100%;
+  padding: 1%;
+  left: 0%;
+  top: 50%;
+  z-index: 999
 }
 
 .catagory_product_name{
@@ -54,10 +184,6 @@ p {
 
 .catagory_products{
   padding-bottom:10%;
-}
-
-.no-margin-left{
-  margin-left:0% !important;
 }
 
 .catagory_image{
@@ -191,6 +317,171 @@ p {
 
 }
 
+.sub_banner{
+  position: relative;
+  z-index: 9;
+  background: black;
+  padding:5px;
+  bottom:10px;
+  width:100%;
+  overflow:hidden;
+}
+
+.sub_catagory{
+  padding:0px;
+  position: relative;
+  height:20px;
+  float: left;
+  color:white;
+  margin-left:30px;
+}
+
+.catagory_arrow{
+  border:1.5px solid #e6e6e6;
+  border-radius:5px;
+  position: absolute;
+  top:40%;
+  width:40px;
+  height:40px;
+  z-index:1;
+  transition:  all .2s;
+  opacity:.6;
+}
+
+.catagory_arrow:hover{
+  opacity:1;
+  background:black;
+}
+
+.detail_row p {
+  color:white;
+}
+
+.catagory_arrow:hover img {
+  filter: brightness(100);
+}
+
+.catagory_arrow img {
+  width:100%;
+  margin-top:50%;
+  filter: brightness(00);
+}
+
+.catagory_arrow--right{
+  right:-5%;
+}
+
+.catagory_arrow--right img {
+  transform: rotateY(180deg);
+}
+
+.catagory_arrow--left{
+  left:-5%;
+}
+
+.items_row{
+  width:90%;
+  margin-left:5%;
+}
+
+.sub_catagory:hover .sub_underline{
+  width:100%;
+  transition: all .4s;
+}
+
+.product_name_sub{
+  font-size:20px;
+}
+
+.product_box {
+  background: white;
+  text-align: center;
+  padding: 5%;
+  width:100%;
+}
+
+.product_description_display{
+  font-size:14px;
+  text-align:left;
+}
+
+.product_image {
+  width: 150px ;
+  height:150px ;
+  margin-left:5%;
+}
+
+.product_name {
+  font-weight: 600;
+  font-size: 16px;
+  text-align: left;
+  color: black;
+}
+
+.product_price {
+  font-size: 14px;
+  color: black;
+  text-align: left;
+}
+
+.product_id {
+  font-size: 14px;
+  color: black;
+  text-align: left;
+}
+
+.product_text_box {
+  margin-top:2.5%;
+  padding-left: 2.5%;
+}
+
+.catagory_price_new{
+  font-size:16px;
+  text-align: left;
+}
+
+.catagory_image{
+  width:5%;
+}
+
+.products_banner {
+  background: white;
+  margin-top: 5%;
+  height: 200px;
+}
+
+.products_banner_image {
+  width: 100%;
+  height: 100%;
+}
+
+.showcase_container_products{
+  margin-top:-30%;
+  position:relative;
+  z-index:99
+}
+
+.price_number {
+  height: 50%;
+  width: 50%;
+  border-radius: 10%;
+  background: white;
+  margin: auto;
+  margin-top: 25%;
+  color: black;
+  text-align: center;
+  font-size: 30px;
+  font-weight: 500;
+  position: relative;
+}
+
+.price_deal {
+  top: 35%;
+  position: absolute;
+  width: 100%;
+}
+
+
 @media screen and (max-width:1377px) and (min-width:1024px) and (orientation:landscape){
 
   .ad_button{
@@ -204,6 +495,7 @@ p {
     padding-top:5%;
     padding-bottom:5%;
   }
+
   .ad_icon{
     top:350px;
   }

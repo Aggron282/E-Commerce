@@ -111,11 +111,11 @@ function ToggleLocationModal(toggle){
 
   if(canEditLocation){
     document.querySelector(".profile_wrapper").classList.add("active_wr")
-    location_modal.classList.add("update_location_container_active");
+    location_modal.classList.add("update_location_container--active");
   }
   else{
     document.querySelector(".profile_wrapper").classList.remove("active_wr")
-    location_modal.classList.remove("update_location_container_active");
+    location_modal.classList.remove("update_location_container--active");
   }
 
 }

@@ -1,0 +1,32 @@
+.modal_container{
+  position:relative;
+  z-index:9999;
+  overflow:hidden;
+  top:-10%
+}
+
+.modal_title_add{
+  text-align:center;
+  font-size:18px;
+  font-weight:400;
+  margin-top:5%
+}
+.product_form_row{
+  width:90%;
+  margin-left:5%
+}
+
+.detail_row{
+  position:absolute;
+  left:10%;
+  width:100%;
+  top:0%;
+  z-index:999;
+  top:2.5%;
+  background:#00453e;
+  width:100%;
+  z-index:99;
+  position:static;
+  height:100%;
+  padding-top:1%
+}

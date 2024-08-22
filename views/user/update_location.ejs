@@ -1,20 +1,20 @@
 <div class="update_location_container">
 
-  <p class="exit_location">X</p>
+  <p class="update_location--exit">X</p>
 
-  <p class="title"> Update Location </p>
-  <button class="location_button current_location_button"> Get Current Location</button>
+  <p class="title update_location_container--title"> Update Location </p>
+  <button class="update_location_button update_location_button--current"> Get Current Location</button>
 
-  <div class="map_container">
+  <div class="update_location_map">
     <gmp-map center="37.4220656,-122.0840897" zoom="10" map-id="DEMO_MAP_ID" style="height: 200px"></gmp-map>
   </div>
 
   <% var update_url = isAdmin ? "/admin/location/update" : "/user/location/update" %>
 
-  <form class="location_form" action = "<%= update_url %>">
+  <form class="update_location_form" action = "<%= update_url %>">
 
-    <input class="current_location_input" placeholder="Enter Address"  name = "address">
-    <button class=" location_button update_location_button" type="Submit">Update Location</button>
+    <input class="update_location_input" placeholder="Enter Address"  name = "address">
+    <button class=" update_location_button update_location_button--submit" type="Submit">Update Location</button>
 
   </form>
 

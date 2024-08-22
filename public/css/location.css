@@ -10,8 +10,6 @@
   border-radius: 10px;
   background: white;
   z-index:9999999;
-
-
 }
 
 #google_map {
@@ -19,6 +17,7 @@
 }
 
 @keyframes map_appear{
+
   0%{
     opacity: 0%;
     transform: rotateY(360deg);
@@ -27,15 +26,15 @@
     opacity: 100%;
     transform: rotateY(0deg);
   }
+
 }
 
-.update_location_container_active{
+.update_location_container--active{
   opacity: 1 !important;
-
   transform: translateX(00px) translateY(10px) !important;
 }
 
-.exit_location{
+.update_location_container--exit{
   position: absolute;
   right:5%;
   font-size: 20px;
@@ -43,17 +42,17 @@
   color:black;
 }
 
-.exit_location:hover{
+.update_location_container--exit:hover{
   color:red !important;
 }
 
-.map_container{
+.update_location_map{
   width:100%;
   margin-top:2.5%;
   background:#e6e6e6;
 }
 
-.current_location_input{
+.update_location_input{
   padding:10px;
   outline: none;
   width:100%;
@@ -62,22 +61,19 @@
   border:1px solid black;
 }
 
-.current_location_button{
+.update_location_button--current{
   width:50%;
   margin-left:25%;
 }
 
-.update_location_button{
+.update_location_button--submit{
   margin-left:25%;
   margin-top:5%;
   width:50%;
 }
-.location_button{
+
+.update_location_button{
   background:white;
-
-}
-
-.location_button{
   border: 1px solid black;
   padding:10px;
   font-size:18px;
@@ -92,32 +88,33 @@
 @media screen and (max-width:1024px) and (min-width:700px){
 
   .update_location_container {
-      width: 90%;
-      position: fixed;
-      top: 15%;
-      transform: translateX(1500px);
-      transition: all .4s;
-      padding: 1%;
-      left: 5%;
-      padding-bottom: 5%;
-      padding-top:5%;
-      border-radius: 10px;
-      background: white;
-      z-index: 9999999;
+    width: 90%;
+    position: fixed;
+    top: 15%;
+    transform: translateX(1500px);
+    transition: all .4s;
+    padding: 1%;
+    left: 5%;
+    padding-bottom: 5%;
+    padding-top:5%;
+    border-radius: 10px;
+    background: white;
+    z-index: 9999999;
   }
+
   .update_location_container .title{
     font-size:30px;
     font-weight:300;
   }
 
-  .location_button{
+  .update_location_button{
     margin-top:2.5%;
     margin-bottom:2.5%;
+    margin-top:5%;
   }
+
   gmp-map{
     height:350px !important;
   }
-  .update_location_button{
-    margin-top:5%;
-  }
+
 }

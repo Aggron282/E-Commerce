@@ -10,7 +10,6 @@ var hasChanged = false;
 
 var fixed_time = 1000;
 
-
 //------------------------------------  Render and Build HTML  --------------------
 
 function BuiltItemHTML(result){
@@ -72,7 +71,6 @@ function RenderSearchProductsToHTML(){
 
 }
 
-
 //------------------------------------ Toggle Modal  --------------------
 function ExitModal(){
 
@@ -98,7 +96,6 @@ function RevealModal(){
 
 }
 
-
 //------------------------------------ EventListeners  --------------------
 search_bar_element.addEventListener("keyup",(e)=>{
 
@@ -123,12 +120,3 @@ exit_element.addEventListener("click",(e)=>{
   ExitModal();
 
 })
-
-
-// const options = {
-//   method: "POST",
-//   body:{
-//     input:input
-//   },
-//   headers: {'Content-Type': 'application/json'}
-// };

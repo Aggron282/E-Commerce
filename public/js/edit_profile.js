@@ -1,11 +1,10 @@
 var edit_profile = document.querySelector("#edit_profile");
 var edit_profile_admin = document.querySelector("#edit_profile_admin");
-var submit_form = document.querySelector(".profile_form_");
-var profile_container = document.querySelector(".profile_container");
-var exit_profile = document.querySelector(".exit_profile");
-var submit_profile = document.querySelector(".submit_profile");
-var submit_profile_admin = document.querySelector(".submit_profile_admin");
 
+var submit_form = document.querySelector(".profile_change_form");
+var profile_container = document.querySelector(".profile_change_container");
+var exit_profile = document.querySelector(".profile_change--exit");
+var submit_profile = document.querySelector(".profile_change_button--submit");
 var profile_name = document.querySelector(".profile_input--name");
 var profile_username = document.querySelector(".profile_input--username");
 var profile_password = document.querySelector(".profile_input--password");
@@ -14,10 +13,10 @@ var profile_confirm = document.querySelector(".profile_input--confirm");
 var canEditProfile = false;
 var profile = null;
 
-
-
 //-----------------------------------------------Set Form and Reveal Modal-----------------------------
 function PopulateAndSetEditProfileModal(toggle,url){
+
+  var black_overlay =  document.querySelector(".black_overlay");
 
   if(toggle){
     canEditProfile = toggle;
@@ -28,16 +27,15 @@ function PopulateAndSetEditProfileModal(toggle,url){
 
   if(canEditProfile){
     PopulateProfileForm(url);
-    document.querySelector(".profile_wrapper").classList.add("active_wr")
-    profile_container.classList.add("profile_container_active");
+    black_overlay.classList.add("black_overlay--active")
+    profile_container.classList.add("profile_container--active");
   }
   else{
-    document.querySelector(".profile_wrapper").classList.remove("active_wr")
-    profile_container.classList.remove("profile_container_active");
+    black_overlay.classList.remove("black_overlay--active")
+    profile_container.classList.remove("profile_container--active");
   }
 
 }
-
 
 //-----------------------------------------------Get and Post Profile Data-----------------------------
 

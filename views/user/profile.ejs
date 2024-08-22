@@ -1,41 +1,41 @@
-<div class="profile_container">
+<div class="profile_change_container">
 
-    <p class="exit_profile">X</p>
+    <p class="profile_change--exit">X</p>
 
-    <form  class="profile_form_" action ="<%= action %>" method = "POST" enctype="multipart/form-data">
+    <form  class="profile_change_form" action ="<%= action %>" method = "POST" enctype="multipart/form-data">
 
-        <div class="profile_img_container">
+        <div class="profile_change_img_container">
 
-            <div class="edit_img">
+            <div class="profiile_change_img_container--edit">
                 <p> Edit Profile Image </p>
-                <input class="inactive_profile_input edit_img" type = "file" name = "thumbnail">
+                <input class="inactive_profile_change_input edit_img" type = "file" name = "thumbnail">
             </div>
 
         </div>
 
-        <label class="profile_label"> Full Name </label>
-        <input class="profile_input profile_input--name " name = "name" placeholder  = "Enter Full Name" >
+        <label class="profile_change_label"> Full Name </label>
+        <input class="profile_change_input profile_change_input--name " name = "name" placeholder  = "Enter Full Name" >
 
-        <label class="profile_label"> Username </label>
-        <input class="profile_input profile_input--username" name = "username" placeholder = "Enter Username" >
+        <label class="profile_change_label"> Username </label>
+        <input class="profile_change_input profile_change_input--username" name = "username" placeholder = "Enter Username" >
 
-        <label class="profile_label"> Password </label>
-        <input class="profile_input profile_input--password" name = "password" type="password" placeholder = "Enter Password" >
+        <label class="profile_change_label"> Password </label>
+        <input class="profile_change_input profile_change_input--password" name = "password" type="password" placeholder = "Enter Password" >
 
-        <label class="profile_label"> Confirm Password </label>
-        <input class="profile_input profile_input--confirm" name = "confirm" type="password" placeholder = "Confirm Password" >
+        <label class="profile_change_label"> Confirm Password </label>
+        <input class="profile_change--input profile_change_input--confirm" name = "confirm" type="password" placeholder = "Confirm Password" >
 
-        <button class="submit_profile"> Update Changes </button>
+        <button class="profile_change_button--submit"> Update Changes </button>
 
     </form>
 
-    <% var class_ = "default_profile" %>
+    <% var class_ = "profile_change_img--default" %>
 
     <% if(user){ %>
       <% var img_ = user.profileImg ? `images/${user.profileImg}` : "/images/profile_img.png" %>
-      <% class_ = user.profileImg ? "" : "default_profile" %>
-      <img class="profile_img_ <%= class_ %>" src =" <%= img_ %>" >
+      <% class_ = user.profileImg ? "" : "profile_change_img--default" %>
+      <img class="profile_change_img--display <%= class_ %>" src =" <%= img_ %>" >
     <%}else{%>
-      <img class="profile_img_ <%= class_ %>" src =" /images/profile_img.png" >
+      <img class="profile_change_img--display <%= class_ %>" src =" /images/profile_img.png" >
     <%}%>
   </div>

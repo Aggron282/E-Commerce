@@ -38,11 +38,11 @@ body{
 
 .modal_wrapper{
   left: 5%;
-    z-index: 99;
-    height: 100vh;
-    position: absolute;
-    top: -2.5% !important;
-    width: 100%;
+  z-index: 99;
+  height: 100vh;
+  position: absolute;
+  top: -2.5% !important;
+  width: 100%;
 }
 
 .product_detail--price{
@@ -73,14 +73,14 @@ body{
 @media screen and (max-width:1024px) and (min-width:700px){
 
   .description_col {
-      width: 100%;
-      top: 400px !important;
-      position: absolute;
-    }
+    width: 100%;
+    top: 400px !important;
+    position: absolute;
+  }
 
   .img_col{
-      position: absolute;
-      top: -5%;
+    position: absolute;
+    top: -5%;
   }
 
 }

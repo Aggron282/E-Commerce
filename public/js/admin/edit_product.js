@@ -7,7 +7,7 @@ var product_form = document.querySelector("#product_form");
 var exit_modal = document.querySelector(".exit_modal");
 var edit_delete = document.getElementsByClassName("edit_delete_container");
 var edit_delete_button  =  document.querySelector(".edit_delete_p");
-var catagory_products_admin_container = document.querySelector(".catagory_products_admin_container");
+var catagory_products_admin_container = document.querySelector(".main_interface--products_container");
 
 var config = null;
 
@@ -21,7 +21,7 @@ var organized_products = [];
 async function Init(){
 
   organized_products = await OrganizeProducts();
-  console.log("S");
+
   if(catagory_products_admin_container){
     catagory_products_admin_container.innerHTML = "";
     RenderProductCatagories();
@@ -40,9 +40,7 @@ async function Init(){
 
   }
 
-
 }
-
 
 //----------------------------Form Edit Functions-----------
 function SubmitForm(){
@@ -89,7 +87,8 @@ function SubmitForm(){
   if(FormErrors.isErr){
     alert(FormErrors.err_msg);
     return null;
-  }else{
+  }
+  else{
     return config;
   }
 
@@ -170,7 +169,6 @@ function SetForm(action){
 
 }
 
-
 //----------------------------Populate and Render Functions-----------
 function PopulateModal({_id,title,price,description,thumbnail,quantity,discount,banner,catagory},url){
 
@@ -200,7 +198,7 @@ function PopulateModal({_id,title,price,description,thumbnail,quantity,discount,
       thumbnail_value = thumbnail;
     }
 
-     config = {
+    config = {
       banner:banner,
       discount:discount,
       catagory:catagory,
@@ -301,8 +299,6 @@ async function RenderProductCatagories(){
 
 }
 
-
-
 //----------------------------Products Organization Functions-----------
 async function OrganizeProducts(){
 
@@ -310,7 +306,7 @@ async function OrganizeProducts(){
   var get_products = await axios.get("/admin/products/all");
   var products = get_products.data;
   var catagories = [];
-  console.log(get_products);
+
   for(var i = 0; i < products.length; i++){
 
       if(catagories.length <= 0){
@@ -400,7 +396,6 @@ function ToggleCatagoryProducts(e){
 
 }
 
-
 //----------------------------Toggle Modal and Edit Functions-----------
 function ToggleCanEdit(){
 
@@ -423,7 +418,6 @@ function ToggleEdit(canEdit_){
 
 function ToggleModal(isOn){
 
-
   if(isOn){
     modal_wrapper.classList.add("active");
     modal_wrapper.classList.remove("inactive");
@@ -438,7 +432,6 @@ function ToggleModal(isOn){
   }
 
 }
-
 
 //----------------------------Add Events To Element Functions-----------
 function AddEventToEditButtons(){
@@ -515,5 +508,4 @@ edit_delete_button.addEventListener("click",()=>{
   ToggleCanEdit();
 });
 
-console.log("Hellpow worlds")
 Init();
