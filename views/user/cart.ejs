@@ -1,50 +1,51 @@
 
-  <%- include("./../layouts/head.ejs") %>
-  <%- include("./header.ejs") %>
+<%- include("./../layouts/user/head.ejs") %>
 
-  <div class="profile_wrapper"></div>
+<%- include("./../layouts/user/home/header.ejs") %>
 
-  <main class="cart container-fluid">
+  <div class="black_overlay"></div>
+
+  <main class="cart_interface container-fluid">
 
     <div class="overlay_content inactive">
       <%- include("./../layouts/user/home/search_overlay.ejs") %>
     </div>
 
     <div class="profile_change_overlay">
-      <%- include("./profile.ejs") %>
-      <%- include("./update_location.ejs") %>
+      <%- include("./../layouts/modal/profile.ejs") %>
+      <%- include("./../layouts/modal/update_location.ejs") %>
     </div>
 
-    <div class="cart_container  main_content padding-5 ">
+    <div class="cart_interface_container main_content padding-5 ">
 
-      <p class=" cart_heading width-100"> Your Cart</p>
+      <p class="cart_interface_heading width-100"> Your Cart</p>
 
       <div class="row relative">
 
-        <div class="col-8 items_col">
+        <div class="col-8 cart_interface_col--items">
 
             <% if (items) {%>
 
                 <% if (items.length > 0) {%>
 
                     <% for (var i = 0; i < items.length; i++) { %>
-                      <div class="cart_box">
+                      <div class="cart_interface_box">
 
                         <div class="row">
 
                           <div class="col-4">
-                            <img class="width-50 margin-left-25 cart_img" src =   <%= `/${items[i].data.thumbnail}` %> />
+                            <img class="margin-left-25 cart_interface_product--img" src =   <%= `/${items[i].data.thumbnail}` %> />
                           </div>
 
                           <div class="col-6">
 
-                            <p class="cart_title cart_text width-100"> <%= items[i].data.title %> </p>
-                            <p class="cart_price cart_text width-100"> $<%= items[i].data.price %>.99 </p>
-                            <p class="cart_quantity cart_text width-100"> Qty: <%= items[i].data.quantity %> </p>
+                            <p class="cart_interface--title cart_interface--text width-100"> <%= items[i].data.title %> </p>
+                            <p class="cart_interface--title cart_interface--text width-100"> $<%= items[i].data.price %>.99 </p>
+                            <p class="cart_interface--title cart_interface--text width-100"> Qty: <%= items[i].data.quantity %> </p>
 
                             <form method = "POST" action = "/cart/delete" >
                               <input  type="hidden" name = "_id" value= <%= items[i].data._id %> />
-                              <button class="delete_button" type="submit"> Delete </button>
+                              <button class="cart_interface_button--delete" type="submit"> Delete </button>
                             </form>
 
                           </div>
@@ -64,11 +65,11 @@
 
         <div class="col-3 relative">
 
-            <div class="total_price_container">
+            <div class="cart_interface_total_price_container">
 
-                <p class="total_price">Total Price</p>
-                <p class="total_number">$ <%= total_price %> .99</p>
-                <button class="checkout_button" id="order_button"> Buy Now</button>
+                <p class="cart_interface_heading">Total Price</p>
+                <p class="cart_interface_total">$ <%= total_price %> .99</p>
+                <button class="cart_interface_button--checkout" id="order_button"> Buy Now</button>
 
                 <script src="https://js.stripe.com/v3/"></script>
 

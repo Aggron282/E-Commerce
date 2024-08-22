@@ -1,4 +1,4 @@
-.login_container{
+.authentication_container{
   background:#f0f4f9;
   height:100vh;
   padding-bottom:5%;
@@ -11,58 +11,67 @@
   background:#f0f4f9;
 }
 
-.login_mod{
+.create_account_modal{
   background:white;
   padding:5%;
-  padding-bottom:25%;
-  margin-top:20%;
+  padding-bottom:2.5%;
+  margin-top:40%;
+  box-shadow: 0px 0px 10px rgba(0,0,0,.4);
   position: relative;
 }
 
-.google_login{
+.create_account_text--title{
+  font-size:30px;
+  text-align: center;
+}
+
+.create_account_img--logo{
+  width:40%;
   margin-top:5%;
+  margin-left:27.5%;
+}
+
+.authentication_input{
+  height:30px;
+  background:white;
+  border:none;
+  margin-top:5%;
+  width:100%;
+  border:0px;
+}
+
+.authentication_button--submit{
+  margin-top:5%;
+  margin-bottom:5%;
   background:white;
 }
 
-.google_login .abcRioButton{
+.authentication_button--google *{
   width:100% !important;
 }
 
-.google_login .abcRioButton  .abcRioButtonContentWrapper{
-  width:100% !important;
-}
-
-.authentication_container{
+.authentication_container--inner{
   background:white;
   margin:5%;
   box-shadow:0px 0px 10px rgba(0,0,0,.5);
   animation: appear 1 ease-in .75s;
   border-radius:10px;
   padding:5%;
-  margin-top:-5%;
   overflow: hidden;
   box-sizing: border-box;
+  margin-top:2.5%;
 }
 
-.error_{
+.login_input--error{
   box-shadow: 0px 0px 10px red !important;
   border-color:red !important;
-}
-
-@keyframes appear {
-  0%{
-    transform:translateX(-1200px);
-  }
-  100%{
-    transform:translateX(0px);
-  }
 }
 
 form p{
   font-family: "Amazon Ember";
 }
 
-.login_subtitle{
+.login_text--subtitle{
   text-align: left;
   font-weight:300;
   width:80%;
@@ -70,12 +79,12 @@ form p{
   font-family: "Amazon Ember";
 }
 
-.logo_login{
+.login_img--logo{
   width:30%;
   margin-left: 5%;
 }
 
-.login_title{
+.login_text--title{
   text-align: left;
   font-weight:250;
   font-size:30px;
@@ -87,16 +96,16 @@ form p{
   float:right;
 }
 
-.intro_container{
+.authentication_intro_container{
   width:50%;
   float:left;
 }
 
-.login_button:hover{
+.authentication_button:hover{
   opacity:1;
 }
 
-.login_button{
+.authentication_button{
   background:linear-gradient(to right,rgba(42, 177, 255, 1),rgba(42, 200, 255, 1));
   padding:2%;
   margin-top:10%;
@@ -110,20 +119,22 @@ form p{
   width:100%;
 }
 
-.forgot_pass{
+.authentication_button--forgot{
   text-align: right;
   color:grey;
+  background:none;
+  border:none;
   margin-top:1%;
   font-size:13px;
 }
 
-.login_row label {
+.authentication_input_container label {
   width:100%;
   font-size:15px;
   font-family: "Amazon Ember";
 }
 
-.login_row input{
+.authentication_input_container input{
   margin-top:2.5%;
   width:100%;
   border:none;
@@ -133,37 +144,38 @@ form p{
   box-shadow:0px 0px 1px rgba(0,0,0,.5);
 }
 
-.login_row input:focus{
+.authentication_input_container input:focus{
   outline:none;
   box-shadow:0px 0px 5px rgba(12, 192, 223, 1);
   border-color:#0CC0DF;
 }
 
-.error_:focus{
+.login_input--error:focus{
   border-color:red !important;
 }
 
-.login_form{
+.authentication_form{
   font-size:14px;
   padding:1%;
 }
 
-.login_row{
+.authentication_input_container{
   width:100%;
   margin-top:2.5%;
 }
 
-.login_container{
+.authentication_container{
   background:linear-gradient(to bottom,#312755,#304472, #583d7d, #68b5de) !important;
 }
 
-.type_title {
+.authentication_type {
   letter-spacing: 3px;
   font-weight: 300;
   color: white;
-  margin-top:-4%;
   font-size: 30px;
-  padding: 5%;
+  display: inline;
+  margin-left:5%;
+  margin-top: 5%;
 }
 
 .create_account_col{
@@ -172,12 +184,12 @@ form p{
 
 @media screen and (max-width:1024px) and (min-width:700px){
 
-  .authentication_container{
+  .authentication_container--inner{
     position: relative;
-    top: -35px !important;
+    top: 0px !important;
   }
 
-  .login_form{
+  .authentication_form{
     padding:10px;
     border: 2px solid #e6e6e6;
   }
@@ -192,39 +204,42 @@ form p{
     width:100%;
   }
 
-  .intro_container{
+  .authentication_intro_container{
     width:100%;
   }
 
-  .login_title{
+  .login_text--title{
     text-align: center;
     font-weight:400;
   }
 
-  .type_title{
+  .authentication_type{
     font-size:40px;
     padding:5%;
+    margin-top:2.5%;
+    padding-top: 2.5%;
+    display: block;
   }
 
-  .create_account_col .login_mod {
+  .create_account_col .create_account_modal {
     box-shadow:0px 0px 10px rgba(0,0,0.4);
     padding-bottom:12.5%;
-    transform: translateY(150px);
+    transform: translateY(-100px);
   }
 
-  .login_row label{
+  .authentication_input_container label{
     font-size:20px;
     font-weight:400;
     margin-top:20px;
   }
 
-  .login_mod label{
+  .create_account_modal label{
     font-size:20px;
     font-weight:400;
     margin-top:20px;
   }
 
-  .login_subtitle {
+  .login_text--subtitle {
     text-align: center;
     font-weight: 300;
     width: 100%;
@@ -232,7 +247,7 @@ form p{
     font-family: "Amazon Ember";
   }
 
-  .logo_login {
+  .login_img--logo {
     width: 30%;
     margin-left: 35%;
   }

@@ -30,6 +30,10 @@ var StoreSession =  new MongoDBStore({
   collection:"session"
 });
 
+const ERRORPAGEURL = path.join(rootDir,"views","error","error.ejs");
+const ERRORPAGE404URL = path.join(rootDir,"views","error","404.ejs");
+
+
 app.set("views","views")
 app.set("view engine","ejs");
 
@@ -138,7 +142,7 @@ app.use(user_routes);
 
 
 app.get("/error",((req,res)=>{
-  res.render(path.join(rootDir,"views","error.ejs"));
+  res.render();
 }));
 
 app.use((error,req,res,next)=>{
@@ -149,7 +153,7 @@ app.use((error,req,res,next)=>{
 
   console.log(error);
 
-  res.status(500).render(path.join(rootDir,"views","error.ejs"),{
+  res.status(500).render(ERRORPAGEURL,{
     errMessage:error,
     error:error,
     statusCode:error.statusCode
@@ -158,7 +162,7 @@ app.use((error,req,res,next)=>{
 });
 
 app.use((req,res)=>{
-  res.render(path.join(rootDir,"views","404.ejs"));
+  res.render(ERRORPAGE404URL);
 });
 
 mongoose.connect("mongodb+srv://mawile12:sableye12@cluster0.mv38jgm.mongodb.net/shop?retryWrites=true&w=majority").then((s)=>{

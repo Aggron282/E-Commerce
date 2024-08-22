@@ -1,6 +1,6 @@
 
 <% if(!isAdmin){ %>
-  <%- include("./../layouts/head.ejs") %>
+  <%- include("./layouts/user/head.ejs") %>
 <%}else{%>
   <head>
 
@@ -27,34 +27,34 @@
 <%}%>
 
 <% if(!isAdmin){ %>
-  <%- include("./header.ejs") %>
-  <div class="profile_wrapper"></div>
+  <%- include("./layouts/user/home/header.ejs") %>
+  <div class="black_overlay"></div>
 
   <div class="overlay_content inactive">
-    <%- include("./../layouts/user/home/search_overlay.ejs") %>
+    <%- include("./layouts/user/home/search_overlay.ejs") %>
   </div>
 
   <div class="profile_change_overlay">
-    <%- include("./profile.ejs") %>
-    <%- include("./update_location.ejs") %>
+    <%- include("./layouts/modal/profile.ejs") %>
+    <%- include("./layouts/modal/update_location.ejs") %>
   </div>
 
 
 <%}else{ %>
-  <%- include("./../layouts/admin/admin_header.ejs") %>
+  <%- include("./layouts/admin/admin_header.ejs") %>
 <%}%>
 
 <main class="main_content relative">
 
   <% if(isAdmin){ %>
-    <%- include("./../layouts/admin/product_form.ejs") %>
+    <%- include("./layouts/admin/product_form.ejs") %>
   <%}%>
 
   <div class="row">
 
-    <div class="col-7 description_col">
+    <div class="col-7 product_detail_description_col">
 
-        <div class="product_detail_box">
+        <div class="product_detail--box">
 
             <p class="product_detail--name"> <%= item.title %> </p>
             <p class="product_detail--type"> <%= item.catagory %> </p>
@@ -70,9 +70,9 @@
             <br />
 
            <% if(!isAdmin) {%>
-              <button product_id = "<%= item._id %>" class="detail_button"  id= "add_cart_button">Add to Cart</button>
+              <button product_id = "<%= item._id %>" class="product_detail_button"  id= "product_detail_button--add">Add to Cart</button>
             <%}else{%>
-              <button _id = "<%= item._id %>" class="detail_button edit_button_p"  id= "edit_button_product">Edit</button>
+              <button _id = "<%= item._id %>" class="product_detail_button"  id= "product_detail_button--edit">Edit</button>
             <%}%>
 
             <br />
@@ -86,7 +86,7 @@
 
     </div>
 
-    <div class="col-4 img_col">
+    <div class="col-4 product_detail_col--img">
 
       <% if (!isAdmin) {%>
         <img class="product_detail_image" src = <%= `./../${item.thumbnail}` %> />
@@ -99,7 +99,7 @@
   </div>
 
   <% if(isAdmin){ %>
-    <button class="delete_perm"> Delete </button>
+    <button class="product_detail_button--delete"> Delete </button>
   <%}%>
 
 </main>
@@ -136,4 +136,4 @@
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyACepJIoDZ1rhhju2bK-lO23qIzaKwXsnY&loading=async&libraries=maps,marker&v=beta" defer>
 </script>
 
-<%- include("./../layouts/end.ejs") %>
+<%- include("./layouts/end.ejs") %>

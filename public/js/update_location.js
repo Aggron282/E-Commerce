@@ -1,12 +1,12 @@
 var location_choice = document.querySelector("#update_location");
 var location_modal = document.querySelector(".update_location_container");
-var exit_location =document.querySelector(".exit_location");
-var location_form = document.querySelector(".location_form");
+var exit_location =document.querySelector(".update_location--exit");
+var location_form = document.querySelector(".update_location_form");
 var update_location_url = location_form.getAttribute("action");
 var address_input = document.querySelector(".current_location_input");
-var location_button = document.querySelector(".update_location_button");
-var map_container = document.querySelector(".map_container");
-var current_location_button = document.querySelector(".current_location_button")
+var location_button = document.querySelector(".update_location_button--submit");
+var map_container = document.querySelector(".update_location_map");
+var current_location_button = document.querySelector(".update_location_button--current")
 
 var current_location_data;
 var current_address_data;

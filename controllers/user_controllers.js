@@ -17,6 +17,11 @@ const User = require("../models/user.js");
 const PlaceholderImages = require("./../data/items_placeholder_other_rated.js");
 const Reviews = require("./../data/reviews.js");
 
+const CHECKOUTPAGEURL = path.join(rootDir,"views","user","checkout.ejs");
+const DETAILPAGEURL = path.join(rootDir,"views","detail.ejs");
+const CARTPAGEURL = path.join(rootDir,"views","user","cart.ejs");
+const HOMEPAGEURL = path.join(rootDir,"views","user","index.ejs");
+
 
 //----------------------------------------------------------------------------------------
 // Get Data Functions
@@ -245,7 +250,7 @@ const GetCheckoutPage = async (req,res) =>{
     cancel_url:req.protocol + "://" + req.get("host") + "/checkout/cancel",
   }).then((session)=>{
 
-    res.render(path.join(rootDir,"views","user","checkout.ejs"),{
+    res.render(CHECKOUTPAGEURL,{
       items:user.cart.items,
       catagories: default_catagories,
       total_price:total_price,
@@ -293,7 +298,7 @@ const GetHomePage = async (req,res,next) => {
       isAuthenticated:req.session.isAuthenticated
     };
 
-    res.render(path.join(rootDir,"views","user","index.ejs"),feedback)
+    res.render(HOMEPAGEURL,feedback)
 
  }).catch((err)=>{
    console.log(err);
@@ -330,7 +335,7 @@ const GetProductDetailPage = async (req,res,next) =>{
          res.redirect("/")
        }
        else{
-         res.render(path.join(rootDir,"views","user","detail.ejs"),{
+         res.render(DETAILPAGEURL,{
            item:product,
            catagories:new_catagories,
            isAdmin:false,
@@ -435,7 +440,7 @@ Product.find().then(async (all_products) =>{
 
    var new_catagories = product_util.OrganizeCatagories(all_products);
 
-    res.render(path.join(rootDir,"views","user","cart.ejs"),{
+    res.render(CARTPAGEURL,{
       items:existing_items,
       cart:cart,
       user:req.user,

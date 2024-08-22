@@ -10,8 +10,8 @@ var auth = require("./../util/auth.js");
 var rootDir = require("./../util/path.js");
 const StatusError = require("./../util/status_error.js");
 
-const LOGINPAGE = path.join(rootDir,"views","user","login.ejs");
-const CREATEACCOUNTPAGE = path.join(rootDir,"views","user","create_account.ejs");
+const LOGINPAGE = path.join(rootDir,"views","auth","login.ejs");
+const CREATEACCOUNTPAGE = path.join(rootDir,"views","auth","create_account.ejs");
 const FUTURETIMEFIXED = 360000000;
 
 

@@ -16,19 +16,6 @@
   animation: map_appear .5s 1 ease-in !important;
 }
 
-@keyframes map_appear{
-
-  0%{
-    opacity: 0%;
-    transform: rotateY(360deg);
-  }
-  100%{
-    opacity: 100%;
-    transform: rotateY(0deg);
-  }
-
-}
-
 .update_location_container--active{
   opacity: 1 !important;
   transform: translateX(00px) translateY(10px) !important;

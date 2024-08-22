@@ -109,25 +109,6 @@ if(submit_profile){
 
 }
 
-if(submit_profile_admin){
-
-  submit_profile_admin.addEventListener("click",(e)=>{
-
-    e.preventDefault();
-
-    var config = {
-        name: profile_name.value,
-        username: profile_username.value,
-        password: profile_password.value,
-        confirm : profile_confirm.value
-      }
-
-      SubmitProfileEdit(config,submit_form);
-
-  });
-
-}
-
 exit_profile.addEventListener("click",(e)=>{
   PopulateAndSetEditProfileModal(false,null);
 });

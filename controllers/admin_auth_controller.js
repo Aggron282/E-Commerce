@@ -13,7 +13,9 @@ var auth = require("./../util/auth.js");
 var rootDir = require("./../util/path.js");
 const StatusError = require("./../util/status_error.js");
 
-const CREATEACCOUNTPAGE = path.join(rootDir,"views","user","create_account.ejs");
+const CREATEACCOUNTPAGEURL = path.join(rootDir,"views","auth","create_account.ejs");
+const LOGINPAGEURL = path.join(rootDir,"views","auth","login.ejs");
+
 
 const ADMIN_LOGIN_CONFIG = {
   login_url:"/admin/login",
@@ -47,7 +49,7 @@ const GetAdminCreateAccountPage = (req,res) => {
   feedback.userInput.password =  "";
   feedback.userInput.name =  "";
 
-  res.render(CREATEACCOUNTPAGE,feedback);
+  res.render(CREATEACCOUNTPAGEURL,feedback);
 
 }
 

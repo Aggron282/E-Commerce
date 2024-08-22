@@ -2,6 +2,7 @@
 <html lang="en" dir="ltr">
 
   <head>
+
     <meta charset="utf-8">
 
     <title></title>
@@ -28,27 +29,31 @@
 
     <div class="black_overlay"></div>
 
-    <%- include("./layouts/admin/admin_header.ejs") %>
+    <%- include("./../layouts/admin/admin_header.ejs") %>
 
     <div class="profile_change_overlay">
-      <%- include("./user/profile.ejs") %>
-      <%- include("./user/update_location.ejs") %>
+      <%- include("./../layouts/modal/profile.ejs") %>
+      <%- include("./../layouts/modal/update_location.ejs") %>
     </div>
 
     <main class="container-fluid relative padding-5">
 
-        <%- include("./layouts/admin/product_form.ejs") %>
+      <%- include("./../layouts/admin/product_form.ejs") %>
 
-        <div class="main_interface active">
-          <div class="main_interface--products_container"></div>
-        </div>
+      <div class="main_interface active">
+        <div class="main_interface--products_container"></div>
+      </div>
 
-  </main>
+    </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script src = "./../js/admin/edit_product.js" ></script>
-  <script src = "./../js/edit_profile.js" ></script>
-  <script src = "./../js/update_location.js" ></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyACepJIoDZ1rhhju2bK-lO23qIzaKwXsnY&loading=async&libraries=maps,marker&v=beta&sensor=true" defer></script>
 
-  <%- include("./layouts/end.ejs") %>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src = "./../js/admin/edit_product.js" ></script>
+    <script src = "./../js/edit_profile.js" ></script>
+    <script src = "./../js/update_location.js" ></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyACepJIoDZ1rhhju2bK-lO23qIzaKwXsnY&loading=async&libraries=maps,marker&v=beta&sensor=true" defer></script>
+
+  <%- include("./../layouts/end.ejs") %>

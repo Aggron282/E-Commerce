@@ -4,7 +4,7 @@
   font-weight: bold;
 }
 
-.product_detail_box{
+.product_detail--box{
   padding:2%;
   margin-top:2.5%;
 }
@@ -18,7 +18,7 @@ body{
   font-weight: normal;
 }
 
-.detail_button{
+.product_detail_button{
   width:50%;
   margin:0 auto;
   background:black;
@@ -30,7 +30,7 @@ body{
   transition: all .2s
 }
 
-.detail_button:hover{
+.product_detail_button:hover{
   background:black !important;
   opacity:1;
   transform: translate(0px) scale(1.05) !important;
@@ -54,10 +54,6 @@ body{
   color:black;
 }
 
-.sold_out{
-  color:red !important
-}
-
 .product_detail--description{
   width:75%;
   font-size:1rem;
@@ -72,13 +68,13 @@ body{
 
 @media screen and (max-width:1024px) and (min-width:700px){
 
-  .description_col {
+  .product_detail_col--description {
     width: 100%;
     top: 400px !important;
     position: absolute;
   }
 
-  .img_col{
+  .product_detail_col--img{
     position: absolute;
     top: -5%;
   }

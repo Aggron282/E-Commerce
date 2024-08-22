@@ -2,7 +2,7 @@ var overlay_content_element = document.querySelector(".overlay_content");
 var main_content_element = document.querySelector(".main_content");
 var exit_element = document.querySelector(".exit_search");
 var search_overlay_element = document.querySelector(".search_page_overlay");
-var search_bar_element = document.querySelector(".search_all");
+var search_bar_element = document.querySelector(".navbar_user_input--search");
 var search_overlay_row_element = document.querySelector(".search_overlay_row");
 
 var hasSearched = false;

@@ -16,6 +16,10 @@ var Admin = require("./../models/admin.js")
 
 let totalProducts;
 
+const HOMEPAGEURL = path.join(rootDir,"views","admin","admin.ejs");
+const DETAILPAGEURL = path.join(rootDir,"views","detail.ejs");
+
+
 
 const HardResetProducts = (req,res) => {
 
@@ -123,9 +127,7 @@ const EditAdmin = (req,res) => {
 // Get Product Data
 
 const GetProductsData = async (req,res,next) =>{
-
   res.json(req.admin.products);
-
 }
 
 const GetOneProductByParams = async (req,res,next) =>{
@@ -151,8 +153,6 @@ const UpdateLocation = (req,res) =>{
   var coords = data.coords;
 
   Admin.findById(req.admin._id).then((admin_)=>{
-
-    console.log(admin_)
 
     admin_.location = data;
 
@@ -199,7 +199,7 @@ const GetOneProduct = (req,res,next) => {
 // Get URL Pages
 const GetMainPage = (req,res,next) =>{
 
-    res.render(path.join(rootDir,"views","admin.ejs"),{
+    res.render(HOMEPAGEURL,{
       products:req.admin.products,
       totalProducts:totalProducts,
       isAdmin:true,
@@ -218,7 +218,7 @@ const GetProductDetailPage = async (req,res,next) =>{
         res.redirect("/admin")
       }
       else{
-        res.render(path.join(rootDir,"views","user","detail.ejs"),{
+        res.render(DETAILPAGEURL,{
           item:product,
           root:"../..",
           user:req.admin,
@@ -237,7 +237,7 @@ const GetProductDetailPage = async (req,res,next) =>{
 const GetOrderPage =(req,res,next)=>{
 
   Order.find({"user.userId":req.user._id}).then((orders)=>{
-    res.render(path.join(rootDir,"views","layouts","admin","orders.ejs"),{orders:orders});
+    res.render(path.join(rootDir,"views","layouts","orders.ejs"),{orders:orders});
   });
 
 }
@@ -320,9 +320,11 @@ const EditOneProduct = async (req,res,next) =>{
   var found_product = await Product.findOne({_id:new ObjectId(body._id)});
   var new_product = {...found_product._doc};
   var thumbnail = new_product.thumbnail;
+
   if( req.file &&  req.file.filename){
      thumbnail = req.file.filename;
   }
+
   new_product.title = body.title;
   new_product.thumbnail = thumbnail;
   new_product.description = body.description;
@@ -356,12 +358,6 @@ const EditOneProduct = async (req,res,next) =>{
 
     req.session.admin = new_admin_;
 
-    // Admin.findOne({_id:new ObjectId(new_admin_._id)}).then(async (a)=>{console.log(a.products[0].title)})
-
-    // var admin_ = await Admin.findOne({_id:new ObjectId(new_admin_._id)});
-
-    // await product.save();
-
     res.json({admin:req.session.admin});
 
   });
@@ -371,8 +367,6 @@ const EditOneProduct = async (req,res,next) =>{
 const AddProduct = async (req,res,nect) => {
 
   var body  =   req.body;
-  console.log("SS");
-  console.log(req.thumbnail,req.body);
 
   var schema = {
     title:body.title,
@@ -391,8 +385,6 @@ const AddProduct = async (req,res,nect) => {
   res.json(schema);
 
 }
-
-
 
 //--------------------------------------------------------------------------------
 // Get Order Data

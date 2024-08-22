@@ -1,5 +1,5 @@
-var cart_button = document.querySelector("#add_cart_button");
-var cart_number = document.querySelector(".bubble_cart_return");
+var cart_button = document.querySelector("#product_detail_button--add");
+var cart_container = document.querySelector(".navbar_user_container--cart");
 
 cart_button.addEventListener("click",(e)=>{
 
@@ -28,7 +28,8 @@ function AddToCart(product_id){
             console.log(res.error);
           }
           else{
-            cart_number.innerHTML = `<p class="margin-top-20 white" id="cart_number" > ${res.data.items.length} </p>`;
+            var cart_number = `<p id="cart_number"> ${res.data.items.length} </p>`;
+            cart_container.innerHTML = cart_number;
           }
 
         }
