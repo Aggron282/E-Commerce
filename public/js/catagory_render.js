@@ -1,5 +1,5 @@
 var container_render = document.querySelector(".catagory_search");
-var catagory_buttons = document.getElementsByClassName("sub_catagory");
+var catagory_buttons = document.getElementsByClassName("navbar_user_sub_banner");
 
 var PAGE_LIMIT = 5;
 var PAGE_INCREMENT = 5;
@@ -12,16 +12,16 @@ var selected_catagory = null;
 function RenderHTMLToCatagory(catagories,catagory_name){
 
   var render_html =  `
-  <div class="catagory_container_sub">
+  <div class="catagory_container">
    <p class="catagory_name"> ${catagory_name} </p>
     <div>
       ${catagories}
     </div>
-    <div class="arrow_catagory_sub_container">
-    <div class="arrow_catagory_sub arrow_catagory_sub--left " multiplier = "1">
+    <div class="arrow_catagory_container">
+    <div class="arrow_catagory arrow_catagory--left " multiplier = "1">
       <img src = "./images/arrow.png"  multiplier = "1"/>
     </div>
-    <div class="arrow_catagory_sub arrow_catagory_sub--right " multiplier ="-1">
+    <div class="arrow_catagory arrow_catagory--right " multiplier ="-1">
       <img src = "./images/arrow.png" multiplier = "-1" />
     </div>
     </div>
@@ -88,21 +88,27 @@ function BuiltCatagoriesHTML(){
 
   for(var i =0; i <PAGE_LIMIT; i++){
 
-    if(counter + i > selected_catagory.items.length){
+    if(counter + i > selected_catagory.products.length){
       break;
     }
 
-    var _id = selected_catagory.items[i]._id;
-    var new_description = selected_catagory.items[i].title.substring(0, 55) + "...";
+    var _id = selected_catagory.products[i]._id;
+    var new_description = selected_catagory.products[i].title.substring(0, 55) + "...";
 
     html += `
-    <div class="sub_catagory_container_item col-2">
-      <p class="title">${new_description}</p>
-      <div class="height_container">
-        <img class="item_img" src = ${selected_catagory.items[counter + i].thumbnail} />
+    <div class="col-2">
+
+      <div class= "catagory_product_box product_box--catagory width-100" catagory = ${selected_catagory.catagory} i = ${selected_catagory.counter} >
+
+        <p class="catagory_product_text--name">${new_description}</p>
+        <div class="catagory_product_image_container">
+          <img class="catagory_product_image" src = ${selected_catagory.products[counter + i].thumbnail} />
+        </div>
+        <p class="catagory_product_text">$${selected_catagory.products[counter + i].price}.99</p>
+        <a href = "/product/${_id}">  <button class="catagory_product_detail">See Details</button> </a>
+
       </div>
-      <p class="price">$${selected_catagory.items[counter + i].price}.99</p>
-      <a href = "/product/${_id}">  <button class="product_detail_catagory">See Details</button> </a>
+
     </div>
     `
   }
@@ -129,7 +135,9 @@ function GetCatagories(catagory){
 
     }
 
-    RenderCatagories();
+    console.log(selected_catagory);
+    
+    BuiltCatagoriesHTML();
 
   })
 

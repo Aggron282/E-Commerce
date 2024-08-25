@@ -9,27 +9,25 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link href="https://fonts.cdnfonts.com/css/amazon-ember" rel="stylesheet">
-    <link href ='./css/animations.css' rel="stylesheet"/>
-    <link href ='./css/detail.css' rel="stylesheet"/>
-    <link href ='./../css/main.css' rel="stylesheet"/>
-    <link href ='./../css/detail.css' rel="stylesheet"/>
-    <link href ='./../css/review.css' rel="stylesheet"/>
-    <link href ='./../css/cart.css' rel="stylesheet"/>
-    <link href ='./../css/search.css' rel="stylesheet"/>
-    <link href ='./css/catagory_products.css' rel="stylesheet"/>
-    <link href ='./../../css/admin.css' rel="stylesheet"/>
-    <link href = "./../../css/admin_header.css" rel= "stylesheet"/>
-    <link href = "./../../css/profile_change.css" rel= "stylesheet"/>
-    <link href ='./../css/location.css' rel="stylesheet"/>
-    <link href ='./../css/util.css' rel="stylesheet"/>
-    <link href ='./../css/add_product_form.css' rel="stylesheet"/>
+    <link href ='/css/animations.css' rel="stylesheet"/>
+    <link href ='/css/detail.css' rel="stylesheet"/>
+    <link href ='/css/review.css' rel="stylesheet"/>
+    <link href ='/css/cart.css' rel="stylesheet"/>
+    <link href ='/css/overlay_products.css' rel="stylesheet"/>
+    <link href ='/css/catagory_products.css' rel="stylesheet"/>
+    <link href ='/css/admin.css' rel="stylesheet"/>
+    <link href = "/css/admin_header.css" rel= "stylesheet"/>
+    <link href = "/css/profile_change.css" rel= "stylesheet"/>
+    <link href ='/css/location.css' rel="stylesheet"/>
+    <link href ='/css/util.css' rel="stylesheet"/>
+    <link href ='/css/add_product_form.css' rel="stylesheet"/>
   </head>
 
   <body>
 
     <div class="black_overlay"></div>
 
-    <%- include("./../layouts/admin/admin_header.ejs") %>
+    <%- include("./../layouts/admin/navbar.ejs") %>
 
     <div class="profile_change_overlay">
       <%- include("./../layouts/modal/profile.ejs") %>
@@ -51,9 +49,9 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src = "./../js/admin/edit_product.js" ></script>
-    <script src = "./../js/edit_profile.js" ></script>
-    <script src = "./../js/update_location.js" ></script>
+    <script src = "/js/admin/edit_product.js" ></script>
+    <script src = "/js/edit_profile.js" ></script>
+    <script src = "/js/update_location.js" ></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyACepJIoDZ1rhhju2bK-lO23qIzaKwXsnY&loading=async&libraries=maps,marker&v=beta&sensor=true" defer></script>
 
   <%- include("./../layouts/end.ejs") %>

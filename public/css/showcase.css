@@ -6,15 +6,18 @@
   top:90%;
 }
 
-.sub_underline{
-  width:0px;
-  position: absolute;
-  top:150%;
-  height:1px;
-  background:white;
-  transition: all .4s;
-  left:0;
-  z-index: 12;
+.slideshow--active{
+  opacity:1;
+  transition:  all .3s;
+  visibility: visible;
+  z-index:0;
+}
+
+.slideshow--inactive{
+  opacity:0;
+  visibility: hidden;
+  transition:  all .3s;
+  z-index:-999;
 }
 
 .bubble_slideshow_row{

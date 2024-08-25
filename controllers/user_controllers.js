@@ -21,6 +21,10 @@ const CHECKOUTPAGEURL = path.join(rootDir,"views","user","checkout.ejs");
 const DETAILPAGEURL = path.join(rootDir,"views","detail.ejs");
 const CARTPAGEURL = path.join(rootDir,"views","user","cart.ejs");
 const HOMEPAGEURL = path.join(rootDir,"views","user","index.ejs");
+const CURATEDPRODUCTSURL = path.join(rootDir,"views","user","curated_products.ejs");
+
+
+const CURATED_ITEMS_LIMIT = 8;
 
 
 //----------------------------------------------------------------------------------------
@@ -40,8 +44,6 @@ const UpdateLocation = (req,res) =>{
   var address = data.address;
   var coords = data.coords;
 
-  console.log(req.user._id)
-
   User.findById(req.user._id).then((user_)=>{
 
     console.log(user_)
@@ -55,6 +57,7 @@ const UpdateLocation = (req,res) =>{
     res.json({user:new_user});
 
   }).catch(err => console.log(err));
+
 }
 
 const GetCurrentCart = (req,res,next)=>{
@@ -77,7 +80,7 @@ const GetCurrentCart = (req,res,next)=>{
 const GetCatagories = (req,res,next) => {
 
    Product.find().then( (all_products) =>{
-    var new_catagories = product_util.OrganizeCatagories(default_catagories,all_products);
+    var new_catagories = product_util.OrganizeCatagories(all_products);
     res.json(new_catagories);
   });
 
@@ -104,23 +107,93 @@ const GetProfile = (req,res)=>{
 
 }
 
-const GetSearchResults = (req,res,next) => {
+function GetPageData(counter,products){
 
-  var input = req.body.input.toLowerCase();
+  var starting_counter = CURATED_ITEMS_LIMIT * counter;
 
-  Product.find({}).then((all_products)=>{
+  var limited_products = [];
 
-     var similar_products = [];
+  if(starting_counter <= 0){
+    starting_counter = 0;
+  }
 
-     for(var i = 0; i < all_products.length; i ++){
+  for(var k = 0; k < CURATED_ITEMS_LIMIT; k++ ){
 
-      if(all_products[i].title.toLowerCase().includes(input) ){
-         similar_products.push(all_products[i]);
-       }
+    if(starting_counter + k < products.length){
+      limited_products.push(products[starting_counter + k]);
+    }else{
+      break;
+    }
 
-     }
+  }
 
-     res.json(similar_products);
+    return limited_products
+
+
+}
+
+const GetSearchResults = async (req,res,next) => {
+
+  var product = req.params.product;
+  var page_counter = parseInt(req.params.page_counter) - 1;
+
+  Product.find({}).then(async (all_products)=>{
+
+     var new_catagories = await product_util.OrganizeCatagories(all_products);
+     var similar_products = await product_util.FindSimilarProducts(product,all_products);
+     var page_length = Math.floor(similar_products.length / CURATED_ITEMS_LIMIT);
+
+     var limited_products = GetPageData(page_counter,similar_products);
+
+     var cart = req.user ? req.user.cart : null;
+
+      res.render(CURATEDPRODUCTSURL, {
+          products:limited_products,
+          page_length:page_length,
+          page_counter:page_counter + 1,
+          root:"./",
+          action:"/user/profile/edit",
+          user:req.user,
+          cart:cart,
+          current_catagory:product,
+          catagories:new_catagories,
+          isAuthenticated:req.session.isAuthenticated,
+          isAdmin:false
+      });
+
+    });
+
+}
+
+const GetCatagoryResults = (req,res) => {
+
+  var catagory = req.params.catagory;
+  var page_counter = 0;
+
+  Product.find({}).then(async (all_products)=>{
+
+    var new_catagories = await product_util.OrganizeCatagories(all_products);
+    var products_in_catagory = await product_util.FindProductsFromCatagory(catagory,new_catagories);
+
+    var page_length = Math.floor(products_in_catagory.length / CURATED_ITEMS_LIMIT);
+
+    var limited_products = GetPageData(page_counter,products_in_catagory);
+
+    var cart = req.user ? req.user.cart : null;
+
+     res.render(CURATEDPRODUCTSURL, {
+         products:limited_products,
+         page_length:page_length,
+         page_counter:page_counter + 1,
+         root:"./",
+         action:"/user/profile/edit",
+         user:req.user,
+         current_catagory:catagory,
+         cart:cart,
+         catagories:new_catagories,
+         isAuthenticated:req.session.isAuthenticated,
+         isAdmin:false
+     });
 
   });
 
@@ -199,13 +272,20 @@ const AddToCart = async (req,res,next)=>{
   var id = req.body.productId;
   var id_ = id.replace("/","");
   var product = req.body;
+  console.log(req.user, req.session.isAuthenticated)
 
-  Product.findById(id_).then((data)=>{
-      req.user.AddCart(data);
-      res.json(data);
-  }).catch((err)=>{
-    StatusError(next,err,500);
-  });
+  if(!req.user || !req.session.isAuthenticated ){
+    res.json({error:401});
+  }else{
+
+    Product.findById(id_).then((data)=>{
+        req.user.AddCart(data);
+        res.json(data);
+    }).catch((err)=>{
+      StatusError(next,err,500);
+    });
+
+  }
 
 }
 
@@ -485,6 +565,7 @@ const ToggleCatagories = (req,res,next) => {
 
 }
 
+module.exports.GetCatagoryResults = GetCatagoryResults;
 module.exports.UpdateLocation = UpdateLocation;
 module.exports.DeleteCartItem = DeleteCartItem;
 module.exports.GetCartPage = GetCartPage;

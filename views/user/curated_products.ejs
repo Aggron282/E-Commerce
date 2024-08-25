@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<html lang="en" dir="ltr">
+
+  <head>
+
+    <meta charset="utf-8">
+    <title>E-Commerce</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <link href="https://fonts.cdnfonts.com/css/amazon-ember" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Allerta+Stencil&family=Archivo+Black&family=Dancing+Script:wght@400..700&family=Exo+2:wght@600&family=Exo:wght@800;900&family=Heebo:wght@800&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,900;1,600&family=Noto+Sans:wght@300&family=Poppins:wght@600&family=Protest+Revolution&family=Roboto+Condensed:wght@300;400&family=Roboto:ital,wght@0,300;1,100&family=Rubik+Distressed&family=Rubik+Moonrocks&family=Special+Elite&family=Teko:wght@300;500&family=Vast+Shadow&family=Work+Sans:wght@200;300;400&display=swap" rel="stylesheet">
+
+    <link href ='/css/animations.css' rel="stylesheet"/>
+    <link href ='/css/detail.css' rel="stylesheet"/>
+    <link href ='/css/review.css' rel="stylesheet"/>
+    <link href ='/css/cart.css' rel="stylesheet"/>
+    <link href ='/css/overlay_products.css' rel="stylesheet"/>
+    <link href = "/css/showcase.css" rel = "stylesheet" />
+    <link href = "/css/product_boxes.css" rel = "stylesheet" />
+    <link href ='/css/profile_change.css' rel="stylesheet"/>
+    <link href ='/css/catagory_products.css' rel="stylesheet"/>
+    <link href ='/css/location.css' rel="stylesheet"/>
+    <link href ='/css/user_header.css' rel="stylesheet"/>
+    <link href ='/css/advertisement_signup.css' rel="stylesheet"/>
+    <link href ='/css/item_banner.css' rel="stylesheet"/>
+    <link href ='/css/discounted_products.css' rel="stylesheet"/>
+    <link href ='/css/curated_products.css' rel="stylesheet"/>
+    <link href ='/css/util.css' rel="stylesheet"/>
+
+
+  </head>
+
+<body>
+  <main>
+
+    <div class="black_overlay"></div>
+
+    <%- include("./../layouts/user/home/navbar.ejs") %>
+
+    <div class="profile_change_overlay">
+      <%- include("./../layouts/modal/profile.ejs") %>
+      <%- include("./../layouts/modal/update_location.ejs") %>
+    </div>
+
+    <div class="main_content main_content--active">
+
+      <div class="curated_products_container">
+
+        <div class="sort_container">
+
+        </div>
+
+        <div class="product_results_container">
+
+          <p class="product_list_text product_list_text--title"> Results - <%= current_catagory %> </p>
+          <p class="product_list_text product_list_text--subtitle"> Check each product page for other buying options. Price and other details may vary based on product size and color. </p>
+
+          <div class="prouduct_results_container--inner">
+
+            <% for(var i = 0; i < products.length; i++){%>
+
+              <% var _id = products[i]._id %>
+              <% var title =  products[i].title.substring(0,50) %>
+              <% var price = "$" + products[i].price + ".99" %>
+              <% var description = products[i].description.substring(0,50) + "..." %>
+              <% var clear = i % 4 == 0 ? "clear" : "" %>
+
+              <% page_counter = parseInt(page_counter) %>
+
+              <% if (page_counter <= 0) {%>
+                  <% page_counter = 1 %>
+              <%}%>
+
+                <div class="product_item_container <%= clear %>" _id = <%= _id %>>
+
+                  <a href = "/product/<%= _id %>">
+
+                    <div class="product_item_container--image">
+                        <img class="product_item_image" src = "/<%= products[i].thumbnail %>" />
+                    </div>
+
+                    <p class="product_item_text product_item_text--title"> <%= title %> </p>
+                    <p class="product_item_text product_item_text--price"> <%= price %> </p>
+                    <p class="product_item_text product_item_text--description"> <%= description %> </p>
+
+                  </a>
+
+                 <button class="product_item_button product_item_button--cart" _id = <%= _id %>>Add to Cart </button>
+
+              </div>
+
+
+
+            <%}%>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <br >
+      <br>
+
+      <div class="result_page_container clear ">
+
+        <% var prev_class = "result_page_number" %>
+
+        <% if(page_counter - 1 <= 0) {%>
+          <% prev_class = "result_page_number--inactive" %>
+        <%}%>
+
+         <div class="toggle_result_container toggle_result_container--prev  relative <%= prev_class %>" page = <%= page_counter - 1 %>>
+             Previous
+             <img class="result_arrow result_arrow--left" src = "/images/arrow.png"/>
+         </div>
+
+           <div class="toggle_result_by_page_container">
+
+               <% if(page_counter > 1){ %>
+
+                   <p class="result_page_number result_page_number--prev" page = <%= page_counter - 1 %> >
+                     <%= page_counter - 1 %>
+                   </p>
+
+               <%}%>
+
+               <p class="result_page_number result_page_number--current result_page_number--active" page = <%= page_counter %>>
+                 <%= page_counter%>
+               </p>
+
+               <% if(page_counter < page_length){ %>
+
+                   <p class="result_page_number result_page_number--next" page = <%= page_counter + 1 %> >
+                     <%= page_counter + 1 %>
+                   </p>
+
+               <%}%>
+
+               <% if(page_counter == 0){ %>
+
+                   <p class="result_page_number result_page_number--next--2" page = <%= page_counter + 2 %>>
+                     <%= page_counter + 2 %>
+                   </p>
+
+               <%}%>
+
+               <% if(page_counter < page_length){ %>
+
+                   <p class="result_page_number result_page_number--current">...</p>
+
+                   <p class="result_page_number result_page_number--last" page = <%= page_length %>>
+                     Last
+                   </p>
+
+               <%}%>
+
+           </div>
+
+          <% var next_class = "result_page_number" %>
+
+          <% if(page_counter + 1 > page_length) {%>
+            <% next_class = "result_page_number--inactive" %>
+          <%}%>
+
+         <div class="toggle_result_container toggle_result_container--next relative <%= next_class %>"  page = <%= page_counter + 1 %>>
+               Next
+             <img class="result_arrow result_arrow--right" src = "/images/arrow.png"/>
+         </div>
+
+     </div>
+
+    </div>
+
+  </main>
+
+
+  <script src = "https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src = "/js/util.js" ></script>
+  <script src = "/js/search_results.js" ></script>
+  <script src = "/js/catagory_render.js" ></script>
+  <script src = "/js/edit_profile.js" ></script>
+  <script src = "/js/update_location.js" ></script>
+  <script src = "/js/cart.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyACepJIoDZ1rhhju2bK-lO23qIzaKwXsnY&loading=async&libraries=maps,marker&v=beta" defer></script>
+  <script>
+
+    var title_el = document.querySelector(".product_item_text--title");
+    var new_title = titleCase(title_el.innerHTML);
+
+    title_el.innerHTML = new_title;
+
+    var href = window.location.href;
+    var result_page_numbers = document.getElementsByClassName("result_page_number");
+
+    for(var i =0; i < result_page_numbers.length; i++){
+
+      result_page_numbers[i].addEventListener("click",(e)=>{
+          var page_number = e.target.getAttribute("page");
+          var new_href = href.substring(0,href.length - 1,-1);
+          new_href += page_number;
+          window.location.assign(new_href);
+      });
+
+    }
+
+
+  </script>
+<%- include("./../layouts/end.ejs") %>

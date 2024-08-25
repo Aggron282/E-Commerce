@@ -2,20 +2,17 @@
 
 <main>
 
-  <div class="profile_wrapper"></div>
+  <div class="black_overlay"></div>
 
-  <%- include("./../layouts/user/home/header.ejs") %>
-
-  <div class="overlay_content inactive">
-    <%- include("./../layouts/user/home/search_overlay.ejs") %>
-  </div>
+  <%- include("./../layouts/user/home/navbar.ejs") %>
 
   <div class="profile_change_overlay">
     <%- include("./../layouts/modal/profile.ejs") %>
     <%- include("./../layouts/modal/update_location.ejs") %>
   </div>
 
-  <div class="main_content active">
+  <div class="main_content main_content--active">
+
       <%- include("./../layouts/user/home/slideshow.ejs") %>
 
     <div class="relative">
@@ -32,15 +29,15 @@
 
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src = "./js/util.js" ></script>
-<script src = "./js/catagory_toggle.js" ></script>
-<script src = "./js/search_results.js" ></script>
-<script src = "./js/slideshow.js" ></script>
-<script src = "./js/long_banner.js" ></script>
-<script src = "./js/catagory_render.js" ></script>
-<script src = "./js/edit_profile.js" ></script>
-<script src = "./js/update_location.js" ></script>
+<script src = "https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src = "/js/util.js" ></script>
+<script src = "/js/catagory_toggle.js" ></script>
+<script src = "/js/search_results.js" ></script>
+<script src = "/js/slideshow.js" ></script>
+<script src = "/js/long_banner.js" ></script>
+<script src = "/js/catagory_render.js" ></script>
+<script src = "/js/edit_profile.js" ></script>
+<script src = "/js/update_location.js" ></script>
 <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyACepJIoDZ1rhhju2bK-lO23qIzaKwXsnY&loading=async&libraries=maps,marker&v=beta" defer>
 </script>

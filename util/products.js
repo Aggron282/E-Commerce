@@ -1,6 +1,7 @@
-//
-async function GetItemsInCatagory(default_catagories,catagory){
+const Product = require("./../models/products.js");
+const text_util = require("./text.js");
 
+async function GetItemsInCatagory(default_catagories,catagory){
 
   Product.find({catagory:catagory}).then((products)=>{
 
@@ -19,11 +20,56 @@ async function GetItemsInCatagory(default_catagories,catagory){
 
 }
 
+function FindSimilarProducts(input,all_products) {
+
+    input = input.toLowerCase();
+
+    if(!all_products){
+      return null;
+     }
+
+     var similar_products = [];
+
+     for(var i = 0; i < all_products.length; i ++){
+
+      if(all_products[i].title.toLowerCase().includes(input) ){
+         similar_products.push(all_products[i]);
+       }
+
+     }
+
+     return similar_products;
+
+}
+
+
+function FindProductsFromCatagory(catagory_name,organized_products){
+
+
+  var catagory_name = catagory_name.toLowerCase();
+  var products = [];
+  for(var i =0; i < organized_products.length; i++){
+
+    var product_catagory_name = organized_products[i].catagory.toLowerCase();
+
+
+    if(catagory_name == product_catagory_name){
+        products = organized_products[i].products;
+        console.log(organized_products[i].products);
+
+      }
+
+  }
+
+  return products;
+
+}
+
 function OrganizeCatagories(products){
 
   var organized_products = [];
   var catagories = [];
-  var counter=0;
+  var counter = 0;
 
   for(var i = 0; i < products.length; i++){
 
@@ -172,6 +218,9 @@ function catagoryMatch(catagories, catagory_needed,counter) {
 
 }
 
+
+module.exports.FindProductsFromCatagory = FindProductsFromCatagory;
+module.exports.FindSimilarProducts = FindSimilarProducts;
 module.exports.OrganizeCatagories = OrganizeCatagories;
 module.exports.catagoryMatch = catagoryMatch;
 module.exports.OrganizeDiscounts = OrganizeDiscounts;

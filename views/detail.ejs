@@ -27,22 +27,19 @@
 <%}%>
 
 <% if(!isAdmin){ %>
-  <%- include("./layouts/user/home/header.ejs") %>
+
+  <%- include("./layouts/user/home/navbar.ejs") %>
+
   <div class="black_overlay"></div>
 
-  <div class="overlay_content inactive">
-    <%- include("./layouts/user/home/search_overlay.ejs") %>
-  </div>
-
-  <div class="profile_change_overlay">
-    <%- include("./layouts/modal/profile.ejs") %>
-    <%- include("./layouts/modal/update_location.ejs") %>
-  </div>
-
-
 <%}else{ %>
-  <%- include("./layouts/admin/admin_header.ejs") %>
+  <%- include("./layouts/admin/navbar.ejs") %>
 <%}%>
+
+<div class="profile_change_overlay">
+  <%- include("./layouts/modal/profile.ejs") %>
+  <%- include("./layouts/modal/update_location.ejs") %>
+</div>
 
 <main class="main_content relative">
 
@@ -107,33 +104,22 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <% if(!isAdmin) {%>
-  <script src = "./../js/search_results.js" ></script>
-  <script src = "./../js/cart.js" ></script>
-  <script src = "./../js/catagory_render.js" ></script>
-  <script src = "./../js/util.js" ></script>
-
+  <script src = "/js/search_results.js" ></script>
+  <script src = "/js/cart.js" ></script>
+  <script src = "/js/catagory_render.js" ></script>
+  <script src = "/js/catagory_toggle.js" ></script>
 <% }else{%>
 
-  <script src = "./../../../js/admin/edit_product.js" ></script>
-  <script src = "./../../../js/util.js" ></script>
-  <script src = "./../../../js/admin/delete_product.js"></script>
+  <script src = "/js/admin/edit_product.js" ></script>
+  <script src = "/js/admin/delete_product.js"></script>
 
 <%}%>
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-<script src = "./../js/util.js" ></script>
-
-<script src = "./../js/catagory_toggle.js" ></script>
-
-<script src = "./../js/search_results.js" ></script>
-
-<script src = "./../js/edit_profile.js" ></script>
-
-<script src = "./../js/update_location.js" ></script>
-
-<script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyACepJIoDZ1rhhju2bK-lO23qIzaKwXsnY&loading=async&libraries=maps,marker&v=beta" defer>
-</script>
+<script src = "/js/util.js" ></script>
+<script src = "/js/edit_profile.js" ></script>
+<script src = "/js/update_location.js" ></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyACepJIoDZ1rhhju2bK-lO23qIzaKwXsnY&loading=async&libraries=maps,marker&v=beta" defer></script>
 
 <%- include("./layouts/end.ejs") %>

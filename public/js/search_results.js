@@ -1,122 +1,115 @@
-var overlay_content_element = document.querySelector(".overlay_content");
-var main_content_element = document.querySelector(".main_content");
-var exit_element = document.querySelector(".exit_search");
-var search_overlay_element = document.querySelector(".search_page_overlay");
+// var overlay_content_element = document.querySelector(".overlay_content");
+// var main_content_element = document.querySelector(".main_content");
+// var exit_element = document.querySelector(".search_overlay_text--exit");
+// var search_overlay_element = document.querySelector(".search_overlay");
 var search_bar_element = document.querySelector(".navbar_user_input--search");
-var search_overlay_row_element = document.querySelector(".search_overlay_row");
+// var search_overlay_row_element = document.querySelector(".search_overlay_row");
 
-var hasSearched = false;
-var hasChanged = false;
+// var hasSearched = false;
+// var hasChanged = false;
 
-var fixed_time = 1000;
+// var fixed_time = 1000;
 
 //------------------------------------  Render and Build HTML  --------------------
 
-function BuiltItemHTML(result){
-
-  var name = result.title.substring(0, 30) + "..."
-  var url = window.location.href;
-  var num_of_slashed = url.split('/').length-1;
-  var url_img_mod = "./";
-  var img = url_img_mod+result.thumbnail
-  var price = result.price
-  var description = result.description.substring(0, 100) + "..."
-
-  if(num_of_slashed > 1){
-
-    for(var i = 0; i < num_of_slashed - 1; i++){
-      url_img_mod += "../";
-    }
-
-  }
-
-  var html =`
-    <div class="col-3 no-margin-left">
-
-    <div class= "product_box fix_x width-100">
-
-      <p class="catagory_name"> ${ name } </p>
-
-      <img class="product_image" src = ${ img } />
-
-      <div class="product_text_box">
-        <p class="product_description_display"> ${ description } </p>
-        <p class="catagory_price_new ">$ ${ price } </p>
-
-        <a href = "/product/${ result._id }" ><p class="product_detail fix_y">See Details</p></a>
-
-      </div>
-
-    </div>
-
-  </div>`
-
-  return html;
-
-}
-
-function RenderSearchProductsToHTML(){
-
-  var html = ``;
-
-  hasSearched = true;
-
-  RevealModal();
-
-  for(var i = 0; i <data.length; i ++){
-    html += BuiltItemHTML(data[i]);
-  }
-
-  search_overlay_row_element.innerHTML = html;
-
-}
+// function BuiltItemHTML(result){
+//
+//   var name = result.title.substring(0, 30) + "..."
+//   var url = window.location.href;
+//   var num_of_slashed = url.split('/').length-1;
+//   var url_img_mod = "./";
+//   var img = url_img_mod+result.thumbnail
+//   var price = result.price
+//   var description = result.description.substring(0, 100) + "..."
+//
+//   if(num_of_slashed > 1){
+//
+//     for(var i = 0; i < num_of_slashed - 1; i++){
+//       url_img_mod += "../";
+//     }
+//
+//   }
+//
+//   var html =`
+//     <div class="col-3 no-margin-left">
+//
+//     <div class= "catagory_product_box product_box--catagory width-100">
+//
+//       <p class="catagory_product_text--name"> ${ name } </p>
+//
+//       <img class="catagory_product_image" src = ${ img } />
+//
+//       <div class="catagory_product_text_box margin-top-5">
+//         <p class="catagory_product_text catagory_product_text--description"> ${ description } </p>
+//         <p class="catagory_product_text catagory_product_text--price">$ ${ price } </p>
+//
+//         <a href = "/product/${ result._id }" ><p class="catagory_product_detail">See Details</p></a>
+//
+//       </div>
+//
+//     </div>
+//
+//   </div>`
+//
+//   return html;
+//
+// }
+//
+// function RenderSearchProductsToHTML(){
+//
+//   var html = ``;
+//
+//   hasSearched = true;
+//
+//   RevealModal();
+//
+//   for(var i = 0; i <data.length; i ++){
+//     html += BuiltItemHTML(data[i]);
+//   }
+//
+//   search_overlay_row_element.innerHTML = html;
+//
+// }
 
 //------------------------------------ Toggle Modal  --------------------
 function ExitModal(){
 
-  search_overlay_element.classList.add("search_inactive");
-  overlay_content_element.classList.add("inactive");
-  main_content_element.classList.add("active");
+  search_overlay_element.classList.add("search_overlay--inactive");
+  overlay_content_element.classList.add("overlay_content--inactive");
+  main_content_element.classList.add("main_content--active");
 
-  search_overlay_element.classList.remove("search_active");
-  overlay_content_element.classList.remove("active");
-  main_content_element.classList.remove("inactive");
+  search_overlay_element.classList.remove("search_overlay--active");
+  overlay_content_element.classList.remove("overlay_content--active");
+  main_content_element.classList.remove("main_content--inactive");
 
 }
 
 function RevealModal(){
 
-  search_overlay_element.classList.remove("search_inactive");
-  main_content_element.classList.remove("active");
-  overlay_content_element.classList.remove("inactive");
+  search_overlay_element.classList.remove("search_overlay--inactive");
+  overlay_content_element.classList.remove("overlay_content--inactive");
+  main_content_element.classList.remove("main_content--active");
 
-  search_overlay_element.classList.add("search_active");
-  overlay_content_element.classList.add("active");
-  main_content_element.classList.add("inactive");
+  search_overlay_element.classList.add("search_overlay--active");
+  overlay_content_element.classList.add("overlay_content--active");
+  main_content_element.classList.add("main_content--inactive");
 
 }
 
 //------------------------------------ EventListeners  --------------------
-search_bar_element.addEventListener("keyup",(e)=>{
+search_bar_element.addEventListener("keypress",(e)=>{
 
-  if(e.keyCode == 13 && !hasSearched){
-
+  if(event.key === "Enter") {
       var input = search_bar_element.value;
+      var page_count = 0;
 
-      axios.post("/search/product/",{input:input}).then((results)=>{
-
-        var data = results.data;
-        RenderSearchProductsToHTML(data);
-
-      });
-
-  }
-
+      window.location.assign(`/search/product/item=${input}/page_counter=${page_count}`);
+    }
 })
 
-exit_element.addEventListener("click",(e)=>{
-
-  hasSearched = false;
-  ExitModal();
-
-})
+// exit_element.addEventListener("click",(e)=>{
+//
+//   hasSearched = false;
+//   ExitModal();
+//
+// })

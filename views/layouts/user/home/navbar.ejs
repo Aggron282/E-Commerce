@@ -5,7 +5,7 @@
       <div class="navbar_user_col--logo">
 
         <a href = "/">
-          <img src = <%= `./${root}/images/e_logo.png `%> class="margin-top-7_5 navbar_user_logo" alt = "logo" />
+          <img src = <%= `/images/e_logo.png `%> class="margin-top-7_5 navbar_user_logo" alt = "logo" />
         </a>
 
       </div>
@@ -30,8 +30,6 @@
 
       <div class="navbar_user_col--search">
 
-          <div>
-
               <span class="navbar_user_search_container">
 
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -40,9 +38,8 @@
 
               </span>
 
-              <input class="form-control no-border navbar_user_input--search"  placeholder = "Search for Item">
 
-          </div>
+              <input class="form-control no-border navbar_user_input--search" name = "input"  placeholder = "Search for Item">
 
       </div>
 
@@ -74,7 +71,7 @@
 
           <a href="/cart">
 
-            <img src=<%= `./${root}/images/cart.png` %> class="navbar_user_icon--cart" />
+            <img src=<%= `/images/cart.png` %> class="navbar_user_icon--cart" />
 
             <div class="navbar_user_container--cart">
 
@@ -98,7 +95,7 @@
 
           <div class="navbar_user_dropdown_list_container relative">
 
-            <img class="navbar_user_icon--profile" src = <%= `./${root}/images/profile_img.png` %>>
+            <img class="navbar_user_icon--profile" src = <%= `/images/profile_img.png` %>>
 
             <div class="navbar_user_list dropdown_list--inner">
 
@@ -124,6 +121,7 @@
 
         </div>
             <%}else{%>
+
               <div class="relative navbar_user_col--create" >
 
                 <a href = "/create_account">
@@ -131,6 +129,7 @@
                 </a>
 
               </div>
+              
             <%}%>
 
         </div>
@@ -141,15 +140,18 @@
 
      <div class = "navbar_user_sub_banner">
 
-
            <% for(var i = 0; i < catagories.length; i++){ %>
 
-                <p class="navbar_user_sub_catagory--title" data = <%= catagories[i].catagory %> ><%= catagories[i].catagory %>
-                  <span class="navbar_user_sub_catagory--underline" data = <%= catagories[i].catagory %>  ></span>
-                </p>
+                <a href = "/search/product/catagory=<%=catagories[i].catagory%>/page_counter=1" >
+
+                  <p class="navbar_user_sub_catagory--title" data = <%= catagories[i].catagory %> ><%= catagories[i].catagory %>
+                    <span class="navbar_user_sub_catagory--underline" data = <%= catagories[i].catagory %>  ></span>
+                  </p>
+
+                </a>
 
            <% } %>
 
+      </div>
 
-         </div>
    <% } %>

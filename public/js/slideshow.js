@@ -34,8 +34,8 @@ function ToggleCounter(e){
 
     var banner_element = document.querySelector(`.header--${i}`);
 
-    banner_element.classList.remove(`active`);
-    banner_element.classList.add(`inactive`);
+    banner_element.classList.add(`slideshow--inactive`);
+    banner_element.classList.remove(`slideshow--active`)
 
   }
 
@@ -50,10 +50,10 @@ function ToggleCounter(e){
 
   }
 
-  var new_banner_element = document.querySelector(`.header--${slideshow_counter}`);
+  var banner_element = document.querySelector(`.header--${slideshow_counter}`);
 
-  new_banner_element.classList.remove(`inactive`);
-  new_banner_element.classList.add(`active`)
+  banner_element.classList.remove(`slideshow--inactive`);
+  banner_element.classList.add(`slideshow--active`)
 
 }
 

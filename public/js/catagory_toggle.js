@@ -34,21 +34,21 @@ function RenderItems(catagory){
      html += `
       <div class="col-3 no-margin-left">
 
-       <div class= "product_box fix_x width-100" catagory = ${catagory.catagory} it = ${current_catagory_counter} >
+       <div class= "catagory_product_box product_box--catagory width-100" catagory = ${catagory.catagory} it = ${current_catagory_counter} >
 
-        <p class="catagory_name">${ name }</p>
+        <p class="catagory_product_text--name">${ name }</p>
 
-        <img class="product_image"src = ${ img } />
+        <img class="catagory_product_image margin-top-5"src = ${ img } />
 
-         <div class="product_text_box">
-           <p class="product_description_display">${description}</p>
-           <p class="catagory_price_new ">$ ${ price }</p>
-           <a href = ${"/product/"+catagory.items[current_catagory_counter]._id} >
-            <p class="product_detail fix_y">See Details</p>
-           </a>
+         <div class="catagory_product_text_box margin-top-5">
+           <p class="catagory_product_text catagory_product_text--description">${description}</p>
+           <p class="catagory_product_text catagory_product_text--price">$ ${ price }</p>
+              <a href = ${"/product/"+catagories[k].products[i_]._id}>
+                <p class="catagory_product_detail">See Details</p>
+              </a>
          </div>
 
-         </div>
+        </div>
 
       </div>`
 
