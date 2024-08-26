@@ -65,9 +65,9 @@ const GetAdminData = (req,res)=>{
 const ConvertLocation = async (req,res) => {
 
   var address = req.body.address;
-
+  console.log(address);
   var location_data = await location.ConvertLocation(address);
-
+  console.log(location_data);
   res.json({location:location_data});
 
 }
@@ -77,7 +77,10 @@ const ReverseConvertLocation = async (req,res) => {
   var coords = req.body;
 
   var location_data = await location.ReverseConvertLocation(coords);
-
+  if(!location_data){
+    res.render(false);
+    return;
+  }
   var data = location_data;
 
 

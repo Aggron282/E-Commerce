@@ -5,6 +5,9 @@
 
   <div class="black_overlay"></div>
 
+  <%- include("./../layouts/modal/popup_message.ejs") %>
+
+
   <main class="cart_interface container-fluid">
 
     <div class="profile_change_overlay">
@@ -20,27 +23,27 @@
 
         <div class="col-8 cart_interface_col--items">
 
-            <% if (items) {%>
+            <% if (cart.items) {%>
 
-                <% if (items.length > 0) {%>
+                <% if (cart.items.length > 0) {%>
 
-                    <% for (var i = 0; i < items.length; i++) { %>
+                    <% for (var i = 0; i < cart.items.length; i++) { %>
                       <div class="cart_interface_box">
 
                         <div class="row">
 
                           <div class="col-4">
-                            <img class="margin-left-25 cart_interface_product--img" src =   <%= `/${items[i].data.thumbnail}` %> />
+                            <img class="margin-left-25 cart_interface_product--img" src =   <%= `/${cart.items[i].data.thumbnail}` %> />
                           </div>
 
                           <div class="col-6">
 
-                            <p class="cart_interface--title cart_interface--text width-100"> <%= items[i].data.title %> </p>
-                            <p class="cart_interface--title cart_interface--text width-100"> $<%= items[i].data.price %>.99 </p>
-                            <p class="cart_interface--title cart_interface--text width-100"> Qty: <%= items[i].data.quantity %> </p>
+                            <p class="cart_interface--title cart_interface--text width-100"> <%= cart.items[i].data.title %> </p>
+                            <p class="cart_interface--title cart_interface--text width-100"> $<%= cart.items[i].data.price %>.99 </p>
+                            <p class="cart_interface--title cart_interface--text width-100"> Qty: <%= cart.items[i].data.quantity %> </p>
 
                             <form method = "POST" action = "/cart/delete" >
-                              <input  type="hidden" name = "_id" value= <%= items[i].data._id %> />
+                              <input  type="hidden" name = "_id" value= <%= cart.items[i].data._id %> />
                               <button class="cart_interface_button--delete" type="submit"> Delete </button>
                             </form>
 

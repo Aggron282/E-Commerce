@@ -7,7 +7,6 @@ const {check,body} = require("express-validator");
 // User URL Pages
 router.get("/login",user_auth_controller.GetUserLoginPage);
 router.post("/login",check("email").isEmail().normalizeEmail(),body("password").trim(),user_auth_controller.PostUserLogin);
-
 router.get("/logout",user_auth_controller.Logout);
 
 router.get("/reset",user_auth_controller.GetResetPage);

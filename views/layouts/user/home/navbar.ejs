@@ -1,3 +1,5 @@
+<%- include("./dropdown_profile.ejs") %>
+
 <div class="navbar_user">
 
     <div class="navbar_row no_padding relative" >
@@ -92,34 +94,9 @@
         </div>
 
         <div class="navbar_user_col--profile"  >
-
-          <div class="navbar_user_dropdown_list_container relative">
-
-            <img class="navbar_user_icon--profile" src = <%= `/images/profile_img.png` %>>
-
-            <div class="navbar_user_list dropdown_list--inner">
-
-              <div class=" dropdown_item navbar_user_list_dropdown--item" id="update_location">
-                <p class="dropdown_title navbar_user_list_dropdown--title">Update Location</p>
-              </div>
-
-              <div class="dropdown_item navbar_user_list_dropdown--item" id = "edit_profile">
-                <p class="dropdown_title navbar_user_list_dropdown--title">Edit Profile</p>
-              </div>
-
-              <div class="dropdown_item navbar_user_list_dropdown--item">
-                <p class="dropdown_title navbar_user_list_dropdown--title">Orders</p>
-              </div>
-
-              <div class="dropdown_item logout navbar_user_list_dropdown--item">
-                <p class="dropdown_title navbar_user_list_dropdown--title">Logout</p>
-              </div>
-
-            </div>
-
-          </div>
-
+          <img class="navbar_user_icon--profile" src = <%= `/images/profile_img.png` %>>
         </div>
+
             <%}else{%>
 
               <div class="relative navbar_user_col--create" >
@@ -129,10 +106,11 @@
                 </a>
 
               </div>
-              
+
             <%}%>
 
         </div>
+
 
    </div>
 

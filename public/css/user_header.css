@@ -26,15 +26,14 @@
 
 .navbar_user_col--create{
   margin-top: -5%;
-    float: right;
-    margin-right: 2.5%;
-
+  float: right;
+  margin-right: 2.5%;
 }
 
 .navbar_user_col--signin{
-    width: 30%;
-    float: left;
-    margin-top: 1%;
+  width: 30%;
+  float: left;
+  margin-top: 1%;
 
 }
 
@@ -54,9 +53,15 @@
   margin-top: 20%;
 }
 
+.navbar_row p {
+  color:white;
+}
+
 .navbar_user_col--profile{
   float:left;
   width:10%;
+  position: relative;
+  z-index: 99;
 }
 
 .navbar_user_col--search{
@@ -64,44 +69,54 @@
   float:left;
   height:100px;
   margin-left:5%;
-
 }
-
 
 .navbar_icon--profile:hover{
   filter:brightness(rgba(255,255,255));
 }
 
-.navbar_col--profile:hover .dropdown_list--inner{
+.avbar_user_icon--profile:hover .dropdown_list--inner{
   visibility:  visible;
   height:auto;
   opacity:1;
 }
 
-.dropdown_list--inner{
-  visibility:  collapse;
-  width:130%;
+.navbar_user_dropdown_list_container{
+  height:100%;
+  width:15%;
+  transform: translateX(100px) rotateY(90deg);
   box-shadow:0px 0px 20px rgba(0,0,0,.5);
   z-index:9999999;
-  opacity:0;
   background:white;
   border-radius:10px;
   transition: all .5s;
-  position: absolute;
-  left:-5%;
+  position: fixed;
+  right:0%;
 }
 
 .dropdown_list--inner .dropdown_item {
   border-bottom:1px solid #e6e6e6;
   font-size:16px;
   width:100%;
+  background: white;
   padding:10px;
   font-family: "Montserrat";
   transition:  .5s all;
+  padding-left:25%;
 }
 
 .dropdown_item p {
   text-align: center;
+  color:black;
+  width:100%;
+  text-align: center;
+
+
+}
+
+.main_content--active * {
+  position: relative;
+  z-index:9;
 }
 
 .dropdown_list--inner .dropdown_item--logout{
@@ -131,7 +146,10 @@
 }
 
 .dropdown_list--active{
-  visibility:visible;
+  opacity:1;
+  z-index: 9999999;
+  transform:  translateX(0px) rotateY(0deg);
+
 }
 
 
@@ -187,14 +205,14 @@
   box-shadow: 0px 0px 10px rgba(0,0,0,.5);
   padding-top:5px;
   position: relative;
-  z-index: 999999999999999999999;
+  z-index: 9999;
 }
 
 .navbar_user_sub_banner p {
   color:white;
 }
 
-.navbar_row p {
+.navbar_row {
   color:white;
 }
 

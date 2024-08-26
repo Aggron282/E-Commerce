@@ -1,5 +1,5 @@
-// var overlay_content_element = document.querySelector(".overlay_content");
-// var main_content_element = document.querySelector(".main_content");
+var overlay_content_element = document.querySelector(".overlay_content");
+var main_content_element = document.querySelector(".main_content");
 // var exit_element = document.querySelector(".search_overlay_text--exit");
 // var search_overlay_element = document.querySelector(".search_overlay");
 var search_bar_element = document.querySelector(".navbar_user_input--search");
@@ -74,11 +74,11 @@ var search_bar_element = document.querySelector(".navbar_user_input--search");
 //------------------------------------ Toggle Modal  --------------------
 function ExitModal(){
 
-  search_overlay_element.classList.add("search_overlay--inactive");
+  // search_overlay_element.classList.add("search_overlay--inactive");
   overlay_content_element.classList.add("overlay_content--inactive");
   main_content_element.classList.add("main_content--active");
 
-  search_overlay_element.classList.remove("search_overlay--active");
+  // search_overlay_element.classList.remove("search_overlay--active");
   overlay_content_element.classList.remove("overlay_content--active");
   main_content_element.classList.remove("main_content--inactive");
 
@@ -86,11 +86,11 @@ function ExitModal(){
 
 function RevealModal(){
 
-  search_overlay_element.classList.remove("search_overlay--inactive");
+  // search_overlay_element.classList.remove("search_overlay--inactive");
   overlay_content_element.classList.remove("overlay_content--inactive");
   main_content_element.classList.remove("main_content--active");
 
-  search_overlay_element.classList.add("search_overlay--active");
+  // search_overlay_element.classList.add("search_overlay--active");
   overlay_content_element.classList.add("overlay_content--active");
   main_content_element.classList.add("main_content--inactive");
 

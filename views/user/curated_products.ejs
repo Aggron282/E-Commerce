@@ -21,6 +21,8 @@
     <link href ='/css/overlay_products.css' rel="stylesheet"/>
     <link href = "/css/showcase.css" rel = "stylesheet" />
     <link href = "/css/product_boxes.css" rel = "stylesheet" />
+    <link href = "/css/popup.css" rel = "stylesheet" />
+
     <link href ='/css/profile_change.css' rel="stylesheet"/>
     <link href ='/css/catagory_products.css' rel="stylesheet"/>
     <link href ='/css/location.css' rel="stylesheet"/>
@@ -40,6 +42,8 @@
     <div class="black_overlay"></div>
 
     <%- include("./../layouts/user/home/navbar.ejs") %>
+    <%- include("./../layouts/modal/popup_message.ejs") %>
+
 
     <div class="profile_change_overlay">
       <%- include("./../layouts/modal/profile.ejs") %>
@@ -61,12 +65,12 @@
 
           <div class="prouduct_results_container--inner">
 
-            <% for(var i = 0; i < products.length; i++){%>
+            <% for(var i = 0; i < limited_products.length; i++){%>
 
-              <% var _id = products[i]._id %>
-              <% var title =  products[i].title.substring(0,50) %>
-              <% var price = "$" + products[i].price + ".99" %>
-              <% var description = products[i].description.substring(0,50) + "..." %>
+              <% var _id = limited_products[i]._id %>
+              <% var title =  limited_products[i].title.substring(0,50) %>
+              <% var price = "$" + limited_products[i].price + ".99" %>
+              <% var description = limited_products[i].description.substring(0,50) + "..." %>
               <% var clear = i % 4 == 0 ? "clear" : "" %>
 
               <% page_counter = parseInt(page_counter) %>
@@ -80,7 +84,7 @@
                   <a href = "/product/<%= _id %>">
 
                     <div class="product_item_container--image">
-                        <img class="product_item_image" src = "/<%= products[i].thumbnail %>" />
+                        <img class="product_item_image" src = "/<%= limited_products[i].thumbnail %>" />
                     </div>
 
                     <p class="product_item_text product_item_text--title"> <%= title %> </p>

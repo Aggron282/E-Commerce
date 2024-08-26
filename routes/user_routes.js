@@ -4,6 +4,7 @@ var adminControllers = require("./../controllers/admin_controllers.js");
 var isAuth = require("./../middleware/isAuth.js");
 var isAuthAdmin = require("./../middleware/isAuthAdmin.js");
 
+router.post("/popups/reset",userControllers.ResetPopups)
 
 //-- Cart And Checkout Handlers
 router.get("/checkout/success",userControllers.AddOrder);

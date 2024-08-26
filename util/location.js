@@ -32,30 +32,32 @@ const ReverseConvertLocation = async ({latitude,longitude}) => {
 }
 
 const ConvertLocation =  async (place) =>{
-
-  const data = await normal_geocoder.geocode(place);
-
-  if(data.length <=0){
-    return false;
+  console.log(place);
+  if(place.length < 2){
+    place = "place";
   }
+  var data = await normal_geocoder.geocode(place);
+    console.log(data);
+    if(data.length <=0){
+      return false;
+    }
 
-  if(data.length > 0){
+    if(data.length > 0){
 
-      latitude = data[0].latitude;
-      longitude = data[0].longitude;
+        latitude = data[0].latitude;
+        longitude = data[0].longitude;
 
-      return  {
-        coords: {
-          latitude:latitude,
-          longitude:longitude,
-        },
-        address:data[0].formattedAddress
-      }
+        return  {
+          coords: {
+            latitude:latitude,
+            longitude:longitude,
+          },
+          address:data[0].formattedAddress
+        }
 
-  }
-  else{
-    return false;
-  }
+    }
+
+
 
 }
 

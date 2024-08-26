@@ -27,6 +27,35 @@ const CURATEDPRODUCTSURL = path.join(rootDir,"views","user","curated_products.ej
 const CURATED_ITEMS_LIMIT = 8;
 
 
+var feedback ={
+  items:{
+    top_deals:null,
+    placeholder:PlaceholderImages,
+    all:null
+  },
+  redirect:"/",
+  limited_products:null,
+  catagories:null,
+  cart:null,
+  user:null,
+  searched_term:"",
+  current_catagory:"",
+  popup_message:null,
+  render:HOMEPAGEURL,
+  root:".",
+  action:"/user/",
+  reviews:Reviews,
+  isAdmin:false,
+  isAuthenticated:null
+};
+
+
+
+const ResetPopups = (req,res) => {
+
+  feedback.popup_message = null;
+  res.json(true);
+}
 //----------------------------------------------------------------------------------------
 // Get Data Functions
 const GetOrders = async(req,res)=>{
@@ -46,7 +75,7 @@ const UpdateLocation = (req,res) =>{
 
   User.findById(req.user._id).then((user_)=>{
 
-    console.log(user_)
+    console.log(user_);
 
     user_.location = data;
 
@@ -54,7 +83,7 @@ const UpdateLocation = (req,res) =>{
 
     new_user.save();
 
-    res.json({user:new_user});
+    res.json({user:new_user,popup:"Updated Location"});
 
   }).catch(err => console.log(err));
 
@@ -129,7 +158,6 @@ function GetPageData(counter,products){
 
     return limited_products
 
-
 }
 
 const GetSearchResults = async (req,res,next) => {
@@ -145,21 +173,25 @@ const GetSearchResults = async (req,res,next) => {
 
      var limited_products = GetPageData(page_counter,similar_products);
 
-     var cart = req.user ? req.user.cart : null;
+     var new_feedback = {...feedback};
 
-      res.render(CURATEDPRODUCTSURL, {
-          products:limited_products,
-          page_length:page_length,
-          page_counter:page_counter + 1,
-          root:"./",
-          action:"/user/profile/edit",
-          user:req.user,
-          cart:cart,
-          current_catagory:product,
-          catagories:new_catagories,
-          isAuthenticated:req.session.isAuthenticated,
-          isAdmin:false
-      });
+     new_feedback.items.top_deals = null;
+     new_feedback.items.all_products = all_products;
+     new_feedback.user = req.user;
+     new_feedback.limited_products = limited_products;
+     new_feedback.cart = req.user ? req.user.cart : null;
+     new_feedback.catagories = new_catagories;
+     new_feedback.popup_message = null;
+     new_feedback.page_length = page_length;
+     new_feedback.page_counter = page_counter + 1;
+     new_feedback.action = "/user/profile/edit";
+     new_feedback.current_catagory = "";
+     new_feedback.searched_term = product;
+     new_feedback.render = CURATEDPRODUCTSURL;
+
+     feedback = new_feedback;
+
+    res.render(new_feedback.render, new_feedback);
 
     });
 
@@ -181,19 +213,25 @@ const GetCatagoryResults = (req,res) => {
 
     var cart = req.user ? req.user.cart : null;
 
-     res.render(CURATEDPRODUCTSURL, {
-         products:limited_products,
-         page_length:page_length,
-         page_counter:page_counter + 1,
-         root:"./",
-         action:"/user/profile/edit",
-         user:req.user,
-         current_catagory:catagory,
-         cart:cart,
-         catagories:new_catagories,
-         isAuthenticated:req.session.isAuthenticated,
-         isAdmin:false
-     });
+    var new_feedback = {...feedback};
+
+    new_feedback.items.top_deals = null;
+    new_feedback.items.all_products = all_products;
+    new_feedback.user = req.user;
+    new_feedback.limited_products = limited_products;
+    new_feedback.cart = req.user ? req.user.cart : null;
+    new_feedback.catagories = new_catagories;
+    new_feedback.popup_message = null;
+    new_feedback.isAuthenticated = req.session.isAuthenticated;
+    new_feedback.page_length = page_length;
+    new_feedback.page_counter = page_counter + 1;
+    new_feedback.action = "/user/profile/edit";
+    new_feedback.current_catagory = catagory;
+    new_feedback.searched_term = new_feedback.searched_term;
+    new_feedback.render = CURATEDPRODUCTSURL;
+    feedback = new_feedback;
+
+     res.render(new_feedback.render, new_feedback);
 
   });
 
@@ -206,6 +244,8 @@ const EditProfile = (req,res) => {
 
   var data  = req.body;
 
+  var current_url = req.body.current_url;
+
   if(!req.user){
     res.redirect("/user/login");
     return;
@@ -215,8 +255,24 @@ const EditProfile = (req,res) => {
   const update = {$set:{ email : data.username, name:data.name, password:data.password } };
 
   User.findOneAndUpdate(filter,update).then((response)=>{
+    if(!response){
+      redirect("/login");
+    }
+
       req.user = response;
-  });
+
+      var new_feedback = {...feedback};
+
+      new_feedback.user = req.user;
+
+      new_feedback.popup_message = "Edited Profile!";
+      new_feedback.redirect = feedback.redirect;
+
+      feedback = new_feedback;
+
+      res.redirect(current_url);
+
+    });
 
 }
 
@@ -272,7 +328,6 @@ const AddToCart = async (req,res,next)=>{
   var id = req.body.productId;
   var id_ = id.replace("/","");
   var product = req.body;
-  console.log(req.user, req.session.isAuthenticated)
 
   if(!req.user || !req.session.isAuthenticated ){
     res.json({error:401});
@@ -330,14 +385,22 @@ const GetCheckoutPage = async (req,res) =>{
     cancel_url:req.protocol + "://" + req.get("host") + "/checkout/cancel",
   }).then((session)=>{
 
-    res.render(CHECKOUTPAGEURL,{
-      items:user.cart.items,
-      catagories: default_catagories,
-      total_price:total_price,
-      action:"/user/profile/edit",
-      sessionId: session.id,
-      isAuthenticated:req.session.isAuthenticated
-    });
+    var new_feedback = {...feedback};
+
+    new_feedback.items.top_deals = null;
+    new_feedback.items.all_products = null;
+    new_feedback.user = req.user;
+    new_feedback.limited_products = null;
+    new_feedback.cart = req.user ? req.user.cart : null;
+    new_feedback.catagories = null;
+    var redirect = "/checkout";
+    new_feedback.isAuthenticated = req.session.isAuthenticated;
+
+    new_feedback.popup_message = new_feedback.redirect == redirect ? new_feedback.popup_message : null;
+    new_feedback.redirect = redirect;
+    new_feedback.render = CHECKOUTPAGEURL;
+
+    res.render(new_feedback.render,new_feedback);
 
   });
 
@@ -352,52 +415,28 @@ const GetHomePage = async (req,res,next) => {
 
     var top_deals = product_util.OrganizeDiscounts(all_products);
 
-    // return;
-    var cart;
+    var new_feedback = {...feedback};
 
-    if(req.user){
-      cart = req.user.cart;
-    }
-    else{
-      cart = null
-    }
+    new_feedback.items.top_deals = top_deals;
+    new_feedback.items.all_products = all_products;
+    new_feedback.user = req.user;
+    new_feedback.render = HOMEPAGEURL;
+    new_feedback.isAuthenticated = req.session.isAuthenticated;
+    new_feedback.cart = req.user ? req.user.cart : null;
+    new_feedback.catagories = new_catagories;
+    var redirect = "/";
+    console.log(new_feedback.redirect == redirect);
+    new_feedback.popup_message = new_feedback.redirect == redirect ? new_feedback.popup_message : null;
+    new_feedback.redirect = redirect;
+    new_feedback.limited_products = null;
 
-    var feedback = {
-      items:{
-        top_deals:top_deals,
-        placeholder:PlaceholderImages,
-        all:all_products
-      },
-      catagories:new_catagories,
-      cart:cart,
-      user:req.user,
-      root:".",
-      action:"/user/profile/edit",
-      reviews:Reviews,
-      isAdmin:false,
-      isAuthenticated:req.session.isAuthenticated
-    };
-
-    res.render(HOMEPAGEURL,feedback)
+    feedback = new_feedback;
+    res.render(new_feedback.render,new_feedback)
 
  }).catch((err)=>{
    console.log(err);
    StatusError(next,err,500);
  });
-
-}
-
-const GetProfilePage = (req,res)=>{
-
-  if(!req.user){
-    res.redirect("/login");
-    return;
-  }
-
-  res.render(path.join(rootDir,"views","user","profile.ejs"),{
-    user:req.user,
-    isAuthenticated:true
-  });
 
 }
 
@@ -415,17 +454,25 @@ const GetProductDetailPage = async (req,res,next) =>{
          res.redirect("/")
        }
        else{
-         res.render(DETAILPAGEURL,{
-           item:product,
-           catagories:new_catagories,
-           isAdmin:false,
-           root:"..",
-           isAdmin:false,
-           user:req.user,
-           cart:req.user.cart,
-           isAuthenticated:req.session.isAuthenticated,
-           action:"/user/profile/edit"
-         });
+
+         var new_feedback = {...feedback};
+
+         var redirect = "/product/"+id;
+
+         new_feedback.popup_message = new_feedback.redirect == redirect ? new_feedback.popup_message : null;
+         new_feedback.redirect = redirect;
+         new_feedback.items.top_deals = null;
+         new_feedback.isAuthenticated = req.session.isAuthenticated;
+
+         new_feedback.items.all_products = all_products;
+         new_feedback.user = req.user;
+         new_feedback.limited_products = null;
+         new_feedback.cart = req.user ? req.user.cart : null;
+         new_feedback.catagories = new_catagories;
+         new_feedback.render = DETAILPAGEURL;
+         new_feedback.item = product;
+
+         res.render(new_feedback.render,new_feedback);
 
        }
 
@@ -518,20 +565,27 @@ const GetCartPage = async (req,res) =>{
 
 Product.find().then(async (all_products) =>{
 
-   var new_catagories = product_util.OrganizeCatagories(all_products);
+     var new_catagories = product_util.OrganizeCatagories(all_products);
 
-    res.render(CARTPAGEURL,{
-      items:existing_items,
-      cart:cart,
-      user:req.user,
-      isAdmin:false,
-      root:"..",
-      catagories:new_catagories,
-      total_price:total_price,
-      action:"/user/profile/edit",
-      session_id:session,
-      isAuthenticated:req.session.isAuthenticated
-    })
+     var new_feedback = {...feedback};
+
+     new_feedback.items.top_deals = null;
+     new_feedback.items.all_products = all_products;
+     new_feedback.user = req.user;
+     var redirect = "/cart";
+     new_feedback.isAuthenticated = req.session.isAuthenticated;
+     new_feedback.popup_message = new_feedback.redirect == redirect ? new_feedback.popup_message : null;
+     new_feedback.redirect = redirect;
+     new_feedback.limited_products = null;
+     new_feedback.cart = req.user ? req.user.cart : null;
+     new_feedback.catagories = new_catagories;
+     new_feedback.render =  CARTPAGEURL;
+     new_feedback.session_id = session;
+     new_feedback.total_price = total_price;
+     new_feedback.cart.items = items;
+     feedback = new_feedback;
+
+    res.render(new_feedback.render,new_feedback);
 
   })
 
@@ -578,6 +632,7 @@ module.exports.GetSearchResults = GetSearchResults;
 module.exports.DeleteCart = DeleteCart;
 module.exports.GetCurrentCart = GetCurrentCart;
 module.exports.GetHomePage = GetHomePage;
+module.exports.ResetPopups = ResetPopups;
 module.exports.GetProducts = GetProducts;
 module.exports.AddToCart = AddToCart;
 module.exports.AddOrder = AddOrder;

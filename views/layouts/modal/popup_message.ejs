@@ -1,0 +1,32 @@
+<% if (popup_message) {%>
+  <% console.log(popup_message) %>
+    <% if (popup_message.length > 0) {%>
+      <span class="popup_message popup_message--active popup_message--server ">
+        <%= popup_message %>
+      </span>
+
+
+
+<%}%>
+<%}%>
+<div class="popup_container">
+
+</div>
+
+<script>
+
+       document.body.addEventListener("click",(e)=>{
+
+         if(document.getElementsByClassName("popup_message").length > 0){
+
+           var popups = document.getElementsByClassName("popup_message");
+
+           for(var i = 0; i < popups.length; i++){
+             popups[i].classList.remove("popup_message--active");
+           }
+
+         }
+
+       });
+
+</script>

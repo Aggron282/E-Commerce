@@ -73,6 +73,8 @@ function AddToCart(product_id){
               cart_container.innerHTML = cart_number;
             }
 
+            RenderPopup("Add Item To Cart!");
+
           }
 
 

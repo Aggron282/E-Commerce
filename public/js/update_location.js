@@ -3,11 +3,12 @@ var location_modal = document.querySelector(".update_location_container");
 var exit_location =document.querySelector(".update_location--exit");
 var location_form = document.querySelector(".update_location_form");
 var update_location_url = location_form.getAttribute("action");
-var address_input = document.querySelector(".current_location_input");
+var address_input = document.querySelector(".update_location_input");
 var location_button = document.querySelector(".update_location_button--submit");
 var map_container = document.querySelector(".update_location_map");
 var current_location_button = document.querySelector(".update_location_button--current")
-
+var popup_container = document.querySelector(".popup_container")
+var navbar_delivery_col = document.querySelector(".navbar_user_col--delivery")
 var current_location_data;
 var current_address_data;
 
@@ -19,9 +20,23 @@ function RenderMapElement({latitude,longitude}){
 
 }
 
+function RenderPopup(message){
+
+  popup_container.innerHTML = (`<span class="popup_message popup_message--active popup_message--server ">
+    ${message}
+  </span>`)
+
+}
+
 var canEditLocation = false;
 
 location_choice.addEventListener("click",(e)=>{
+  ToggleDropdown(false);
+  ToggleLocationModal()
+});
+
+navbar_delivery_col.addEventListener("click",(e)=>{
+  ToggleDropdown(false);
   ToggleLocationModal()
 });
 
@@ -48,21 +63,27 @@ async function SubmitAndUpdateLocation(){
 
   var address = address_input.value;
   var data = await axios.post("/location/convert",{address:address});
+
   var new_location_data = data.data.location;
 
   current_address_data = address;
 
-  RenderMapElement(new_location_data.coords);
-
-  var update_location = await axios.post(update_location_url,new_location_data);
-
-  console.log(update_location);
-
-  if(update_location.data){
-    alert("Location Updated");
+  if(!new_location_data){
+      RenderPopup("Invalid Location");
+      return
   }else{
-    alert("Error Occured");
-  }
+
+      RenderMapElement(new_location_data.coords);
+
+      var update_location = await axios.post(update_location_url,new_location_data);
+    
+      if(update_location.data){
+        RenderPopup("Location Updated");
+      }else{
+        RenderPopup("Error Occured");
+      }
+
+    }
 
 }
 
@@ -83,18 +104,20 @@ function GetCurrentLocation(){
 
     var address_formatted = location_data.address.city + "," + location_data.address.state + "," + location_data.address.zip;
 
+    console.log(location_data);
+
     var new_coords = {
-      latitude:location_data.coords.latitude,
-      longitude:location_data.coords.longitude
+      latitude:location_data.coords ? location_data.coords.latitude  : null,
+      longitude:location_data.coords ? location_data.coords.longitude  : null,
     }
 
     address_input.value = address_formatted;
+    console.log(new_coords);
+    if(new_coords.latitude && new_coords.longitude){
+      RenderMapElement(new_coords);
+    }
 
-
-    RenderMapElement(new_coords);
-
-
-  }).catch(err=>{console.log("error")});
+  }).catch(err=>{console.log(err)});
 
   });
 
@@ -110,12 +133,21 @@ function ToggleLocationModal(toggle){
   }
 
   if(canEditLocation){
-    document.querySelector(".profile_wrapper").classList.add("active_wr")
+    document.querySelector(".black_overlay").classList.add("black_overlay--active")
     location_modal.classList.add("update_location_container--active");
   }
   else{
-    document.querySelector(".profile_wrapper").classList.remove("active_wr")
+    document.querySelector(".black_overlay").classList.remove("black_overlay--active")
     location_modal.classList.remove("update_location_container--active");
   }
 
 }
+
+async function InitLocation(){
+  var data = await axios.get("/user/profile/data");
+  var data_ = data.data;
+  address_input.value = data_.location.address;
+    RenderMapElement(data_.location.coords);
+}
+
+InitLocation();

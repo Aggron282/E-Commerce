@@ -4,7 +4,7 @@
   top:0%;
   transform: translateX(1500px);
   transition: all .4s;
-  padding:1%;
+  padding:10px;
   left:5%;
   padding-bottom:2.5%;
   border-radius: 10px;
@@ -51,6 +51,8 @@
 .update_location_button--current{
   width:50%;
   margin-left:25%;
+  display: block;
+  margin-top:-20px;
 }
 
 .update_location_button--submit{
@@ -69,6 +71,7 @@
 .update_location_container .title{
   font-size: 23px;
   font-weight: 250;
+  display: inline;
 }
 
 

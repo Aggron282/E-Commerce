@@ -1,8 +1,8 @@
 <div class="profile_change_container">
 
     <p class="profile_change--exit">X</p>
-
-    <form  class="profile_change_form" action ="<%= action %>" method = "POST" enctype="multipart/form-data">
+    <% console.log(action) %>
+    <form  class="profile_change_form" action ="<%= action %>profile/edit" method = "POST" enctype="multipart/form-data">
 
         <div class="profile_change_img_container">
 
@@ -23,9 +23,10 @@
         <input class="profile_change_input profile_change_input--password" name = "password" type="password" placeholder = "Enter Password" >
 
         <label class="profile_change_label"> Confirm Password </label>
-        <input class="profile_change--input profile_change_input--confirm" name = "confirm" type="password" placeholder = "Confirm Password" >
+        <input class="profile_change_input profile_change_input--confirm" name = "confirm" type="password" placeholder = "Confirm Password" >
+        <input class="profile_change_input profile_change_input--confirm" name = "current_url" type="hidden" value = <%= redirect %> >
 
-        <button class="profile_change_button--submit"> Update Changes </button>
+        <button class="profile_change_button--submit" type="submit"> Update Changes </button>
 
     </form>
 
