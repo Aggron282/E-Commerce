@@ -48,15 +48,14 @@ function FindProductsFromCatagory(catagory_name,organized_products){
 
   var catagory_name = catagory_name.toLowerCase();
   var products = [];
+
   for(var i =0; i < organized_products.length; i++){
 
     var product_catagory_name = organized_products[i].catagory.toLowerCase();
 
-
     if(catagory_name == product_catagory_name){
         products = organized_products[i].products;
         console.log(organized_products[i].products);
-
       }
 
   }
@@ -88,7 +87,7 @@ function OrganizeCatagories(products){
       }
 
       if(!isFound){
-          catagories.push(products[i].catagory);
+        catagories.push(products[i].catagory);
       }
 
   }
@@ -139,18 +138,18 @@ function OrganizeDiscounts(all_products){
 
   for(var k = 0; k < limit_top_discount; k++){
 
-
     for(var i =0; i < products.length; i++){
 
       if(products[i]){
 
-
         isFound = false;
 
           var product_doc = products[i]._doc;
+
           for(var z = 0; z < _ids.length; z++){
 
             isFound = false;
+
             if(JSON.stringify(product_doc._id) == _ids[z]){
                 isFound = true;
               }
@@ -160,7 +159,6 @@ function OrganizeDiscounts(all_products){
           }else{
             isFound = true;
           }
-
 
             if(product_doc.discount >= highest_discount && !isFound){
               highest_discount = product_doc.discount;

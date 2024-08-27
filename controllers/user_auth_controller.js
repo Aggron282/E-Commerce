@@ -28,8 +28,10 @@ const feedback = {
     password:"",
     name:""
   },
-  type:"User",
+  redirect:USER_LOGIN_CONFIG.login_url,
+  type:USER_LOGIN_CONFIG.type,
   url:"",
+  popup_message:null,
   validationErrors:[]
 }
 
@@ -49,6 +51,9 @@ const PostUserLogin = (req,res,next) => {
 
   var errors = validationResult(req);
 
+  feedback.validationErrors = errors.array();
+
+
   if(errors.isEmpty()){
 
     User.findOne({email:email}).then((found_user)=>{
@@ -62,6 +67,7 @@ const PostUserLogin = (req,res,next) => {
 
             req.session.isAuthenticated = true;
             req.session.user = found_user;
+            feedback.popup_message = "Success!"
             // console.log(found_user);
             // console.log(found_user);
             req.session.save((err)=>{
@@ -69,10 +75,14 @@ const PostUserLogin = (req,res,next) => {
             });
 
           }else{
+            feedback.popup_message = "Username/Password Incorrect!"
+
             res.status(401).render(LOGINPAGE,feedback);
           }
         }
         else{
+          feedback.popup_message = "No User Found!"
+
           res.status(401).render(LOGINPAGE,feedback);
         }
 
@@ -101,7 +111,7 @@ const Logout = (req,res) => {
       console.log(err);
     }
     else{
-      res.redirect(USER_LOGIN_CONFIG.login_url);
+      res.redirect("/");
     }
 
   })
@@ -220,6 +230,7 @@ const CreateAccount = (req,res) => {
             req.session.user = new_user;
 
             req.session.save((err)=>{
+              feedback.popup_message = "Created Your Account!"
               res.redirect(USER_LOGIN_CONFIG.login_url);
             });
 
@@ -230,6 +241,7 @@ const CreateAccount = (req,res) => {
 
       }
       else{
+        feedback.popup_message = "Failure in Creating Account"
         res.redirect(USER_LOGIN_CONFIG.create_url);
       }
 
@@ -237,6 +249,7 @@ const CreateAccount = (req,res) => {
 
   }
   else{
+    feedback.popup_message = "Invalid Inputs Detected"
     res.status(202).render(CREATEACCOUNTPAGE,feedback);
   }
 
@@ -250,6 +263,7 @@ const GetUserLoginPage = (req,res) => {
 
   feedback.userInput.email = "";
   feedback.userInput.password = "";
+  feedback.redirect = "/login";
 
   res.render(LOGINPAGE,feedback);
 
@@ -273,6 +287,7 @@ const GetNewPasswordPage = (req,res,next)=>{
 
     }
     else{
+      feedback.redirect = "/new_password";
       res.redirect(USER_LOGIN_CONFIG.login_url);
     }
 
@@ -288,6 +303,8 @@ const GetCreateAccountPage = (req,res) => {
 
   feedback.userInput.email = "";
   feedback.userInput.password = "";
+
+  feedback.redirect = "/create_account";
 
   res.render(CREATEACCOUNTPAGE,feedback);
 

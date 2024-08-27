@@ -29,7 +29,7 @@ router.post(
 
   body("password").isLength({min:6}).withMessage("Please enter password that is more than 6 characters").trim(),
 
-  body("name").isLength({min:1}).withMessage("Please enter name that is 1 character or more").custom((v)=>{
+  body("name").isLength({min:2}).withMessage("Please enter name that is 1 character or more").custom((v)=>{
 
     var value = v.toLowerCase();
 

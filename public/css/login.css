@@ -158,14 +158,28 @@ form p{
   font-size:14px;
   padding:1%;
 }
+.container-fluid {
+  position: relative;
+}
+
+.authentication_span--error{
+  font-size:13px;
+  color:orangered;
+}
+.authentication_input--error{
+  border-color:red !important;
+}
 
 .authentication_input_container{
   width:100%;
   margin-top:2.5%;
 }
 
-.authentication_container{
+.authentication_container--user{
   background:linear-gradient(to bottom,#312755,#304472, #583d7d, #68b5de) !important;
+}
+.authentication_container--admin{
+  background:linear-gradient(to bottom,#673F69,#D74B76, #FFAF45, #FFAF45) !important;
 }
 
 .authentication_type {
