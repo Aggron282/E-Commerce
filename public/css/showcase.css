@@ -3,7 +3,7 @@
   width:10%;
   position:absolute;
   left:45%;
-  top:90%;
+  top:130%;
 }
 
 .slideshow--active{
@@ -23,11 +23,13 @@
 .bubble_slideshow_row{
   z-index:99;
   position:relative;
-  bottom:100px
+  bottom:0px
 }
+
 .header{
   position: absolute !important;
 }
+
 .header--1{
   margin-top:-2.5%;
 }
@@ -130,13 +132,13 @@
   color:white;
   background:black;
   border-radius:30px;
-  width:15%;
-  font-size:15px;
+  width:35%;
+  font-size:18px;
   font-family: "Amazon Ember";
   position: absolute;
-  left:5%;
+  left:-25%;
   font-weight:100;
-  top:30%;
+  top:20%;
 }
 
 .header_title_2--3{

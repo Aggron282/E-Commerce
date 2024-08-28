@@ -276,3 +276,11 @@
   float: left;
   padding-top: 5%;
 }
+
+@media screen and (max-width:1024px) and (min-width:700px){
+
+.navbar_user_input--search {
+    margin-top: -20%;
+  }
+
+}
