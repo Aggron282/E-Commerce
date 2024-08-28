@@ -279,8 +279,8 @@
 @media screen and (max-width:1024px) and (min-width:700px){
 
   .navbar_user_input--search {
-    margin-top: -15%;
-    width:20%;
+    margin-top: -0%;
+    width:30%;
   }
 
   .navbar_user_col--order{
