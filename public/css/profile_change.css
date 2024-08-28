@@ -17,10 +17,10 @@
 }
 
 .profile_change_container{
-  position: fixed;
+  position: absolute;
   top:0%;
   z-index:999999;
-  width:90%;
+  width:100%;
   transition: all .3s;
   background: white;
   transform:translateY(-1500px);
