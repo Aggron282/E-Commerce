@@ -42,6 +42,10 @@
   position: relative;
 }
 
+.ad_button:hover{
+   color:white !important;
+}
+
 .ad_button{
   width:50%;
   margin-left:25%;
