@@ -111,9 +111,7 @@
     font-size:18px !important;
   }
 
-  .advertise_divider{
-      margin-top:10%;
-  }
+
 
   .advertise_container{
     padding-top:5%;
@@ -128,6 +126,9 @@
 
 @media screen and (max-width:1024px) and (min-width:700px){
 
+    .advertise_divider{
+      margin-top:10%;
+    }
 
     .advertise_container .text_banner .title{
       font-size:45px;
@@ -136,7 +137,7 @@
     }
 
     .advertise_container{
-      height: 85vh;
+      height: 80vh;
     }
 
     .signup_banner{
@@ -162,11 +163,12 @@
       bottom: 5px;
       position: absolute
     }
+
     .google_button{
       font-size: 25px !important;
-    text-align: left;
-    display: inline;
-    padding-left: 105px;
+      text-align: left;
+      display: inline;
+      padding-left: 105px;
     }
 
     .ad_button{
@@ -180,7 +182,7 @@
     .ad_icon{
       position: absolute;
       bottom: 0%;
-      width: 120%;
+      width: 150%;
       top: 140%;
       left: 0%;
     }
