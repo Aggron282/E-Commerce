@@ -204,7 +204,7 @@ margin:0% !important;
     margin-left:7.5%;
   }
   .toggle_result_by_page_container{
-    width:50%;
-    margin-left: 25%;
+    width:50% !important;
+    margin-left: 25% !important;
   }
 }
