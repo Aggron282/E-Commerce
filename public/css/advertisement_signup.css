@@ -169,9 +169,9 @@
     .ad_icon{
       position: absolute;
       bottom: 0%;
-      width: 100%;
-      top: 100%;
-      left: -40%;
+      width: 120%;
+      top: 140%;
+      left: 0%;
     }
 
     .advertise_container .text_banner .subtitle{
