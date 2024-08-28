@@ -287,11 +287,25 @@
     width:15%;
   }
 
+  .navbar_user_col--cart{
+    margin-top:-1%;
+  }
+
+  .navbar_user_col--profile{
+    margin-top:-1%;
+  }
+
+
+
   .navbar_user_col--logo{
     width:15%;
     margin-left:2.5%;
   }
 
+.navbar_user_col--logo{
+  width:80%;
+  margin-left: 0%;
+}
 
 
 
