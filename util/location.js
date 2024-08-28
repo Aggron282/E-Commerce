@@ -32,12 +32,17 @@ const ReverseConvertLocation = async ({latitude,longitude}) => {
 }
 
 const ConvertLocation =  async (place) =>{
-  console.log(place);
-  if(place.length < 2){
-    place = "place";
-  }
-  var data = await normal_geocoder.geocode(place);
+
+    console.log(place); 
+
+    if(place.length < 2){
+      place = "place";
+    }
+
+    var data = await normal_geocoder.geocode(place);
+
     console.log(data);
+
     if(data.length <=0){
       return false;
     }
@@ -57,10 +62,7 @@ const ConvertLocation =  async (place) =>{
 
     }
 
-
-
 }
-
 
 
 module.exports.ReverseConvertLocation = ReverseConvertLocation;
