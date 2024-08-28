@@ -197,9 +197,9 @@ margin:0% !important;
 
 @media screen and (max-width:1024px) and (min-width:700px){
 
-.product_item_container{
-  width:40%;
-  margin-left:5%;
-}
+  .product_item_container{
+    width:40%;
+    margin-left:7.5%;
+  }
 
 }
