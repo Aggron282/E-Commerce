@@ -101,8 +101,8 @@
 
 .advertise_divider{
     width:50%;
-    margin-left: 50%;
-    margin-top:1%;
+    margin-left: 25%;
+    margin-top:5%;
     height:1px;
     background:white;
 }
@@ -132,7 +132,7 @@
 @media screen and (max-width:1024px) and (min-width:700px){
 
     .advertise_divider{
-      margin-top:10%;
+      margin-top:15%;
     }
 
     .advertise_container .text_banner .title{
