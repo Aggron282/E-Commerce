@@ -203,7 +203,9 @@
         padding: 0px;
         height: 100%;
       }
-
+      .signup_banner{
+        padding-bottom:5%;
+      }
     }
 
 
