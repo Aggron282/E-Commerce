@@ -288,20 +288,17 @@
   }
 
   .navbar_user_col--cart{
-    margin-top:-30px;
+    margin-top:-15px;
   }
 
   .navbar_user_col--profile{
-    margin-top:-30px;
+    margin-top:-15px;
   }
-
-
 
   .navbar_user_col--logo{
     width:15%;
     margin-left:2.5%;
   }
-
 
   .navbar_user_col--logo img {
     width:80% !important;
