@@ -123,12 +123,21 @@
 
 @media screen and (max-width:1024px) and (min-width:700px){
 
+  .banner_title {
+    font-size:40px;
+    width:60%;
+    margin-bottom:60px;
+  }
   .items_banner_container{
-    margin-top: 10%;
+    margin-top: 7.5%;
   }
 
   .text_banner .subtitle{
     margin-top:5%;
+  }
+
+  .items_banner_container--inner{
+    height:20vh;
   }
 
 }

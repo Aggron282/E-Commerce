@@ -582,8 +582,9 @@ Product.find().then(async (all_products) =>{
      new_feedback.render =  CARTPAGEURL;
      new_feedback.session_id = session;
      new_feedback.total_price = total_price;
-     new_feedback.cart.items = items;
+     new_feedback.cart.items = items ? items : [];
      feedback = new_feedback;
+
 
     res.render(new_feedback.render,new_feedback);
 

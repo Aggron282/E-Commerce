@@ -70,13 +70,28 @@ body{
 
   .product_detail_col--description {
     width: 100%;
-    top: 400px !important;
-    position: absolute;
+
+    padding: 2%;
+    padding-top:10px;
+
+    margin-top:55vh;
+
   }
+
+  .product_detail_image{
+    width: 70%;
+    margin-top: 15%;
+  }
+
 
   .product_detail_col--img{
     position: absolute;
     top: -5%;
+    width: 70%;
+    z-index: -1;
+    height:70vh;
+
+
   }
 
 }

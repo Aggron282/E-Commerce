@@ -346,6 +346,9 @@
   .bubble_slideshow_row{
     top:25px;
   }
+  .items_banner_container--inner{
+    height:20vh;
+  }
   .header{
     height:150vh;
     background-position: center;

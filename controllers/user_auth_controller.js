@@ -202,13 +202,13 @@ const CreateAccount = (req,res) => {
   const email = req.body.email;
   const name = req.body.name;
   const password = req.body.password;
+
   var errors = validationResult(req);
 
   feedback.userInput.email = email;
   feedback.userInput.password = password;
   feedback.userInput.name = name;
   feedback.validationErrors = errors.array();
-
 
   if(errors.isEmpty()){
 

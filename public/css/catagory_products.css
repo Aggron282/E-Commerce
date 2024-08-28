@@ -214,6 +214,9 @@
   width: 100%;
 }
 
+.catagory_arrow{
+  position: absolute !important;
+}
 
 @media screen and (max-width:1024px) and (min-width:700px){
 
@@ -231,11 +234,22 @@
     height:60px;
   }
 
+  .catagory_title {
+    color: black;
+    font-size: 25px;
+    padding-left: 2.5%;
+  }
+
   .catagory_products{
     margin-left:10px;
     margin-right:10px;
     padding-bottom:20%;
+    margin-top:10%;
   }
+
+  /* .catagory_arrow--right {
+    right: -90%;
+  } */
 
   .catagory_row{
     padding-bottom:10%;

@@ -20,6 +20,10 @@
   text-transform:capitalize;
 }
 
+.top_discount_products_col{
+  width: calc((100% - 6rem) / 2) !important;
+}
+
 .discount_product_detail{
     text-align: center;
     font-size: 16px;
