@@ -139,6 +139,7 @@ margin:0% !important;
   background:yellow;
   margin-top:5%;
   border:none;
+  color:black;
   width:50%;
   box-shadow: 0px 0px 10px rgba(0,0,0,.3);
   border-radius:5px;
@@ -202,5 +203,8 @@ margin:0% !important;
     margin-top:5%;
     margin-left:7.5%;
   }
-
+  .toggle_result_by_page_container{
+    width:50%;
+    margin-left: 25%;
+  }
 }
