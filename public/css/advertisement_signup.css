@@ -136,10 +136,6 @@
       padding-top: 30px;
     }
 
-    .advertise_container{
-      height: 80vh;
-    }
-
     .signup_banner{
       width: 40%;
       background: linear-gradient(to bottom, #312755, #304472, #583d7d, #68b5de);
@@ -183,7 +179,7 @@
       position: absolute;
       bottom: 0%;
       width: 150%;
-      top: 140%;
+      top: 100%;
       left: 0%;
     }
 
