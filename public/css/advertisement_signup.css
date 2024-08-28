@@ -125,11 +125,10 @@
     }
 
     .advertise_container{
-      height: 100vh;
+      height: 85vh;
     }
 
     .signup_banner{
-      float: left;
       width: 40%;
       background: linear-gradient(to bottom, #312755, #304472, #583d7d, #68b5de);
       padding: 0px;
@@ -147,7 +146,7 @@
     }
 
     .google_img{
-      width: 100px;
+      width: 50px;
       left: 0%;
       bottom: 5px;
       position: absolute
@@ -170,14 +169,13 @@
     .ad_icon{
       position: absolute;
       bottom: 0%;
-      width: 200%;
+      width: 100%;
       top: 100%;
       left: -40%;
     }
 
     .advertise_container .text_banner .subtitle{
         padding: 30px;
-        text-align: left;
         font-size: 35px;
         font-weight: 600;
         margin-top: 10%;
