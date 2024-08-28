@@ -5,10 +5,10 @@ var PDFDocument = require("pdfkit");
 var ObjectId = require("mongodb").ObjectId;
 
 var StatusError = require("./../util/status_error.js");
+
 var fileHelper = require("./../util/file.js");
 var rootDir = require("./../util/path.js");
 var location = require("./../util/location.js");
-
 
 const Product = require("./../models/products.js");
 const Order = require("./../models/orders.js");
@@ -65,9 +65,8 @@ const GetAdminData = (req,res)=>{
 const ConvertLocation = async (req,res) => {
 
   var address = req.body.address;
-  console.log(address);
   var location_data = await location.ConvertLocation(address);
-  console.log(location_data);
+
   res.json({location:location_data});
 
 }
@@ -77,12 +76,13 @@ const ReverseConvertLocation = async (req,res) => {
   var coords = req.body;
 
   var location_data = await location.ReverseConvertLocation(coords);
+
   if(!location_data){
     res.render(false);
     return;
   }
-  var data = location_data;
 
+  var data = location_data;
 
   var formatted_address = {
     zip:data.zipcode,
@@ -95,8 +95,6 @@ const ReverseConvertLocation = async (req,res) => {
     latitude:data.latitude,
     longitude:data.longitude
   }
-
-  console.log(coords,formatted_address);
 
    res.json({address:formatted_address,coords:coords});
    res.end();
@@ -113,8 +111,6 @@ const EditAdmin = (req,res) => {
     res.redirect("/admin/login");
     return;
   }
-
-  console.log(req.file.filename);
 
   const filter = { _id : new ObjectId(req.admin._id) };
   const update = {$set:{ username : data.username, name:data.name, password:data.password, profileImg:req.file.filename} };
@@ -324,7 +320,7 @@ const EditOneProduct = async (req,res,next) =>{
   var new_product = {...found_product._doc};
   var thumbnail = new_product.thumbnail;
 
-  if( req.file &&  req.file.filename){
+  if( req.file && req.file.filename){
      thumbnail = req.file.filename;
   }
 
@@ -339,7 +335,6 @@ const EditOneProduct = async (req,res,next) =>{
   new_product.discount = body.discount;
 
   var new_products = products.map((p)=>{
-
 
     if(JSON.stringify(p._id) == JSON.stringify(new_product._id)){
       return p = new_product;
