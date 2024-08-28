@@ -338,7 +338,23 @@
   }
 
   .header_button_1{
-    top: 15%;
+    width: 30%;
+    top: 5%;
+    left: -27.5%;
   }
+
+  .bubble_slideshow_row{
+    top:25px;
+  }
+  .header{
+    height:150vh;
+    background-position: center;
+  }
+  .bubble_showcase {
+    width: 25%;
+    opacity: .3;
+    float: left;
+  }
+
 
 }

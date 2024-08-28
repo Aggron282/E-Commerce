@@ -119,32 +119,79 @@
 
 
     .advertise_container .text_banner .title{
-      font-size:35px;
+      font-size:65px;
       font-weight:600;
+      padding-top: 30px;
     }
 
-      .ad_button{
-        margin-top:7.5%;
-      }
+    .advertise_container{
+      height: 100vh;
+    }
+
+    .signup_banner{
+      float: left;
+      width: 40%;
+      background: linear-gradient(to bottom, #312755, #304472, #583d7d, #68b5de);
+      padding: 0px;
+      height: 100%;
+    }
+    
+    .item_banner{
+      width: 50%;
+      padding: 2%;
+      position: absolute;
+    }
+
+    .question{
+      font-size: 50px;
+    }
+
+    .google_img{
+      width: 100px;
+      left: 0%;
+      bottom: 5px;
+      position: absolute
+    }
+    .google_button{
+      font-size: 25px !important;
+    text-align: left;
+    display: inline;
+    padding-left: 105px;
+    }
 
     .ad_button{
+      margin-top:7.5%;
       width:90% !important;
       margin-left:5%;
-      font-size:18px !important;
+      padding:30px;
+
+      font-size:28px !important;
     }
 
     .ad_icon{
       position: absolute;
-      bottom:0%;
-      width:70%;
-      top:400px;
-      left:20%;
+      bottom: 0%;
+      width: 200%;
+      top: 100%;
+      left: -40%;
     }
 
     .advertise_container .text_banner .subtitle{
-      font-size:27px;
-      font-weight:400;
-      margin-top:10%;
+        padding: 30px;
+        text-align: left;
+        font-size: 57px;
+        font-weight: 600;
+        margin-top: 10%;
+      }
+
+      .signup_banner{
+        float: left;
+        width: 40%;
+        background: linear-gradient(to bottom, #312755, #304472, #583d7d, #68b5de);
+        padding: 0px;
+        height: 100%;
+      }
+
     }
 
 
