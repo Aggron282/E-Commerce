@@ -57,7 +57,8 @@ location_button.addEventListener("click",(e)=>{
 current_location_button.addEventListener("click",(e)=>{
   e.preventDefault();
   GetCurrentLocation();
-})
+});
+
 
 async function SubmitAndUpdateLocation(){
 
@@ -76,7 +77,7 @@ async function SubmitAndUpdateLocation(){
       RenderMapElement(new_location_data.coords);
 
       var update_location = await axios.post(update_location_url,new_location_data);
-    
+
       if(update_location.data){
         RenderPopup("Location Updated");
       }else{
