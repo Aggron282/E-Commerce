@@ -53,14 +53,17 @@
                       <input
                       class ="login_form"
                         value= "<%= userInput.password %>" name = "password" type="password" placeholder = "Enter Password"/>
-                      <a href = "/reset"> <button class="authentication_button--forgot">Forgot Password?</button> </a>
                     </div>
 
                     <button class="authentication_button authentication_button--submit" type="submit">Login</button>
                     <br />
+
                     <div class="g-signin2 authentication_button--google width-100 margin-top-5" data-onsuccess="onSignIn"></div>
 
               </form>
+              <a href = "/reset"> <button class="authentication_button--forgot">Forgot Password?</button> </a>
+              <br />
+              <a href = "/<%= type.toLowerCase() %>/create_account"> <button class="authentication_button--forgot">Don't have an account? Create one here</button> </a>
 
             </div>
 

@@ -122,13 +122,14 @@ user.methods.AddCart = function(id){
          var updated_cart = {
            items:items
          }
-
+         console.log(this);
          this.cart = updated_cart;
          this.save();
 
         }
 
-   })
+   });
+   
 }
 
 user.methods.deleteProduct = function(id,cb){

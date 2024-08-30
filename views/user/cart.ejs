@@ -1,78 +1,79 @@
-
 <%- include("./../layouts/user/head.ejs") %>
 
-<%- include("./../layouts/user/home/navbar.ejs") %>
+<main>
 
   <div class="black_overlay"></div>
 
+  <%- include("./../layouts/user/home/navbar.ejs") %>
   <%- include("./../layouts/modal/popup_message.ejs") %>
 
+  <div class="profile_change_overlay">
+    <%- include("./../layouts/modal/update_location.ejs") %>
+    <%- include("./../layouts/modal/profile.ejs") %>
+  </div>
 
-  <main class="cart_interface container-fluid">
+  <div class="main_content main_content--active">
 
-    <div class="profile_change_overlay">
-      <%- include("./../layouts/modal/profile.ejs") %>
-      <%- include("./../layouts/modal/update_location.ejs") %>
-    </div>
+        <div class="cart_interface_container padding-5 ">
 
-    <div class="cart_interface_container main_content padding-5 ">
+          <p class="cart_interface_heading width-100"> Your Cart</p>
 
-      <p class="cart_interface_heading width-100"> Your Cart</p>
+          <div class="row relative">
 
-      <div class="row relative">
+            <div class="col-8 cart_interface_col--items">
 
-        <div class="col-8 cart_interface_col--items">
+                <% if (cart.items) {%>
 
-            <% if (cart.items) {%>
+                    <% if (cart.items.length > 0) {%>
 
-                <% if (cart.items.length > 0) {%>
+                        <% for (var i = 0; i < cart.items.length; i++) { %>
+                          <div class="cart_interface_box">
 
-                    <% for (var i = 0; i < cart.items.length; i++) { %>
-                      <div class="cart_interface_box">
+                            <div class="row">
 
-                        <div class="row">
+                              <div class="col-4">
+                                <img class="margin-left-25 cart_interface_product--img" src =   <%= `/${cart.items[i].data.thumbnail}` %> />
+                              </div>
 
-                          <div class="col-4">
-                            <img class="margin-left-25 cart_interface_product--img" src =   <%= `/${cart.items[i].data.thumbnail}` %> />
-                          </div>
+                              <div class="col-6">
 
-                          <div class="col-6">
+                                <p class="cart_interface--title cart_interface--text width-100"> <%= cart.items[i].data.title %> </p>
+                                <p class="cart_interface--title cart_interface--text width-100"> $<%= cart.items[i].data.price %>.99 </p>
+                                <p class="cart_interface--title cart_interface--text width-100"> Qty: <%= cart.items[i].data.quantity %> </p>
 
-                            <p class="cart_interface--title cart_interface--text width-100"> <%= cart.items[i].data.title %> </p>
-                            <p class="cart_interface--title cart_interface--text width-100"> $<%= cart.items[i].data.price %>.99 </p>
-                            <p class="cart_interface--title cart_interface--text width-100"> Qty: <%= cart.items[i].data.quantity %> </p>
+                                <form method = "POST" action = "/cart/delete" >
+                                  <input  type="hidden" name = "_id" value= <%= cart.items[i].data._id %> />
+                                  <button class="cart_interface_button--delete" type="submit"> Delete </button>
+                                </form>
 
-                            <form method = "POST" action = "/cart/delete" >
-                              <input  type="hidden" name = "_id" value= <%= cart.items[i].data._id %> />
-                              <button class="cart_interface_button--delete" type="submit"> Delete </button>
-                            </form>
+                              </div>
 
-                          </div>
 
+                            </div>
 
                         </div>
 
-                      </div>
+                      <% }%>
 
-                    <% }%>
+                  <% } %>
 
-                <% } %>
+              <% } %>
 
-            <% } %>
+          </div>
 
-        </div>
+          <div class="col-3 relative">
 
-        <div class="col-3 relative">
+              <div class="cart_interface_total_price_container">
 
-            <div class="cart_interface_total_price_container">
+                  <p class="cart_interface_heading">Total Price</p>
+                  <p class="cart_interface_total">$ <%= total_price %> .99</p>
+                  <button class="cart_interface_button--checkout" id="order_button"> Buy Now</button>
 
-                <p class="cart_interface_heading">Total Price</p>
-                <p class="cart_interface_total">$ <%= total_price %> .99</p>
-                <button class="cart_interface_button--checkout" id="order_button"> Buy Now</button>
+                  <script src="https://js.stripe.com/v3/"></script>
 
-                <script src="https://js.stripe.com/v3/"></script>
+              </div>
 
-            </div>
+          </div>
 
         </div>
 
@@ -80,7 +81,6 @@
 
     </div>
 
-  </main>
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 

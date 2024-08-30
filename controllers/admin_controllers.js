@@ -203,6 +203,8 @@ const GetMainPage = (req,res,next) =>{
       totalProducts:totalProducts,
       isAdmin:true,
       user:req.admin,
+      popup_message:null,
+      redirect:"/",
       action:"/admin/profile/edit"
     });
 
@@ -221,7 +223,9 @@ const GetProductDetailPage = async (req,res,next) =>{
           item:product,
           root:"../..",
           user:req.admin,
-          isAdmin:true
+          redirect:"/product/"+id,
+          isAdmin:true,
+          popup_message:null
         });
 
       }

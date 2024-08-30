@@ -10,6 +10,7 @@ var profile_username = document.querySelector(".profile_change_input--username")
 var profile_password = document.querySelector(".profile_change_input--password");
 var profile_confirm = document.querySelector(".profile_change_input--confirm");
 var profile_dropdown_opener = document.querySelector(".navbar_user_col--profile");
+var main_content = document.querySelector(".main_content");
 var dropdown = document.querySelector(".navbar_user_dropdown_list_container");
 
 var canEditProfile = false;
@@ -18,8 +19,6 @@ var isDropdownOpen = false;
 
 //-----------------------------------------------Set Form and Reveal Modal-----------------------------
 function PopulateAndSetEditProfileModal(toggle,url){
-
-  var black_overlay =  document.querySelector(".black_overlay");
 
   if(toggle){
     canEditProfile = toggle;
@@ -30,12 +29,13 @@ function PopulateAndSetEditProfileModal(toggle,url){
 
   if(canEditProfile){
     PopulateProfileForm(url);
-    black_overlay.classList.add("black_overlay--active")
-    profile_container.classList.add("profile_container--active");
+
+    main_content.classList.remove("main_content--active")
+    profile_container.classList.add("profile_change_container--active");
   }
   else{
-    black_overlay.classList.remove("black_overlay--active")
-    profile_container.classList.remove("profile_container--active");
+    main_content.classList.add("main_content--active")
+    profile_container.classList.remove("profile_change_container--active");
   }
 
 }

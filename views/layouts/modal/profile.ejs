@@ -31,12 +31,16 @@
     </form>
 
     <% var class_ = "profile_change_img--default" %>
-
+    <% console.log(user) %>
     <% if(user){ %>
-      <% var img_ = user.profileImg ? `images/${user.profileImg}` : "/images/profile_img.png" %>
+      <% var img_ = user.profileImg ? `/images/${user.profileImg}` : "/images/profile_img.png" %>
       <% class_ = user.profileImg ? "" : "profile_change_img--default" %>
       <img class="profile_change_img--display <%= class_ %>" src =" <%= img_ %>" >
     <%}else{%>
       <img class="profile_change_img--display <%= class_ %>" src =" /images/profile_img.png" >
     <%}%>
+
+
+    <img class="profile_change_logo"  src = "/images/new_logo--2.png"/>
+
   </div>

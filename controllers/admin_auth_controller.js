@@ -31,6 +31,7 @@ const feedback = {
     name:""
   },
   type:"Admin",
+  popup_message:null,
   url:"/admin/create_account",
   validationErrors:[]
 }
@@ -41,18 +42,81 @@ const GetAdminLoginPage = async (req,res) => {
   await auth.RenderLogin(req,res,ADMIN_LOGIN_CONFIG,null,feedback);
 }
 
-const GetAdminCreateAccountPage = (req,res) => {
+const CreateAccount = (req,res) => {
+
+
+  const email = req.body.email;
+  const name = req.body.name;
+  const password = req.body.password;
+
+  var errors = validationResult(req);
+
+  feedback.userInput.email = email;
+  feedback.userInput.password = password;
+  feedback.userInput.name = name;
+  feedback.validationErrors = errors.array();
+  feedback.url = ADMIN_LOGIN_CONFIG.create_url;
+
+  if(errors.isEmpty()){
+
+    Admin.findOne({email:email}).then((response)=>{
+
+      if(!response){
+
+          // bcrypt.hash(password,12).then((encrypt)=>{
+
+            const new_admin = new Admin({
+              email: email,
+              name:name,
+              password:password,
+              profileImg:"",
+              products:[]
+            });
+
+            new_admin.save();
+
+            req.session.admin = new_admin;
+
+            req.session.save((err)=>{
+              feedback.popup_message = "Created Your Account!"
+              res.redirect(ADMIN_LOGIN_CONFIG.login_url);
+            });
+
+            // res.redirect(USER_LOGIN_CONFIG.login_url);
+
+        // }).then(result =>{
+        // });
+
+      }
+      else{
+        feedback.popup_message = "Failure in Creating Account"
+        res.redirect(ADMIN_LOGIN_CONFIG.create_url);
+      }
+
+    });
+
+  }
+  else{
+    feedback.popup_message = "Invalid Inputs Detected"
+    res.render(CREATEACCOUNTPAGEURL,feedback);
+  }
+
+
+}
+
+
+const GetCreateAccountPage = (req,res) => {
 
   feedback.url = ADMIN_LOGIN_CONFIG.create_url;
 
-  feedback.userInput.email =  "";
-  feedback.userInput.password =  "";
-  feedback.userInput.name =  "";
+  feedback.userInput.email = "";
+  feedback.userInput.password = "";
+
+  feedback.redirect = "/create_account";
 
   res.render(CREATEACCOUNTPAGEURL,feedback);
 
 }
-
 //-----------------------------------------------------------------
 //Post Admin Functions
 const PostAdminLogin = async (req,res,next) => {
@@ -94,7 +158,7 @@ const PostAdminLogin = async (req,res,next) => {
 
   }
 
-
+module.exports.GetCreateAccountPage = GetCreateAccountPage;
 module.exports.GetAdminLoginPage = GetAdminLoginPage;
-module.exports.GetAdminCreateAccountPage = GetAdminCreateAccountPage;
+module.exports.CreateAccount = CreateAccount;
 module.exports.PostAdminLogin = PostAdminLogin;

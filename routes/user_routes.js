@@ -30,7 +30,7 @@ router.get("/catagories",userControllers.GetCatagories);
 router.get("/user/profile/data",isAuth,userControllers.GetProfile);
 
 // Changes to User Cart
-router.post("/cart",userControllers.AddToCart);
+router.post("/cart",isAuth,userControllers.AddToCart);
 router.post("/cart/delete",isAuth,userControllers.DeleteCartItem);
 //router.post("/delete/cart",userControllers.AddToCart);
 router.post("/catagories",userControllers.ToggleCatagories);

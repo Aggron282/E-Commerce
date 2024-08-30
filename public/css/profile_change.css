@@ -2,9 +2,11 @@
   position:relative;
 }
 
-.profile_container--active{
-  transform:translateY(20px) !important;
+.profile_change_container--active{
+  z-index:9999999999999999999 !important;
+  opacity:1 !important;
 }
+
 
 .black_overlay--active{
   position: fixed;
@@ -19,16 +21,13 @@
 .profile_change_container{
   position: absolute;
   top:0%;
-  z-index:999999;
+  z-index:-1;
   width:100%;
   transition: all .3s;
   background: white;
-  transform:translateY(-1500px);
+  opacity: 0;
   padding:2.5%;
   padding-bottom:2.5%;
-  border-radius:10px;
-  left:5%;
-  box-shadow: 0px 0px 10px rgba(0,0,0,.5);
 }
 
 .profile_change--exit{
@@ -49,12 +48,21 @@
   background:white;
   border-color:black;
   border-width:1.5px;
+  margin-top: 5%;
+  width:60%;
   padding:10px;
   transition: .4s all;
 }
 
 .profile_change_img--default{
   background:black !important;
+  border-radius: 50%;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, .5);
+
+  padding: 2px;
+
+  border: 1px solid black;
+
 }
 
 .profile_change_button--submit:hover{
@@ -62,15 +70,18 @@
   color:white;
 }
 
+
+.profile_change_logo {
+  width:20%;
+  margin-top:5%;
+  margin-left:40%;
+  clear: both;
+}
+
 .profile_change_img--display{
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, .5);
-  padding: 2px;
-  border: 1px solid black;
-  width: 30%;
+  width: 25%;
   float: right;
   top: 20%;
-  height:50%;
-  border-radius: 50%;
   position: absolute;
   right:5%;
 }

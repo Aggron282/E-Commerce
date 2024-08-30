@@ -66,6 +66,7 @@ const PostUserLogin = (req,res,next) => {
           // if(isFound){
 
             req.session.isAuthenticated = true;
+            console.log(found_user);
             req.session.user = found_user;
             feedback.popup_message = "Success!"
             // console.log(found_user);
@@ -105,8 +106,10 @@ const PostUserLogin = (req,res,next) => {
 
 const Logout = (req,res) => {
 
+  req.user = null;
+  req.isAuthenticated = false;
   req.session.destroy((err)=>{
-
+    console.log(req.session);
     if(err){
       console.log(err);
     }
@@ -222,6 +225,7 @@ const CreateAccount = (req,res) => {
               email: email,
               name:name,
               password:password,
+              profileImg:"",
               cart:{items:[]}
             });
 

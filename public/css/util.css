@@ -27,6 +27,32 @@ body{
   margin-left:25%;
 }
 
+.main_content{
+  visibility: hidden;
+  opacity: 0;
+  height:10px;
+  z-index:-199;
+}
+
+.main_content div {
+  position: absolute;
+}
+
+.main_content--active div {
+  position: relative;
+}
+
+
+
+.main_content--active{
+  opacity: 1 !important;
+  position: relative !important;
+  z-index: 199 !important;
+  height:auto !important;
+
+  visibility: visible !important;
+}
+
 p {
   font-family:"Amazon Ember";
   color:black;

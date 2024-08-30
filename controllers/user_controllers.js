@@ -251,8 +251,16 @@ const EditProfile = (req,res) => {
     return;
   }
 
+  console.log(req.file);
+
+  if(data.password.length <= 0){
+    data.password = req.user.password;
+  }
+
+   var file = req.file ? req.file.filename : req.user.profileImg
+
   const filter = { _id : new ObjectId(req.user._id) };
-  const update = {$set:{ email : data.username, name:data.name, password:data.password } };
+  const update = {$set:{ email : data.username, name:data.name, password:data.password, profileImg: file} };
 
   User.findOneAndUpdate(filter,update).then((response)=>{
     if(!response){
@@ -331,7 +339,8 @@ const AddToCart = async (req,res,next)=>{
 
   if(!req.user || !req.session.isAuthenticated ){
     res.json({error:401});
-  }else{
+  }
+  else{
 
     Product.findById(id_).then((data)=>{
         req.user.AddCart(data);
@@ -416,7 +425,7 @@ const GetHomePage = async (req,res,next) => {
     var top_deals = product_util.OrganizeDiscounts(all_products);
 
     var new_feedback = {...feedback};
-
+    console.log(req.user);
     new_feedback.items.top_deals = top_deals;
     new_feedback.items.all_products = all_products;
     new_feedback.user = req.user;
