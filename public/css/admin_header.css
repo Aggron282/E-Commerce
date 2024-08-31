@@ -115,8 +115,6 @@
   width:10%;
   float: right;
   margin-top:-5%;
-
-
 }
 
 .logo_container{
@@ -131,6 +129,7 @@
   .profile_icon{
     margin-top: 10px ;
   }
+  
   .dropdown_title{
     font-size:25px;
     font-weight:400;
