@@ -69,7 +69,7 @@
             <% for(var i = 0; i < limited_products.length; i++){%>
 
               <% var _id = limited_products[i]._id %>
-              <% var title =  limited_products[i].title.substring(0,50) %>
+              <% var title =  limited_products[i].title.substring(0,70) %>
               <% var price = "$" + limited_products[i].price + ".99" %>
               <% var description = limited_products[i].description.substring(0,50) + "..." %>
               <% var clear = i % 4 == 0 ? "clear" : "" %>
@@ -85,16 +85,15 @@
                   <a href = "/product/<%= _id %>">
 
                     <div class="product_item_container--image">
-                        <img class="product_item_image" src = "/<%= limited_products[i].thumbnail %>" />
+                        <img class="product_item_image" src = "/images/<%= limited_products[i].thumbnail %>" />
                     </div>
 
                     <p class="product_item_text product_item_text--title"> <%= title %> </p>
                     <p class="product_item_text product_item_text--price"> <%= price %> </p>
-                    <p class="product_item_text product_item_text--description"> <%= description %> </p>
+
 
                   </a>
 
-                 <button class="product_item_button product_item_button--cart" _id = <%= _id %>>Add to Cart </button>
 
               </div>
 

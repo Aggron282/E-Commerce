@@ -111,6 +111,7 @@ margin:0% !important;
 
 .product_item_image{
   width:50%;
+  object-fit: cover;
   margin-left:25%;
   max-height: 120px;
   overflow: hidden;
@@ -124,7 +125,7 @@ margin:0% !important;
 
 .product_item_text--title{
   font-weight: 700;
-  font-size:18px;
+  font-size:16px;
 }
 
 .product_item_text--price{
