@@ -30,12 +30,13 @@
       </div>
 
       <div class="catagory_populate_container" id = <%= `_${c}` %>>
+        <div class="row">
 
         <% for(var i = 0; i <= 3; i++) { %>
 
           <% var i_ = i + starting_counter %>
-
-          <div class="col-3 no-margin-left">
+          <% if(catagories[k].products[i_]){ %>
+            <div class="col-3 catagorized_products_col">
 
             <div class= "catagory_product_box product_box--catagory width-100" catagory = <%= c %> it = <%= i_ %> >
 
@@ -47,12 +48,13 @@
 
               <% var description = "" %>
 
-              <% if(catagories[k].products[i_]){ %>
+
                 <% name = catagories[k].products[i_].title.substring(0, 30) + "..."; %>
-                <% img = "./"+catagories[k].products[i_].thumbnail %>
+              
+                <% img = "/images/"+catagories[k].products[i_].thumbnail %>
                 <% price = catagories[k].products[i_].price %>
                 <% description = catagories[k].products[i_].description.substring(0, 100) + "...";  %>
-              <%}%>
+
 
               <p class="catagory_product_text--name"><%= name %></p>
 
@@ -62,16 +64,21 @@
 
                 <p class="catagory_product_text catagory_product_text--description"><%=description %></p>
                 <p class="catagory_product_text catagory_product_text--price ">$ <%= price %></p>
-
                 <a href = <%="/product/"+catagories[k].products[i_]._id %>><p class="catagory_product_detail">See Details</p></a>
 
               </div>
+
+                <%}else{%>
+                  <% break %>
+                <%}%>
 
            </div>
 
          </div>
 
         <% } %>
+
+        </div>
 
        </div>
 

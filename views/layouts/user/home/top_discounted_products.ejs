@@ -21,7 +21,7 @@
             <% link =`/product/${items.top_deals[i]._id}` %>
             <% name = name.substring(0, 35) + "..."; %>
             <% description = items.top_deals[i].description %>
-            <% thumbnail = `./${items.top_deals[i].thumbnail}` %>
+            <% thumbnail = `/images/${items.top_deals[i].thumbnail}` %>
 
             <% if (description.length > 105) { %>
               <% description = description.substring(0, 105) + "..."; %>
