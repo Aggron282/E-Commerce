@@ -387,6 +387,15 @@
     position: absolute;
     left: 5%;
 }
+.header_title_1--1 {
+    font-size: 65px;
+}
+
+.header_title_1--2 {
+    letter-spacing: 2px;
+    font-size: 18px;
+    font-weight:300;
+  }
 
   .header_title_2--2{
     font-weight: 999;
