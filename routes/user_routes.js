@@ -25,6 +25,8 @@ router.get("/cart/purchase",isAuth,userControllers.GetCartPage);
 router.get("/get_products",userControllers.GetProducts);
 router.get("/search/product/item=:product/page_counter=:page_counter",userControllers.GetSearchResults);
 router.get("/search/product/catagory=:catagory/page_counter=:page_counter",userControllers.GetCatagoryResults);
+router.get("/search/product/catagory=:catagory/page_counter=:page_counter/isAdmin=:isAdmin",userControllers.GetCatagoryResults);
+router.get("/search/product/item=:product/page_counter=:page_counter/isAdmin=:isAdmin",userControllers.GetSearchResults);
 
 router.get("/catagories",userControllers.GetCatagories);
 router.get("/user/profile/data",isAuth,userControllers.GetProfile);

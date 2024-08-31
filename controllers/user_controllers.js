@@ -163,7 +163,12 @@ const GetSearchResults = async (req,res,next) => {
 
   var product = req.params.product;
   var page_counter = parseInt(req.params.page_counter) - 1;
-
+  var isAdmin = req.params.isAdmin  == "true"? true : false;
+  if(isAdmin){
+    if(!req.admin){
+      isAdmin = false;
+    }
+  }
   Product.find({}).then(async (all_products)=>{
 
      var new_catagories = await product_util.OrganizeCatagories(all_products);
@@ -186,6 +191,7 @@ const GetSearchResults = async (req,res,next) => {
      new_feedback.action = "/user/profile/edit";
      new_feedback.current_catagory = "";
      new_feedback.searched_term = product;
+     new_feedback.isAdmin = isAdmin;
      new_feedback.render = CURATEDPRODUCTSURL;
 
 
@@ -200,7 +206,13 @@ const GetSearchResults = async (req,res,next) => {
 const GetCatagoryResults = (req,res) => {
 
   var catagory = req.params.catagory ? req.params.catagory : req.body.catagory;
-
+  console.log(req.params)
+  var isAdmin = req.params.isAdmin  == "true"? true : false;
+  if(isAdmin){
+    if(!req.admin){
+      isAdmin = false;
+    }
+  }
   var page_counter = 0;
 
   Product.find({}).then(async (all_products)=>{
@@ -231,8 +243,7 @@ const GetCatagoryResults = (req,res) => {
     new_feedback.catagory_input = catagory;
     new_feedback.searched_term = new_feedback.searched_term;
     new_feedback.render = CURATEDPRODUCTSURL;
-    new_feedback.isAdmin = req.admin ? true : false;
-
+    new_feedback.isAdmin = isAdmin;
      res.render(new_feedback.render, new_feedback);
 
   });
@@ -439,7 +450,7 @@ const GetHomePage = async (req,res,next) => {
     new_feedback.redirect = redirect;
     new_feedback.limited_products = null;
     new_feedback.isAdmin = false;
-    req.session.admin = null;
+
     feedback = new_feedback;
 
     res.render(new_feedback.render,new_feedback)
