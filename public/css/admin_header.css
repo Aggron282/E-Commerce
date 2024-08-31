@@ -111,8 +111,12 @@
   }
 
 .profile_col_admin{
-  width:12.5%;
+  width:10%;
   float: right;
+
+}
+.profile_col_admin img {
+  margin-top:-5%;
 }
   .logo_container{
     margin-right: 2.5%;
