@@ -220,7 +220,7 @@ const GetMainPage = (req,res,next) =>{
   new_feedback.products= req.admin.products,
   new_feedback.action = "/admin/profile/edit";
   new_feedback.totalProducts = totalProducts
-
+  new_feedback.isAuthenticated = req.isAuthenticated;
   res.render(HOMEPAGEURL,new_feedback);
 
 }
@@ -244,6 +244,7 @@ const GetProductDetailPage = async (req,res,next) =>{
         new_feedback.item = product;
         new_feedback.redirect = "/product/edit/"+id;
         new_feedback.isAdmin = true;
+        new_feedback.isAuthenticated = req.isAuthenticated;
         res.render(DETAILPAGEURL,new_feedback);
       }
 

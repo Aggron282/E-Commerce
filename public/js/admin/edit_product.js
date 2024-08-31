@@ -246,7 +246,7 @@ async function RenderProductCatagories(){
       <div class="col-3 no-margin-left margin-top-2_5 admin_catagory_product_col">
         <div class= "catagory_product_box product_box--catagory width-100 relative "style="z-index:0;"  catagory = "${ organized_products[i].catagory.toLowerCase() }" it = "${k}"  >
 
-          <p class="catagory_product_text--name">${organized_products[i].products[k].title}</p>
+          <p class="catagory_product_text--name">${organized_products[i].products[k].title.substring(0,50)}</p>
 
           <img class="catagory_product_image_admin margin-top-5" src = '${"/images/"+organized_products[i].products[k].thumbnail.replace(/ /g,'')}' />
 
@@ -255,7 +255,7 @@ async function RenderProductCatagories(){
             <p class="catagory_product_text catagory_product_text--price ${discount_price < organized_products[i].products[k].price ? "cross-out" : ""}">$ ${ organized_products[i].products[k].price}</p>
             <p class="catagory_product_text catagory_product_text--discount ">$ ${ discount_price + " (" + organized_products[i].products[k].discount + "% Discount)"  }</p>
             <p class="catagory_product_text catagory_product_text--quantity "> Qty: ${ organized_products[i].products[k].quantity} </p>
-            <p class="catagory_product_text catagory_product_text--description">${organized_products[i].products[k].description.substring(0,50)+"..."}</p>
+
 
             <a href =${ "/admin/product/"+organized_products[i].products[k]._id} >
               <p class="catagory_product_detail">See Details</p>
