@@ -65,7 +65,7 @@
             <p class="product_detail--type"> <%= item.catagory %> </p>
             <p class="product_detail--price"> $<%= item.price %>.99 </p>
 
-            <span class="product_id" id="product_id_hash" _id = "<%= item._id %>" ></span>
+            <span class="product_id" id="product_id_hash" _id = "<%= item._id %>"></span>
 
             <% var inactive = item.quantity > 0 ? "" : "sold_out" %>
             <% var qty = item.quantity > 0 ? "Qty:"+item.quantity : "This Product is Currently Sold Out" %>
@@ -92,12 +92,8 @@
     </div>
 
     <div class="col-4 product_detail_col--img">
-
-      <% if (!isAdmin) {%>
-        <img class="product_detail_image" src = <%= `./../${item.thumbnail}` %> />
-      <%}else{%>
-        <img class="product_detail_image" src = <%= `./../../../${item.thumbnail}` %> />
-      <%}%>
+    
+        <img class="product_detail_image" src = <%= `/images/${item.thumbnail}` %> />
 
     </div>
 
