@@ -53,6 +53,7 @@
 textarea{
   border:3px solid #e6e6e6 !important;
 }
+
 .input_form{
   border:none;
   border-radius:0px;
@@ -191,4 +192,24 @@ textarea{
 
 .shopping_line{
   width:100%;
+}
+
+@media screen and (max-width:1024px) and (min-width:700px){
+
+  .shopping_line_container{
+    width:50%;
+  }
+
+  .content_text--title{
+    width:100%;
+  }
+
+  .content_img{
+    width:70%;
+  }
+
+  .product_input_col{
+    width:100%;
+  }
+
 }
