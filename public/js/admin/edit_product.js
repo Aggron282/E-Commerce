@@ -244,7 +244,7 @@ async function RenderProductCatagories(){
 
 
       <div class="col-3 no-margin-left margin-top-2_5 admin_catagory_product_col">
-        <div class= "catagory_product_box product_box--catagory width-100 relative"  catagory = "${ organized_products[i].catagory.toLowerCase() }" it = "${k}"  >
+        <div class= "catagory_product_box product_box--catagory width-100 relative "style="z-index:0;"  catagory = "${ organized_products[i].catagory.toLowerCase() }" it = "${k}"  >
 
           <p class="catagory_product_text--name">${organized_products[i].products[k].title}</p>
 
