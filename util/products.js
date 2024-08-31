@@ -48,19 +48,47 @@ function FindProductsFromCatagory(catagory_name,organized_products){
 
   var catagory_name = catagory_name.toLowerCase();
   var products = [];
+  var letters_needed = 3;
+  var letters_matched = 0;
+  var isFound = false;
 
   for(var i =0; i < organized_products.length; i++){
 
     var product_catagory_name = organized_products[i].catagory.toLowerCase();
+    var limit = catagory_name.length > product_catagory_name.length ? catagory_name.length : product_catagory_name.length;
+    console.log(limit)
 
-    if(catagory_name == product_catagory_name){
-        products = organized_products[i].products;
-        console.log(organized_products[i].products);
+    for(var k =0; k < catagory_name.length; k++ ){
+
+      console.log(product_catagory_name[k], catagory_name[k])
+
+      if(product_catagory_name[k] == catagory_name[k] ){
+        letters_matched++;
+      }else{
+        letters_matched = 0;
       }
+
+      if(letters_matched >= letters_needed){
+        isFound = true;
+        console.log( organized_products[i]);
+        products = organized_products[i].products;
+        break;
+      }
+
+      if(!product_catagory_name[k] || !catagory_name[k]){
+        break;
+      }
+
+    }
+
+    if(isFound){
+      break;
+    }
 
   }
 
   return products;
+
 
 }
 
@@ -181,7 +209,6 @@ function OrganizeDiscounts(all_products){
 
   }
 
-  console.log(top_discount_products);
 
   return  top_discount_products;
 

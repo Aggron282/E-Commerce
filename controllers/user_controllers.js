@@ -75,7 +75,6 @@ const UpdateLocation = (req,res) =>{
 
   User.findById(req.user._id).then((user_)=>{
 
-    console.log(user_);
 
     user_.location = data;
 
@@ -189,7 +188,6 @@ const GetSearchResults = async (req,res,next) => {
      new_feedback.searched_term = product;
      new_feedback.render = CURATEDPRODUCTSURL;
 
-     feedback = new_feedback;
 
     res.render(new_feedback.render, new_feedback);
 
@@ -197,16 +195,19 @@ const GetSearchResults = async (req,res,next) => {
 
 }
 
+
+
 const GetCatagoryResults = (req,res) => {
 
-  var catagory = req.params.catagory;
+  var catagory = req.params.catagory ? req.params.catagory : req.body.catagory;
+
   var page_counter = 0;
 
   Product.find({}).then(async (all_products)=>{
 
     var new_catagories = await product_util.OrganizeCatagories(all_products);
     var products_in_catagory = await product_util.FindProductsFromCatagory(catagory,new_catagories);
-
+    console.log(products_in_catagory);
     var page_length = Math.floor(products_in_catagory.length / CURATED_ITEMS_LIMIT);
 
     var limited_products = GetPageData(page_counter,products_in_catagory);
@@ -227,9 +228,10 @@ const GetCatagoryResults = (req,res) => {
     new_feedback.page_counter = page_counter + 1;
     new_feedback.action = "/user/profile/edit";
     new_feedback.current_catagory = catagory;
+    new_feedback.catagory_input = catagory;
     new_feedback.searched_term = new_feedback.searched_term;
     new_feedback.render = CURATEDPRODUCTSURL;
-    feedback = new_feedback;
+    new_feedback.isAdmin = req.admin ? true : false;
 
      res.render(new_feedback.render, new_feedback);
 
@@ -251,7 +253,6 @@ const EditProfile = (req,res) => {
     return;
   }
 
-  console.log(req.file);
 
   if(data.password.length <= 0){
     data.password = req.user.password;
@@ -425,21 +426,22 @@ const GetHomePage = async (req,res,next) => {
     var top_deals = product_util.OrganizeDiscounts(all_products);
 
     var new_feedback = {...feedback};
-    console.log(req.user);
     new_feedback.items.top_deals = top_deals;
     new_feedback.items.all_products = all_products;
+    new_feedback.isAdmin = false;
     new_feedback.user = req.user;
     new_feedback.render = HOMEPAGEURL;
     new_feedback.isAuthenticated = req.session.isAuthenticated;
     new_feedback.cart = req.user ? req.user.cart : null;
     new_feedback.catagories = new_catagories;
     var redirect = "/";
-    console.log(new_feedback.redirect == redirect);
     new_feedback.popup_message = new_feedback.redirect == redirect ? new_feedback.popup_message : null;
     new_feedback.redirect = redirect;
     new_feedback.limited_products = null;
-
+    new_feedback.isAdmin = false;
+    req.session.admin = null;
     feedback = new_feedback;
+
     res.render(new_feedback.render,new_feedback)
 
  }).catch((err)=>{

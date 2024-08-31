@@ -22,7 +22,11 @@
     <link href = "/css/showcase.css" rel = "stylesheet" />
     <link href = "/css/product_boxes.css" rel = "stylesheet" />
     <link href = "/css/popup.css" rel = "stylesheet" />
-      <link href = "/css/dropdown_navbar.css" rel = "stylesheet" />
+    <link href = "/css/dropdown_navbar.css" rel = "stylesheet" />
+    <% if(isAdmin){%>
+      <link href = "/css/admin.css" rel = "stylesheet" />
+      <link href = "/css/admin_header.css" rel = "stylesheet" />
+    <%}%>
 
     <link href ='/css/profile_change.css' rel="stylesheet"/>
     <link href ='/css/catagory_products.css' rel="stylesheet"/>
@@ -42,7 +46,11 @@
 
     <div class="black_overlay"></div>
 
+    <% if(isAdmin){ %>
+    <%- include("./../layouts/admin/navbar.ejs") %>
+    <%}else{%>
     <%- include("./../layouts/user/home/navbar.ejs") %>
+    <%}%>
     <%- include("./../layouts/modal/popup_message.ejs") %>
 
 
@@ -60,11 +68,17 @@
         </div>
 
         <div class="product_results_container">
-
-          <p class="product_list_text product_list_text--title"> Results - <%= current_catagory %> </p>
+          <% var results = current_catagory ? current_catagory : searched_term %>
+          <p class="product_list_text product_list_text--title"> Results - <%= results %> </p>
           <p class="product_list_text product_list_text--subtitle"> Check each product page for other buying options. Price and other details may vary based on product size and color. </p>
 
           <div class="prouduct_results_container--inner">
+
+            <% if( limited_products.length <= 0 ) { %>
+
+              <p class="product_results_text--no_results product_results_text"> No Results </p>
+
+            <%}%>
 
             <% for(var i = 0; i < limited_products.length; i++){%>
 

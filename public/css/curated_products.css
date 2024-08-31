@@ -12,6 +12,13 @@
   top:0%;
 }
 
+.product_results_text--no_results{
+  font-weight:700;
+  font-size:50px ;
+  text-align: center;
+  margin-top:5%;
+}
+
 .sort_container *{
   width:0px;
   opacity:0;

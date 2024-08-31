@@ -69,6 +69,7 @@ const PostUserLogin = (req,res,next) => {
             console.log(found_user);
             req.session.user = found_user;
             feedback.popup_message = "Success!"
+            
             // console.log(found_user);
             // console.log(found_user);
             req.session.save((err)=>{

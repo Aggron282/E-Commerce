@@ -92,7 +92,7 @@
     </div>
 
     <div class="col-4 product_detail_col--img">
-    
+
         <img class="product_detail_image" src = <%= `/images/${item.thumbnail}` %> />
 
     </div>
@@ -109,7 +109,6 @@
 
 
 <% if(!isAdmin) {%>
-  <script src = "/js/search_results.js" ></script>
   <script src = "/js/cart.js" ></script>
   <script src = "/js/catagory_render.js" ></script>
   <script src = "/js/catagory_toggle.js" ></script>
@@ -121,6 +120,7 @@
 <%}%>
 
 <script src = "/js/navbar.js" ></script>
+<script src = "/js/search_results.js" ></script>
 
 <script src = "/js/util.js" ></script>
 <script src = "/js/update_location.js" ></script>

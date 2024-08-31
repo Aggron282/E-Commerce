@@ -19,6 +19,7 @@ let totalProducts;
 const HOMEPAGEURL = path.join(rootDir,"views","admin","admin.ejs");
 const DETAILPAGEURL = path.join(rootDir,"views","detail.ejs");
 
+var product_util = require("./../util/products.js");
 
 var feedback = {
   item:null,
@@ -211,16 +212,23 @@ const GetOneProduct = (req,res,next) => {
 
 //--------------------------------------------------------------------------------
 // Get URL Pages
-const GetMainPage = (req,res,next) =>{
+const GetMainPage = async (req,res,next) =>{
 
   feedback.user = req.user;
-
-  var new_feedback = {...feedback};
+  if(!req.admin){
+    res.redirect("/admin/login");
+    return;
+  }
+   var new_feedback = {...feedback};
+   var new_catagories = await product_util.OrganizeCatagories(req.admin.products);
 
   new_feedback.products= req.admin.products,
   new_feedback.action = "/admin/profile/edit";
   new_feedback.totalProducts = totalProducts
   new_feedback.isAuthenticated = req.isAuthenticated;
+
+  new_feedback.catagories = new_catagories;
+  feedback = new_feedback;
   res.render(HOMEPAGEURL,new_feedback);
 
 }
@@ -233,17 +241,20 @@ const GetProductDetailPage = async (req,res,next) =>{
         res.redirect("/admin")
         return;
     }
-    Product.findById(id).then((product)=>{
+    Product.findById(id).then(async (product)=>{
 
       if(!product){
         res.redirect("/admin")
       }
       else{
+        var new_catagories = await product_util.OrganizeCatagories(req.admin.products);
+
         var new_feedback ={...feedback}
         new_feedback.action = "/product/edit/"+id;
         new_feedback.item = product;
         new_feedback.redirect = "/product/edit/"+id;
         new_feedback.isAdmin = true;
+        new_feedback.catagories = new_catagories;
         new_feedback.isAuthenticated = req.isAuthenticated;
         res.render(DETAILPAGEURL,new_feedback);
       }

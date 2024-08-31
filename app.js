@@ -165,6 +165,15 @@ app.use((req,res)=>{
   res.render(ERRORPAGE404URL);
 });
 
+app.use((err, req, res, next) => {
+  res.locals.error = err;
+  //------------------------vvvvvvv added
+  const status = err.status || 500;
+  console.log(err);
+  res.status(status);
+  res.render('error');
+});
+
 mongoose.connect("mongodb+srv://mawile12:sableye12@cluster0.mv38jgm.mongodb.net/shop?retryWrites=true&w=majority").then((s)=>{
 
   User.find().then((users)=>{

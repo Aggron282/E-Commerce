@@ -24,17 +24,41 @@
       Edit / Delete
   </div>
 
-  <div class="nav_container">
-    Orders
+  <div class="nav_container search_p">
+    <form class= "navbar_user_input--form"style="margin-top:0%;border:none;">
+      <input class="form-control no-border navbar_user_input--search " name = "input"  placeholder = "Search for Item" >
+    </form>
+
   </div>
 
-  <div class="nav_container">
-    Sales / Profit
-  </div>
 
   <div class="nav_container profile_col profile_col_admin">
 
     <img class="profile_icon profile_icon--admin" src = <%= `/images/profile_img.png` %>>
+
+  </div>
+
+  <div class = "navbar_user_sub_banner">
+
+    <% var limit = catagories.length >= 6 ? 6 : catagories.length %>
+        <% for(var i = 0; i < limit; i++){ %>
+
+             <a href = "/search/product/catagory=<%=catagories[i].catagory%>/page_counter=1" >
+
+               <p class="navbar_user_sub_catagory--title" data = <%= catagories[i].catagory %> ><%= catagories[i].catagory %>
+                 <span class="navbar_user_sub_catagory--underline" data = <%= catagories[i].catagory %>  ></span>
+               </p>
+
+             </a>
+
+
+          <%}%>
+
+          <div class="catagory_search_container">
+            <form  class="catagory_search_form" >
+              <input class="catagory_search_user form-control" placeholder = "Enter Catagory" name = "catagory" >
+            </form>
+          </div>
 
   </div>
 

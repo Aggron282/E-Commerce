@@ -3,6 +3,9 @@ var main_content_element = document.querySelector(".main_content");
 // var exit_element = document.querySelector(".search_overlay_text--exit");
 // var search_overlay_element = document.querySelector(".search_overlay");
 var search_bar_element = document.querySelector(".navbar_user_input--search");
+var search_form_element = document.querySelector(".navbar_user_input--form");
+console.log(search_form_element,search_bar_element)
+var catagory_search_form = document.querySelector(".catagory_search_form")
 // var search_overlay_row_element = document.querySelector(".search_overlay_row");
 
 // var hasSearched = false;
@@ -97,16 +100,28 @@ function RevealModal(){
 }
 
 //------------------------------------ EventListeners  --------------------
-search_bar_element.addEventListener("keypress",(e)=>{
+if(search_form_element){
 
-  if(event.key === "Enter") {
+  search_form_element.addEventListener("submit",(e)=>{
+      e.preventDefault();
+      var search_bar_element = document.querySelector(".navbar_user_input--search");
+
       var input = search_bar_element.value;
-      var page_count = 0;
+      console.log(search_bar_element)
 
-      window.location.assign(`/search/product/item=${input}/page_counter=${page_count}`);
-    }
-})
+      window.location.assign(`/search/product/item=${input}/page_counter=0`);
 
+    })
+
+}
+
+if(catagory_search_form){
+catagory_search_form.addEventListener("submit",(e)=>{
+  e.preventDefault();
+  var catagory_input = document.querySelector(".catagory_search_user").value;
+  window.location.assign(`/search/product/catagory=${catagory_input}/page_counter=0`);
+});
+}
 // exit_element.addEventListener("click",(e)=>{
 //
 //   hasSearched = false;
