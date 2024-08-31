@@ -163,7 +163,7 @@
   }
 
   .navbar_dropdown_list_container--admin{
-      width:35%;
+      width:45% !important;
   }
 
 }
