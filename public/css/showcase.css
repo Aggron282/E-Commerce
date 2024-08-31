@@ -396,16 +396,14 @@
     position: absolute;
     z-index: 19;
     left: 2.5%;
-    top: 20%;
+    top: 22.5%;
     width: 50%;
-    font-size: 30px;
-    font-family: "Special Elite";
+    font-size: 0px;
     position: absolute !important;
 
 }
 .top_discount_product_container{
   margin-top:10% !important;
-  margin-left:2.5%;
   }
 
   .header_button_3 {
@@ -426,7 +424,7 @@
     font-weight: 700;
     width: 60%;
     color: white;
-    font-size: 3s0px;
+    font-size: 40px;
     font-family: "Special Elite";
     position: absolute;
     top: -12.5%;
@@ -438,7 +436,7 @@
     font-size: 50px;
     font-family: "Special Elite";
     position: absolute;
-    top: -30.5%;
+    top: -22.5%;
     line-height: 2;
     left: 10%;
     width: 30%;
@@ -448,5 +446,5 @@
     left: 5%;
     top: 0%;
     filter: invert(59%) sepia(9%) saturate(3567%) hue-rotate(179deg) brightness(88%) contrast(91%);
-}
+  }
 }
