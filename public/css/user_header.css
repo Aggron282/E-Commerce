@@ -84,7 +84,7 @@
 .navbar_user_dropdown_list_container{
   height:100%;
   width:15%;
-  transform: translateX(100px) rotateY(90deg);
+  transform: translateX(400px) rotateY(90deg);
   box-shadow:0px 0px 20px rgba(0,0,0,.5);
   z-index:9999999;
   background:white;
