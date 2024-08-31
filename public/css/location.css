@@ -99,17 +99,17 @@
     width: 100% !important;
     font-size: 30px;
     font-weight: 500;
-}
-.update_location_button {
-  color:black !important;
+  }
 
-}
-.update_location--exit{
+  .update_location_button {
+    color:black !important;
+  }
 
+  .update_location--exit{
     margin-top: -2.5%;
     margin-left: 2.5%;
+  }
 
-}
   .update_location_button{
     margin-top:2.5%;
     margin-bottom:2.5%;

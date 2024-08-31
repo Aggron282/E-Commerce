@@ -264,8 +264,9 @@
   }
 
   .catagory_arrow{
-    width:60px;
-    height:60px;
+    width:30px;
+    height:30px;
+    border-width:0px;
   }
 
   .catagory_title {
@@ -280,17 +281,17 @@
     padding-bottom:20%;
     margin-top:10%;
   }
-.catagory_product_box{
-  border-width:0px !important;
-}
+
+  .catagory_product_box{
+    border-width:0px !important;
+  }
   /* .catagory_arrow--right {
     right: -90%;
   } */
 
   .catagory_row{
-    padding-bottom:10%;
+    padding-bottom:5%;
     padding-top:2.5%;
-    border-bottom:2px solid #e6e6e6;
   }
 
 }

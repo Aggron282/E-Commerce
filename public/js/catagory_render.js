@@ -135,8 +135,6 @@ function GetCatagories(catagory){
 
     }
 
-    console.log(selected_catagory);
-
     BuiltCatagoriesHTML();
 
   })
