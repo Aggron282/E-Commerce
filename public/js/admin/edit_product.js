@@ -243,7 +243,7 @@ async function RenderProductCatagories(){
       html += `
 
 
-      <div class="col-3 no-margin-left margin-top-2_5 ">
+      <div class="col-3 no-margin-left margin-top-2_5 admin_catagory_product_col">
         <div class= "catagory_product_box product_box--catagory width-100 relative"  catagory = "${ organized_products[i].catagory.toLowerCase() }" it = "${k}"  >
 
           <p class="catagory_product_text--name">${organized_products[i].products[k].title}</p>

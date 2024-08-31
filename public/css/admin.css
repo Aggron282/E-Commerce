@@ -13,6 +13,7 @@ body{
   transition: all .5s;
 }
 
+
 .arrow_catagory img {
   filter: brightness(0);
   width:50px;
@@ -219,4 +220,14 @@ body{
   background:black;
   color:white;
   border-radius:20px
+}
+
+@media screen and (max-width:1024px) and (min-width:700px){
+  .product_box--catagory{
+    height: 45vh !important;
+  }
+  .admin_catagory_product_col{
+    width:33.33333% !important;
+  }
+
 }
