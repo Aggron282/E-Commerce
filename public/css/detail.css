@@ -72,12 +72,9 @@ body{
 
   .product_detail_col--description {
     width: 100%;
-
     padding: 2%;
     padding-top:10px;
-
     margin-top:50%;
-
   }
 
   .product_detail_image{
@@ -85,15 +82,12 @@ body{
     margin-top: 15%;
   }
 
-
   .product_detail_col--img{
     position: absolute !important;
     top: -5%;
     width: 70%;
     z-index: -1;
     height:70vh;
-
-
   }
 
 }
