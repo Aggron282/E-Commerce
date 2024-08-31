@@ -109,6 +109,10 @@
     font-size:17px;
   }
 
+.profile_col_admin{
+  width:12.5%;
+  float: right;
+}
   .logo_container{
     margin-right: 2.5%;
   }
