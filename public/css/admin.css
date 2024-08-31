@@ -223,12 +223,16 @@ body{
 }
 
 @media screen and (max-width:1024px) and (min-width:700px){
+
   .product_box--catagory{
     height: 60vh !important;
     padding-bottom:10%;
   }
+
   .admin_catagory_product_col{
     width:33.33333% !important;
   }
+
+
 
 }
