@@ -42,10 +42,12 @@
 .dropdown_item:hover p{
   color:white;
 }
-
+.dropdown_list{
+  z-index:9999;
+}
 .dropdown_list--active{
   opacity:1;
-  
+
   transform:  translateX(0px) rotateY(0deg);
 
 }

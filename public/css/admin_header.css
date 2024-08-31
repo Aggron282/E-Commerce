@@ -132,8 +132,8 @@
   }
 
   .dropdown_title{
-    font-size:25px;
-    font-weight:400;
+    font-size:20px;
+    font-weight:300;
   }
   .shopping_line{
     transform: rotateZ(0deg) scaleX(1.4);
@@ -177,6 +177,8 @@
     width: 100%;
     border: none;
   }
+
+
 
   .navbar_dropdown_list_container--admin{
       width:32.5% !important;

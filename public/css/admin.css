@@ -199,7 +199,9 @@ body{
    margin-left:25%;
    transition: all .3s;
 }
-
+.dropdown_list--inner{
+  z-index:9999;
+}
 .product_box--catagory{
    height:auto !important;
 }
