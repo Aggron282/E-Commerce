@@ -108,13 +108,13 @@
 
     margin-left:2.5%;
     font-size:20px;
-    width:12.5%;
+    width:14%;
   }
 
 .profile_col_admin{
   width:10%;
   float: right;
-  margin-top:-5%;
+  margin-top:-2.5%;
 }
 
 .logo_container{
@@ -123,13 +123,13 @@
 
   .logo_container{
     margin-left:0%;
-    margin-right: 1%;
+    margin-right: 5px;
   }
 
   .profile_icon{
     margin-top: 10px ;
   }
-  
+
   .dropdown_title{
     font-size:25px;
     font-weight:400;
