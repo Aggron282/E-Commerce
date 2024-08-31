@@ -143,7 +143,6 @@
 
 .dropdown_list--active{
   opacity:1;
-  z-index: 9999999;
   transform:  translateX(0px) rotateY(0deg);
 
 }
