@@ -395,10 +395,11 @@
     text-align: center;
     position: absolute;
     z-index: 19;
+    font-family: "Amazon Ember";
     left: 2.5%;
-    top: 20%;
+    top: 22.5%;
     width: 50%;
-    font-size: 0px;
+    font-size: 40px;
     position: absolute !important;
 
 }
