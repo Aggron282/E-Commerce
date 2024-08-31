@@ -396,7 +396,7 @@
     position: absolute;
     z-index: 19;
     left: 2.5%;
-    top: 22.5%;
+    top: 20%;
     width: 50%;
     font-size: 0px;
     position: absolute !important;
@@ -422,12 +422,12 @@
 }
 .header--3_subtitle {
     font-weight: 700;
-    width: 60%;
+    width: 65%;
     color: white;
     font-size: 40px;
     font-family: "Special Elite";
     position: absolute;
-    top: -12.5%;
+    top: -14%;
     line-height: 2;
     left: 40%;
 }
@@ -436,7 +436,7 @@
     font-size: 50px;
     font-family: "Special Elite";
     position: absolute;
-    top: -22.5%;
+    top: -25%;
     line-height: 2;
     left: 10%;
     width: 30%;
