@@ -117,7 +117,7 @@
 .banner_item{
   width:20%;
   padding:2%;
-  position:absolute;
+  position:absolute !important;
 }
 
 
