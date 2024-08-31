@@ -141,31 +141,30 @@
   top:20%;
 }
 
-.header_title_2--3{
-  font-size:20px;
-  font-family:"Special Elite";
-  font-weight:300;
-  margin-top:10%;
-  width:100%;
-  position: absolute;
-  left:7.5%;
+.header_title_2--3 {
+    font-size: 40px;
+    font-family: "Special Elite";
+    font-weight: 300;
+    margin-top: 1%;
+    width: 100%;
+    position: absolute !important;
+    /* left: 7.5%; */
 }
-
 .header_banner--1{
   position: relative;
 }
 
-.header_title_2--2{
-  color:black;
-  width:100%;
-  text-align:center;
-  position: absolute;
-  z-index:19;
-  left:-2.5%;
-  top:20px;
-  width:40%;
-  font-size:40px;
-  font-family:"Special Elite";
+.header_title_2--2 {
+    color: black;
+    width: 100%;
+    text-align: center;
+    position: absolute !important;
+    z-index: 19;
+    left: -2.5%;
+    top: 25%;
+    width: 40%;
+    font-size: 30px;
+    font-family: "Special Elite";
 }
 
 .bubble_showcase:hover{
@@ -202,25 +201,39 @@
   background-image:  linear-gradient(to top, rgba(255,255,255,1),rgba(255,255,255,0), rgba(255,255,255,0), rgba(0,0,0,.5)),url("./../images/showcase--3.png") !important;
 }
 
-.header--3_title{
-  color:white;
-  font-size:45px;
-  font-family: "Special Elite";
-  position: absolute;
-  top:22.5%;
-  line-height: 2;
-  left:7%;
-  width:30%;
+.header--3_title {
+    color: white;
+    font-size: 40px;
+    font-family: "Special Elite";
+    position: absolute !important;
+    top: 30%;
+    line-height: 2;
+    left: 12.5%;
+    width: 30%;
 }
-
-.header--3_subtitle{
-  color:white;
-  font-size:22.5px;
-  font-family: "Special Elite";
-  position: absolute;
-  top:50%;
-  line-height: 2;
-  left:5%;
+.header--3_subtitle {
+    width: 50%;
+    color: white;
+    font-size: 40px;
+    font-family: "Amazon Ember";
+    position: absolute !important;
+    top: 20%;
+    color:white;
+    font-weight: 800;
+    line-height: 2;
+    left: 30%;
+}
+.header_title_2--2 {
+    color: black;
+    width: 100%;
+    text-align: center;
+    position: absolute !important;
+    z-index: 19;
+    left: -2.5%;
+    top: 25%;
+    width: 40%;
+    font-size: 40px;
+    font-family: "Amazon Ember";
 }
 
 .header--3_img{
