@@ -12,7 +12,7 @@
 
   <% var update_url = isAdmin ? "/admin/location/update" : "/user/location/update" %>
 
-  <form class="update_location_form" action = "<%= update_url %>">
+  <form class="update_location_form" isAuth = "<%=isAuthenticated%>" action = "<%= update_url %>">
 
     <input class="update_location_input" placeholder="Enter Address"  name = "address">
 

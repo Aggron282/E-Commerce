@@ -17,6 +17,10 @@
 }
 
 
+.navbar_user_list_dropdown--update_location{
+  
+}
+
 .dropdown_list--inner .dropdown_item--logout{
   background:orangered !important;
   color:black !important;

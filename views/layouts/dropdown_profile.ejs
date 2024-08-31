@@ -1,11 +1,14 @@
 
   <div class="navbar_user_dropdown_list_container navbar_dropdown_list_container--user">
 
+    <% if(isAuthenticated) {%>
+      <% isAuth = true %>
+    <%}%>
 
     <div class="navbar_user_list dropdown_list--inner">
 
-      <div class=" dropdown_item navbar_user_list_dropdown--item" id="update_location">
-        <p class="dropdown_title navbar_user_list_dropdown--title">Update Location</p>
+      <div class=" dropdown_item navbar_user_list_dropdown--item navbar_user_list_dropdown--update_location" isAuth = "<%= isAuth %>" id="update_location">
+        <p class="dropdown_title navbar_user_list_dropdown--title"isAuth = "<%= isAuth %>">Update Location</p>
       </div>
 
       <div class="dropdown_item navbar_user_list_dropdown--item" id = "edit_profile">

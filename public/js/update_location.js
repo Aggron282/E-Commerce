@@ -9,6 +9,10 @@ var map_container = document.querySelector(".update_location_map");
 var current_location_button = document.querySelector(".update_location_button--current")
 var popup_container = document.querySelector(".popup_container")
 var navbar_delivery_col = document.querySelector(".navbar_user_col--delivery")
+var dropdown_list_admin = document.querySelector(".navbar_dropdown_list_container--admin");
+var navbar_update_location_list_dropdown = document.querySelector(".navbar_user_list_dropdown--update_location");
+var dropdown_list_user = document.querySelector(".navbar_dropdown_list_container--user");
+var dropdown_ = dropdown_list_admin ? dropdown_list_admin : dropdown_list_user;
 var current_location_data;
 var current_address_data;
 
@@ -31,23 +35,33 @@ function RenderPopup(message){
 var canEditLocation = false;
 
 location_choice.addEventListener("click",(e)=>{
-  ToggleDropdown(false);
-  ToggleLocationModal()
+
+  ToggleDropdown(dropdown_,false);
+  ToggleLocationModal(null);
+
 });
 
 if(navbar_delivery_col){
 
   navbar_delivery_col.addEventListener("click",(e)=>{
-    ToggleDropdown(false);
-    var isAuth = e.target.getAttribute("isAuth")  == "true" ? true : false;
-    console.log(isAuth)
-    ToggleLocationModal(null,isAuth)
+
+    ToggleLocationModal(null)
+  });
+
+}
+
+if(navbar_update_location_list_dropdown){
+
+  navbar_update_location_list_dropdown.addEventListener("click",(e)=>{
+    ToggleDropdown(dropdown_,false);
+
+    ToggleLocationModal(null)
   });
 
 }
 
 exit_location.addEventListener("click",(e)=>{
-  ToggleLocationModal(false,true)
+  ToggleLocationModal(false)
 });
 
 location_form.addEventListener("submit",(e)=>{
@@ -68,28 +82,35 @@ current_location_button.addEventListener("click",(e)=>{
 
 async function SubmitAndUpdateLocation(){
 
-  var address = address_input.value;
-  var data = await axios.post("/location/convert",{address:address});
+  if(location_form.getAttribute("isAuth") == "true"){
 
-  var new_location_data = data.data.location;
 
-  current_address_data = address;
+    var address = address_input.value;
+    var data = await axios.post("/location/convert",{address:address});
 
-  if(!new_location_data){
-      RenderPopup("Invalid Location");
-      return
-  }else{
+    var new_location_data = data.data.location;
 
-      RenderMapElement(new_location_data.coords);
+    current_address_data = address;
 
-      var update_location = await axios.post(update_location_url,new_location_data);
+    if(!new_location_data){
+        RenderPopup("Invalid Location");
+        return
+    }else{
 
-      if(update_location.data){
-        RenderPopup("Location Updated");
-      }else{
-        RenderPopup("Error Occured");
+        RenderMapElement(new_location_data.coords);
+
+        var update_location = await axios.post(update_location_url,new_location_data);
+
+        if(update_location.data){
+          RenderPopup("Location Updated");
+        }else{
+          RenderPopup("Error Occured");
+        }
+
       }
 
+    }else{
+      window.location.assign("/login");
     }
 
 }
@@ -130,12 +151,7 @@ function GetCurrentLocation(){
 
 }
 
-function ToggleLocationModal(toggle,isAuth){
-
-  if(isAuth !== null && !isAuth){
-    window.location.assign("/login");
-    return;
-  }
+function ToggleLocationModal(toggle){
 
   if(toggle){
     canEditLocation = toggle;
@@ -144,7 +160,7 @@ function ToggleLocationModal(toggle,isAuth){
     canEditLocation = !canEditLocation;
   }
 
-  if(canEditLocation){
+  if(!canEditLocation){
     document.querySelector(".black_overlay").classList.add("black_overlay--active")
     location_modal.classList.add("update_location_container--active");
   }
