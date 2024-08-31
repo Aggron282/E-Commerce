@@ -20,6 +20,14 @@ const HOMEPAGEURL = path.join(rootDir,"views","admin","admin.ejs");
 const DETAILPAGEURL = path.join(rootDir,"views","detail.ejs");
 
 
+var feedback = {
+  item:null,
+  root:"",
+  user:null,
+  redirect:"",
+  isAdmin:true,
+  popup_message:null
+}
 
 const HardResetProducts = (req,res) => {
 
@@ -113,7 +121,14 @@ const EditAdmin = (req,res) => {
   }
 
   const filter = { _id : new ObjectId(req.admin._id) };
-  const update = {$set:{ username : data.username, name:data.name, password:data.password, profileImg:req.file.filename} };
+
+  var profileImg = null;
+
+  if(req.file){
+    profileImg = req.file.filename ? req.file.filename : null;
+  }
+
+  const update = {$set:{ username : data.username, name:data.name, password:data.password, profileImg:profileImg} };
 
   Admin.findOneAndUpdate(filter,update).then((response)=>{
       req.admin = response;
@@ -198,36 +213,38 @@ const GetOneProduct = (req,res,next) => {
 // Get URL Pages
 const GetMainPage = (req,res,next) =>{
 
-    res.render(HOMEPAGEURL,{
-      products:req.admin.products,
-      totalProducts:totalProducts,
-      isAdmin:true,
-      user:req.admin,
-      popup_message:null,
-      redirect:"/",
-      action:"/admin/profile/edit"
-    });
+  feedback.user = req.user;
+
+  var new_feedback = {...feedback};
+
+  new_feedback.products= req.admin.products,
+  new_feedback.action = "/admin/profile/edit";
+  new_feedback.totalProducts = totalProducts
+
+  res.render(HOMEPAGEURL,new_feedback);
 
 }
 
 const GetProductDetailPage = async (req,res,next) =>{
 
-  var id = req.params._id;
-
+    var id = req.params._id;
+    console.log(id);
+    if(!id || id.length < 10){
+        res.redirect("/admin")
+        return;
+    }
     Product.findById(id).then((product)=>{
+
       if(!product){
         res.redirect("/admin")
       }
       else{
-        res.render(DETAILPAGEURL,{
-          item:product,
-          root:"../..",
-          user:req.admin,
-          redirect:"/product/"+id,
-          isAdmin:true,
-          popup_message:null
-        });
-
+        var new_feedback ={...feedback}
+        new_feedback.action = "/product/edit/"+id;
+        new_feedback.item = product;
+        new_feedback.redirect = "/product/edit/"+id;
+        new_feedback.isAdmin = true;
+        res.render(DETAILPAGEURL,new_feedback);
       }
 
     }).catch((err)=>{
@@ -324,6 +341,8 @@ const EditOneProduct = async (req,res,next) =>{
   var new_product = {...found_product._doc};
   var thumbnail = new_product.thumbnail;
 
+  console.log(new_product,req.file);
+
   if( req.file && req.file.filename){
      thumbnail = req.file.filename;
   }
@@ -351,24 +370,33 @@ const EditOneProduct = async (req,res,next) =>{
   var new_admin_ = new Admin(new_admin);
   var product = new Product(new_product);
 
-  const filter = { _id : new ObjectId(new_admin_._id) };
-  const update = {$set:{ products : new_products}};
+  Product.findOneAndReplace({_id:product._id},new_product).then((r)=>{
+    console.log(r);
+    const filter = { _id : new ObjectId(new_admin_._id) };
+    const update = {$set:{ products : new_products}};
 
-  Admin.findOneAndUpdate(filter,update,{new: true,useFindAndModify:false}).then((err,doc)=>{
+    Admin.findOneAndUpdate(filter,update,{new: true,useFindAndModify:false}).then((err,doc)=>{
 
-    new_admin_.products = new_products;
+      new_admin_.products = new_products;
 
-    req.session.admin = new_admin_;
+      req.session.admin = new_admin_;
+      feedback.popup_message = "Edited Product!"
+      res.redirect(req.url);
 
-    res.json({admin:req.session.admin});
+    });
 
-  });
+  })
 
 }
 
 const AddProduct = async (req,res,nect) => {
 
   var body  =   req.body;
+  var filename  = "";
+
+  if(req.file){
+    filename = req.file.filename ? req.file.filename : "";
+  }
 
   var schema = {
     title:body.title,
@@ -378,13 +406,31 @@ const AddProduct = async (req,res,nect) => {
     discount:body.discount,
     catagory:body.catagory,
     banner:body.banner,
-    thumbnail:"",
+    thumbnail:filename,
     userId:req.user
   }
 
   var products = new Product(schema);
 
-  res.json(schema);
+  products.save();
+
+  var new_admin = {...req.admin._doc};
+  console.log(new_admin);
+  new_admin.products.push(products);
+
+  var new_products = new_admin.products;
+
+  const filter = { _id : new ObjectId(new_admin._id) };
+
+  const update = {$set:{ products : new_products}};
+
+  Admin.findOneAndUpdate(filter,update,{new: true,useFindAndModify:false}).then((err,doc)=>{
+
+    feedback.popup_message = "Added Product";
+
+    res.redirect("/admin");
+
+  })
 
 }
 

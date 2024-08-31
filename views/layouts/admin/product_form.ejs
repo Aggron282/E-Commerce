@@ -1,67 +1,77 @@
-<div class= "modal_wrapper inactive">
-
-    <div class="modal_container">
+<div class= "add_product_modal add_product_modal--inactive">
 
       <p class="exit_modal">X</p>
-
+      <div class="row">
+        <div class="add_product_form_container relative col-6">
         <div class="shopping_line_container">
 
-          <% if(!isAdmin) {%>
-            <img class="shopping_line width-100" src="/images/l.png"/>
-            <%}else{%>
               <img class="shopping_line width-100" src="/images/l.png"/>
-            <%}%>
-
-        </div>
-
-        <p class="modal_title_add"> Add a New Product </p>
-
-        <form id = "product_form" method = "POST" enctype="multipart/form-data">
-
-          <div class="row product_form_row">
-
-            <div class="col-6 product_input_col">
-              <input class=" width-100 input_form name_input" name="title"  placeholder="Enter Name">
-            </div>
-
-            <div class="col-4 product_input_col">
-              <input class=" width-100 input_form price_input" name="price" type="number"  placeholder="Enter Price">
-            </div>
-
-            <div class="col-4 product_input_col">
-              <input class=" width-100 input_form catagory_input" name="catagory" placeholder="Enter Catagory">
-            </div>
-
-            <div class="col-4 product_input_col">
-              <input class=" width-100  input_form banner_input"name="banner"  placeholder="Enter Banner Type">
-            </div>
-
-            <div class="col-4 product_input_col">
-              <input class=" width-100 input_form quantity_input"name="quantity" type="number"  placeholder="Enter Quantity">
-            </div>
-
-            <div class="col-4 product_input_col">
-              <input class=" width-100  input_form discount_input"name="discount"type="number"  placeholder="Discount Percentage">
-            </div>
-
-            <div class="col-4 product_input_col">
-              <input type='file' class="width-100 input_form image_input"  name="thumbnail"  placeholder="Image URL">
-            </div>
-
-            <div class="col-6 product_input_col">
-              <input class="form-control width-100 input_form description_input"name="description" placeholder="Enter Description ">
-              <input class="form-control width-100 id_input" name="_id" type="hidden" >
-            </div>
-
-
-            <div class="col-6 product_input_col">
-              <button type="submit"class="add_product_btn" > Submit</button>
-            </div>
 
           </div>
 
-        </form>
+
+          <p class="modal_title_add"> Add a New Product </p>
+
+          <form id = "product_form" method = "POST" enctype="multipart/form-data">
+
+            <div class="row product_form_row">
+
+              <div class="col-6 product_input_col">
+                <input class=" width-100 input_form name_input " name="title"  placeholder="Enter Name">
+              </div>
+
+              <div class="col-6 product_input_col">
+                <input class=" width-100 input_form price_input" name="price" type="number"  placeholder="Enter Price">
+              </div>
+
+              <div class="col-6 product_input_col">
+                <input class=" width-100 input_form catagory_input" name="catagory" placeholder="Enter Catagory">
+              </div>
+
+              <div class="col-6 product_input_col">
+                <input class=" width-100  input_form banner_input"name="banner"  placeholder="Enter Banner Type">
+              </div>
+
+              <div class="col-6 product_input_col">
+                <input class=" width-100 input_form quantity_input"name="quantity" type="number"  placeholder="Enter Quantity">
+              </div>
+
+              <div class="col-6 product_input_col">
+                <input class=" width-100  input_form discount_input"name="discount"type="number"  placeholder="Discount Percentage">
+              </div>
+
+              <div class="col-12 product_input_col margin-top-5">
+                <input type='file' class="width-100 input_form image_input"  name="thumbnail"  placeholder="Image URL">
+              </div>
+
+              <div class="col-12 product_input_col product_input_col--description margin-top-5">
+                <textarea  rows="8" cols="80" class="form-control width-100 input_form description_input no-padding"name="description"
+                placeholder="Enter Description ">Enter description
+                </textarea>
+                <input class="form-control width-100 id_input" name="_id" type="hidden" >
+              </div>
+
+
+
+                <button type="submit"class="add_product_btn" > Submit </button>
+
+
+            </div>
+
+          </form>
 
     </div>
 
-</div>
+    <div class="add_product_content_container col-6">
+      <p class="content_text content_text--title">Name of Your Product</p>
+      <p class="content_text--subtitle content_text content_text--catagory">Catagory</p>
+      <img class="content_img" src = "/images/product_1.png"/>
+      <p class="content_text content_text--price">$[price of product]</p>
+      <p class="content_text content_text--discount">$[price of discounted product]</p>
+      <p class="content_text content_text--description"> Description of Product</p>
+
+    </div>
+
+    </div>
+
+  </div>

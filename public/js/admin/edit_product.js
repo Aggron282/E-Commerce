@@ -1,6 +1,7 @@
 var add_product = document.getElementsByClassName("add_p");
-var main_interface = document.querySelector(".main_interface");
-var modal_wrapper = document.querySelector(".modal_wrapper");
+
+var main_interface = document.querySelector(".main_content");
+var modal_wrapper = document.querySelector(".add_product_modal");
 var edit_button = document.getElementsByClassName("edit_button_p");
 var delete_button_p = document.getElementsByClassName("delete_button_p");
 var product_form = document.querySelector("#product_form");
@@ -33,7 +34,8 @@ async function Init(){
 
   for(var i =0; i < add_product.length; i++){
 
-    add_product[i].addEventListener("click",()=>{
+    add_product[i].addEventListener("click",(e)=>{
+      console.log(e.target)
       ToggleModal(true);
       SetForm("/admin/product/add");
     });
@@ -222,9 +224,9 @@ async function RenderProductCatagories(){
 
   for(var i =0; i < organized_products.length; i++){
 
-    html+= `<div class="row" style="padding-bottom:5%;position:relative"> `
+    html+= `<div class="row relative padding-bottom-5 products_in_catagory_row" > `
 
-    html += `<div class="catagory_products"style="padding-bottom:0%;" >
+    html += `<div class="catagory_products_admin" >
       <p class="catagory_name"> ${organized_products[i].catagory} </p>
     </div>
     `
@@ -235,27 +237,35 @@ async function RenderProductCatagories(){
       if(new_counter >= organized_products[i].products.length){
         break;
       }
-
+      console.log(organized_products[i].products[k])
+      var discount_price = parseFloat(organized_products[i].products[k].price - (organized_products[i].products[k].price * (organized_products[i].products[k].discount / 100)));
+      discount_price = Math.round(discount_price * 100) / 100;
       html += `
 
-      <div class="sub_catagory_container_item col-2" style="margin-top:0%;">
 
-        <div class="inner_container--admin-product">
+      <div class="col-3 no-margin-left margin-top-2_5 ">
+        <div class= "catagory_product_box product_box--catagory width-100 relative"  catagory = "${ organized_products[i].catagory.toLowerCase() }" it = "${k}"  >
 
-          <a href = "/admin/product/detail/${organized_products[i].products[new_counter]._id}">
+          <p class="catagory_product_text--name">${organized_products[i].products[k].title}</p>
 
-          <p class="title">${organized_products[i].products[new_counter].title.substring(0, 55) + "..."}</p>
+          <img class="catagory_product_image_admin margin-top-5" src = '${"/images/"+organized_products[i].products[k].thumbnail.replace(/ /g,'')}' />
 
-          <div class="height_container">
-            <img class="item_img" src = ${organized_products[i].products[new_counter].thumbnail} />
-          </div>
+          <div class="catagory_product_text_box margin-top-5">
 
-          <p class="price price--admin">$${organized_products[i].products[new_counter].price}.99</p>
+            <p class="catagory_product_text catagory_product_text--price ${discount_price < organized_products[i].products[k].price ? "cross-out" : ""}">$ ${ organized_products[i].products[k].price}</p>
+            <p class="catagory_product_text catagory_product_text--discount ">$ ${ discount_price + " (" + organized_products[i].products[k].discount + "% Discount)"  }</p>
+            <p class="catagory_product_text catagory_product_text--quantity "> Qty: ${ organized_products[i].products[k].quantity} </p>
+            <p class="catagory_product_text catagory_product_text--description">${organized_products[i].products[k].description.substring(0,50)+"..."}</p>
 
-          </a>
-          </div>
+            <a href =${ "/admin/product/"+organized_products[i].products[k]._id} >
+              <p class="catagory_product_detail">See Details</p>
+            </a>
 
-          <div class="edit_delete_container">
+        </div>
+
+     </div>
+
+          <div class="edit_delete_container edit_delete_container--inactive ">
 
             <div class="inner_edit edit_button_p"  _id = "${organized_products[i].products[new_counter]._id}">
               Edit
@@ -267,16 +277,17 @@ async function RenderProductCatagories(){
 
           </div>
 
+
       </div>`
 
     }
 
     html += `
-    <div class="arrow_catagory_sub_container arrow_catagory_sub_container--admin">
-      <div class="arrow_catagory_sub arrow_catagory_sub--left arrow_catagory_sub--left--admin " multiplier = "-1" catagory = "${organized_products[i].catagory}">
+    <div class="arrow_catagory_container arrow_catagory_container--admin">
+      <div class="arrow_catagory arrow_catagory--left arrow_catagory--left--admin " multiplier = "-1" catagory = "${organized_products[i].catagory}">
         <img src = "./images/arrow.png"  multiplier = "-1"  catagory = "${organized_products[i].catagory}" />
       </div>
-      <div class="arrow_catagory_sub arrow_catagory_sub--right arrow_catagory_sub--right--admin" multiplier ="1" catagory =  "${organized_products[i].catagory}" >
+      <div class="arrow_catagory arrow_catagory--right arrow_catagory--right--admin" multiplier ="1" catagory =  "${organized_products[i].catagory}" >
         <img src = "./images/arrow.png" multiplier = "1" catagory =  "${organized_products[i].catagory}"  />
       </div>
     </div>`
@@ -401,13 +412,6 @@ function ToggleCanEdit(){
 
   canEdit = !canEdit;
 
-  if(canEdit){
-    edit_delete_button.classList.add("underline_active");
-  }
-  else{
-    edit_delete_button.classList.remove("underline_active");
-  }
-
   AddEditAndDeleteFeature(canEdit);
 
 }
@@ -417,19 +421,17 @@ function ToggleEdit(canEdit_){
 }
 
 function ToggleModal(isOn){
-
   if(isOn){
-    modal_wrapper.classList.add("active");
-    modal_wrapper.classList.remove("inactive");
-    main_interface.classList.remove("active");
-    main_interface.classList.add("inactive");
+    modal_wrapper.classList.remove("add_product_modal--inactive");
+    main_interface.classList.remove("main_content--active");
   }
   else{
-    modal_wrapper.classList.add("inactive");
-    modal_wrapper.classList.remove("active");
-    main_interface.classList.remove("inactive");
-    main_interface.classList.add("active");
+    modal_wrapper.classList.add("add_product_modal--inactive");
+    main_interface.classList.add("main_content--active");
   }
+
+  console.log(modal_wrapper)
+
 
 }
 
@@ -447,6 +449,7 @@ function AddEventToEditButtons(){
         product = product.data;
 
         PopulateModal(product,"/admin/product/edit");
+        PopulateContent(product.title,product.catagory,product.price,product.discount,product.thumbnail,product.description);
 
     });
 
@@ -485,10 +488,12 @@ function AddEditAndDeleteFeature(canEdit){
   for(var i =0; i < edit_delete.length; i++){
 
     if(canEdit){
-      edit_delete[i].classList.add("edit_delete_container_active");
+      edit_delete[i].classList.remove("edit_delete_container--inactive");
+      edit_delete[i].classList.add("edit_delete_container--active");
     }
     else{
-      edit_delete[i].classList.remove("edit_delete_container_active");
+      edit_delete[i].classList.add("edit_delete_container--inactive");
+      edit_delete[i].classList.remove("edit_delete_container--active");
     }
 
   }
@@ -509,3 +514,111 @@ edit_delete_button.addEventListener("click",()=>{
 });
 
 Init();
+
+
+var name_content = document.querySelector(".content_text--title");
+var price_content = document.querySelector(".content_text--price");
+var discount_content = document.querySelector(".content_text--discount");
+var catagory_content = document.querySelector(".content_text--catagory");
+var description_content = document.querySelector(".content_text--description");
+var image_content = document.querySelector(".content_img");
+
+function PopulateContent(name,catagory,price,discount,thumbnail,description){
+
+  if(discount > 0){
+    price_content.classList.add("cross-out");
+  }else{
+    price_content.classList.remove("cross-out");
+  }
+
+  var discount_price = parseFloat(price - (price * (discount / 100)));
+
+  discount_price = Math.round(discount_price * 100) / 100;
+
+  name_content.innerHTML = name;
+  catagory_content.innerHTML = catagory;
+  price_content.innerHTML = "$"+price;
+  discount_content.innerHTML = "$"+discount_price;
+  image_content.setAttribute("src","/images/"+thumbnail);
+  description_content.innerHTML = description;
+}
+
+function UpdateAddProductContent(element,value){
+  console.log(element,value);
+  element.innerHTML = value;
+}
+
+document.querySelector(".name_input").addEventListener("keyup",(e)=>{
+  var value = e.target.value;
+  if(value.length <= 0){
+    value = "Name of Your Product";
+  }
+  UpdateAddProductContent(name_content,value);
+});
+
+document.querySelector(".price_input").addEventListener("keyup",(e)=>{
+  var value = e.target.value;
+
+  if(value.length > 0){
+    value = Math.abs(parseInt(value));
+  }else{
+    value = 0;
+  }
+  e.target.value = value;
+  if(e.target.value == NaN){
+    e.target.value  = 0;
+    value = 0;
+  }
+  UpdateAddProductContent(price_content,"$"+value);
+});
+
+document.querySelector(".discount_input").addEventListener("keyup",(e)=>{
+  var value = e.target.value;
+
+  if(value.length > 0){
+    value = Math.abs(parseInt(value));
+  }else{
+    value = 0;
+  }
+
+  e.target.value = value;
+
+  if(e.target.value == NaN){
+    e.target.value  = 0;
+    value = 0;
+  }
+
+  var price = 0;
+
+  if(document.querySelector(".price_input").value > 0){
+    price = document.querySelector(".price_input").value;
+  }
+
+    if(value > 0){
+      price_content.classList.add("cross-out");
+    }else{
+      price_content.classList.remove("cross-out");
+    }
+
+  var discount_price = parseFloat(price - (price * (value / 100)));
+  discount_price = Math.round(discount_price * 100) / 100;
+  UpdateAddProductContent(discount_content,"$"+discount_price );
+
+});
+
+document.querySelector(".catagory_input").addEventListener("keyup",(e)=>{
+
+  var value = e.target.value;
+  if(value.length <= 0){
+    value = "Catagory";
+  }
+  UpdateAddProductContent(catagory_content,value);
+});
+
+document.querySelector(".description_input").addEventListener("keyup",(e)=>{
+  var value = e.target.value;
+  if(value.length <= 0){
+    value = "Enter Description";
+  }
+  UpdateAddProductContent(description_content,value);
+});

@@ -1,3 +1,5 @@
+<%- include("./dropdown_main_menu.ejs") %>
+
 <header class = "admin_navbar">
 
   <a href = "/admin">
@@ -32,31 +34,7 @@
 
   <div class="nav_container profile_col profile_col_admin">
 
-    <div class="dropdown_list relative">
-
-      <img class="profile_icon" src = <%= `./../images/profile_img.png` %>>
-
-      <div class="profile_dropdown_list">
-
-        <div class="dropdown_item" id="update_location">
-          <p class="dropdown_title" >Update Location</p>
-        </div>
-
-          <div class="dropdown_item" id = "edit_profile_admin" type = "admin">
-            <p class="dropdown_title">Edit Profile</p>
-          </div>
-
-        <div class="dropdown_item">
-          <p class="dropdown_title">Advanced Settings</p>
-        </div>
-
-        <div class="dropdown_item logout">
-          <p class="dropdown_title ">Logout</p>
-        </div>
-
-      </div>
-
-    </div>
+    <img class="profile_icon profile_icon--admin" src = <%= `/images/profile_img.png` %>>
 
   </div>
 

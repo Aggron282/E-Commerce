@@ -16,7 +16,7 @@ router.delete("/admin/delete_product/:_id",isAuth,adminControllers.DeleteOneProd
 // Admin URL Pages
 router.get("/admin",isAuth,adminControllers.GetMainPage);
 router.get("/user_orders",isAuth,adminControllers.GetOrderPage);
-router.get("/admin/product/detail/:_id",isAuth,adminControllers.GetProductDetailPage);
+router.get("/admin/product/:_id",isAuth,adminControllers.GetProductDetailPage);
 
 // Admin Queries
 router.get("/admin/profile/data",isAuth,adminControllers.GetAdminData);

@@ -19,11 +19,10 @@
   width:10%;
 }
 
-
-
 .navbar_user_col--logo{
   float:left;
   width:15%;
+  margin-top:2.5%;
 }
 
 .navbar_user_col--create{
@@ -39,7 +38,7 @@
 }
 
 .navbar_user_subtitle--delivery{
-  margin-top:10%;
+  margin-top:5%;
   flex:none;
   float:left;
 }
@@ -76,7 +75,7 @@
   filter:brightness(rgba(255,255,255));
 }
 
-.avbar_user_icon--profile:hover .dropdown_list--inner{
+.navbar_user_icon--profile:hover .dropdown_list--inner{
   visibility:  visible;
   height:auto;
   opacity:1;
@@ -115,10 +114,6 @@
 
 }
 
-.main_content--active * {
-  position: relative;
-  z-index:9;
-}
 
 .dropdown_list--inner .dropdown_item--logout{
   background:orangered !important;
@@ -330,4 +325,9 @@
     margin-bottom: 2.5%;
   }
 
+}
+
+.main_content--active * {
+  position: relative;
+  z-index:9;
 }

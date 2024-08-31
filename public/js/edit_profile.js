@@ -11,11 +11,10 @@ var profile_password = document.querySelector(".profile_change_input--password")
 var profile_confirm = document.querySelector(".profile_change_input--confirm");
 var profile_dropdown_opener = document.querySelector(".navbar_user_col--profile");
 var main_content = document.querySelector(".main_content");
-var dropdown = document.querySelector(".navbar_user_dropdown_list_container");
+var dropdown = document.querySelector(".navbar_dropdown_list_container--user") ? document.querySelector(".navbar_dropdown_list_container--user") : document.querySelector(".navbar_dropdown_list_container--admin");
 
 var canEditProfile = false;
 var profile = null;
-var isDropdownOpen = false;
 
 //-----------------------------------------------Set Form and Reveal Modal-----------------------------
 function PopulateAndSetEditProfileModal(toggle,url){
@@ -29,7 +28,7 @@ function PopulateAndSetEditProfileModal(toggle,url){
 
   if(canEditProfile){
     PopulateProfileForm(url);
-
+    console.log(main_content);
     main_content.classList.remove("main_content--active")
     profile_container.classList.add("profile_change_container--active");
   }
@@ -43,9 +42,9 @@ function PopulateAndSetEditProfileModal(toggle,url){
 //-----------------------------------------------Get and Post Profile Data-----------------------------
 
 async function PopulateProfileForm (url){
-
+  console.log(url);
   var profile =  axios.get(url).then((response)=>{
-
+    console.log(response);
     var data = response.data;
     console.log(data.name);
     profile_name.value = data.name;
@@ -81,24 +80,14 @@ function SubmitProfileEdit({name,username,password,confirm},e){
 
 }
 
-function ToggleDropdown(isOpen){
 
-  isDropdownOpen = isOpen;
-
-  if(isOpen){
-    dropdown.classList.add("dropdown_list--active");
-  }else{
-    dropdown.classList.remove("dropdown_list--active");
-  }
-
-}
 
 
 //-----------------------------------------------Add EventListeners to Elements ------------------------
 if(edit_profile){
 
   edit_profile.addEventListener("click",(e)=>{
-    ToggleDropdown(false)
+    ToggleDropdown(dropdown,false)
     PopulateAndSetEditProfileModal(null,"/user/profile/data");
   });
 
@@ -107,7 +96,7 @@ if(edit_profile){
 if(edit_profile_admin){
 
   edit_profile_admin.addEventListener("click",(e)=>{
-    ToggleDropdown(false)
+    ToggleDropdown(dropdown,false)
     PopulateAndSetEditProfileModal(null,"/admin/profile/data");
   });
 
@@ -148,15 +137,25 @@ if(submit_form){
 
 }
 
-profile_dropdown_opener.addEventListener("click",(e)=>{
-  ToggleDropdown(true);
-});
+if(profile_dropdown_opener){
 
-document.querySelector(".main_content").addEventListener("click",(e)=>{
-  if(isDropdownOpen){
-    ToggleDropdown(false);
-  }
-});
+  profile_dropdown_opener.addEventListener("click",(e)=>{
+    ToggleDropdown(dropdown,true);
+  });
+
+}
+
+if(document.querySelector(".main_content")){
+
+  document.querySelector(".main_content").addEventListener("click",(e)=>{
+
+    if(isDropdownOpen){
+      ToggleDropdown(dropdown,false);
+    }
+
+  });
+
+}
 
 exit_profile.addEventListener("click",(e)=>{
   PopulateAndSetEditProfileModal(false,null);

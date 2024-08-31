@@ -1,8 +1,8 @@
 <div class="profile_change_container">
 
     <p class="profile_change--exit">X</p>
-    <% console.log(action) %>
-    <form  class="profile_change_form" action ="<%= action %>profile/edit" method = "POST" enctype="multipart/form-data">
+    <% var type = isAdmin ? "admin" : "user" %>
+    <form  class="profile_change_form" action ="<%= type %>/profile/edit" method = "POST" enctype="multipart/form-data">
 
         <div class="profile_change_img_container">
 

@@ -7,20 +7,24 @@
   background-image: url("./../images/advert.png");
 }
 
-
 .google_button{
   width:90% !important;
   margin-left:5% !important;
-  background:#38b6ff !important;
+  background:white !important;
   border-radius:0px !important;
   position: relative;
 }
 
 .google_img{
-  width:30px;
+  width:50px;
   left:0%;
-  bottom:5px;
+  bottom:-2.5px;
   position: absolute;
+}
+
+.create_button{
+  background:#38b6ff !important;
+  color:white !important;
 }
 
 .signup_banner{
@@ -28,6 +32,7 @@
   width:40%;
   background:linear-gradient(to bottom,#312755,#304472, #583d7d, #68b5de);
   padding:20px;
+  height:100%;
 }
 
 .question{
@@ -40,6 +45,7 @@
 
 .text_banner{
   position: relative;
+  margin-top:5%;
 }
 
 .ad_button:hover{
@@ -70,7 +76,6 @@
 .advertise_container .text_banner{
   width:60%;
   float:left;
-  padding:20px;
 }
 
 .advertise_container .text_banner .title{
@@ -96,7 +101,7 @@
 .advertise_container .text_banner .subtitle{
   font-size:35px;
   font-weight:400;
-  margin-top:5%;
+  margin-top:2.5%;
 }
 
 .advertise_divider{
@@ -107,7 +112,14 @@
     background:white;
 }
 
-@media screen and (max-width:1377px) and (min-width:1024px) and (orientation:landscape){
+.ad_button{
+  width:90% !important;
+  margin-left:5%;
+  margin-top:5%;
+  font-size:18px !important;
+}
+
+@media screen and (max-width:1277px) and (min-width:1024px) and (orientation:landscape){
 
   .ad_button{
     width:90% !important;

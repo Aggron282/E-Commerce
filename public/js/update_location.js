@@ -35,13 +35,19 @@ location_choice.addEventListener("click",(e)=>{
   ToggleLocationModal()
 });
 
-navbar_delivery_col.addEventListener("click",(e)=>{
-  ToggleDropdown(false);
-  ToggleLocationModal()
-});
+if(navbar_delivery_col){
+
+  navbar_delivery_col.addEventListener("click",(e)=>{
+    ToggleDropdown(false);
+    var isAuth = e.target.getAttribute("isAuth")  == "true" ? true : false;
+    console.log(isAuth)
+    ToggleLocationModal(null,isAuth)
+  });
+
+}
 
 exit_location.addEventListener("click",(e)=>{
-  ToggleLocationModal(false)
+  ToggleLocationModal(false,true)
 });
 
 location_form.addEventListener("submit",(e)=>{
@@ -124,7 +130,12 @@ function GetCurrentLocation(){
 
 }
 
-function ToggleLocationModal(toggle){
+function ToggleLocationModal(toggle,isAuth){
+
+  if(isAuth !== null && !isAuth){
+    window.location.assign("/login");
+    return;
+  }
 
   if(toggle){
     canEditLocation = toggle;

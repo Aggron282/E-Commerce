@@ -14,6 +14,14 @@ body{
   line-height: 1.7;
 }
 
+.margin-top-2_5{
+  margin-top:2.5%;
+}
+
+.cross_out{
+  text-decoration: line-through !important;
+
+}
 
 .margin-top-5{
   margin-top:5%;

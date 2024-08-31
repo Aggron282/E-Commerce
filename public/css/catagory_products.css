@@ -75,7 +75,6 @@
   border-color:black;
 }
 
-
 .catagory_product_name{
   font-size:16px;
   text-align: center;
@@ -84,6 +83,19 @@
 
 .catagory_products{
   padding-bottom:10%;
+}
+
+.catagory_products_admin{
+  padding-bottom:0%;
+  padding-top:2.5%;
+  border-bottom:1px solid #e6e6e6;
+}
+
+.catagory_product_box{
+  box-shadow:0px 0px 10px rgba(0,0,0,.5);
+  padding:5%;
+  padding-top:5%;
+  padding-bottom: 5%;
 }
 
 .catagory_image{
@@ -156,6 +168,11 @@
 
 .catagory_arrow--right img {
   transform: rotateY(180deg);
+}
+
+.catagory_product_text--name{
+  font-size:25px;
+  font-weight:500;
 }
 
 .catagory_arrow--left{

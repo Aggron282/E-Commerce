@@ -1,4 +1,4 @@
-<%- include("./dropdown_profile.ejs") %>
+<%- include("./../../dropdown_profile.ejs") %>
 
 <div class="navbar_user">
 
@@ -7,22 +7,38 @@
       <div class="navbar_user_col--logo">
 
         <a href = "/">
-          <img src = <%= `/images/e_logo.png `%> class="margin-top-7_5 navbar_user_logo" alt = "logo" />
+          <img src = <%= `/images/e_logo.png `%> class="navbar_user_logo" alt = "logo" />
         </a>
 
       </div>
 
-      <div class="navbar_user_col--delivery">
+      <% var isAuth = false %>
 
-          <p class="navbar_user_subtitle--deliver margin-left-5 padding-left-10">
+      <% if(isAuthenticated) {%>
+        <% isAuth = true %>
+      <%}%>
 
-            <strong>Delivering to</strong>
+      <% var address = ' Enter Location Here....' %>
+
+      <% if(user) {%>
+
+        <% if(user.location && user.location.address.length > 0){ %>
+          <% address = user.location.address ? user.location.address.substring(0, 70) + "..." :' Enter Location Here....' %>
+        <%}%>
+
+      <%}%>
+
+      <div isAuth = "<%= isAuth %>"  class="navbar_user_col--delivery" >
+
+          <p isAuth = "<%= isAuth %>" class="navbar_user_subtitle--delivery margin-left-5 padding-left-10">
+
+            <strong isAuth = "<%= isAuth %>">Delivering to</strong>
 
             <br />
-            Scottdale Arizona 852....
+            <%= address %>
             <br />
 
-            <span class = "navbar_user_update_location">
+            <span isAuth = "<%= isAuth %>" class = "navbar_user_update_location">
               Update Location
             </span>
 
