@@ -32,7 +32,7 @@ function RenderHTMLToCatagory(catagories,catagory_name){
 
   var catagories_arrows = document.getElementsByClassName("arrow_catagory_sub");
 
-  for(var i =0; i <catagories_arrows.length; i++){
+  for(var i =0; i < catagories_arrows.length; i++){
 
     catagories_arrows[i].addEventListener("click",(e)=>{
 
@@ -136,7 +136,7 @@ function GetCatagories(catagory){
     }
 
     console.log(selected_catagory);
-    
+
     BuiltCatagoriesHTML();
 
   })

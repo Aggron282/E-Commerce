@@ -19,7 +19,7 @@
 
       <p class="catagory_title"> <%= c %> </p>
 
-    <div class="row items_row relative">
+    <div class="items_row relative">
 
       <div class="catagory_arrow catagory_arrow--left" catagory = <%= c %> counter = -1  >
         <img src = "./../images/arrow.png" />
@@ -38,7 +38,7 @@
           <% if(catagories[k].products[i_]){ %>
             <div class="col-3 catagorized_products_col">
 
-            <div class= "catagory_product_box product_box--catagory width-100" catagory = <%= c %> it = <%= i_ %> >
+            <a href = <%="/product/"+catagories[k].products[i_]._id %>>  <div class= "catagory_product_box product_box--catagory width-100" catagory = <%= c %> it = <%= i_ %> >
 
               <% var name = "Name Will Be Placed Here" %>
 
@@ -50,7 +50,7 @@
 
 
                 <% name = catagories[k].products[i_].title.substring(0, 30) + "..."; %>
-              
+
                 <% img = "/images/"+catagories[k].products[i_].thumbnail %>
                 <% price = catagories[k].products[i_].price %>
                 <% description = catagories[k].products[i_].description.substring(0, 100) + "...";  %>
@@ -61,12 +61,13 @@
               <img class="catagory_product_image margin-top-5" src = "<%= img %>" />
 
               <div class="catagory_product_text_box margin-top-5">
+                <% var cross = catagories[k].products[i_].discount > 0 ? "cross-out" : "" %>
+                <p class="catagory_product_text catagory_product_text--price <%= cross %>">$ <%= price %></p>
+                <% var discount_price = parseFloat(price - (price * (catagories[k].products[i_].discount / 100))) %>
+                <% discount_price = Math.round(discount_price * 100) / 100 %>
+                <p class="catagory_product_text catagory_product_text--price ">$ <%= discount_price %></p>
 
-                <p class="catagory_product_text catagory_product_text--description"><%=description %></p>
-                <p class="catagory_product_text catagory_product_text--price ">$ <%= price %></p>
-                <a href = <%="/product/"+catagories[k].products[i_]._id %>><p class="catagory_product_detail">See Details</p></a>
-
-              </div>
+              </div></a>
 
                 <%}else{%>
                   <% break %>
