@@ -20,10 +20,18 @@
 
       <% var address = ' Enter Location Here....' %>
 
-      <% if(user) {%>
+      <% if(user){ %>
 
-        <% if(user.location && user.location.address.length > 0){ %>
-          <% address = user.location.address ? user.location.address.substring(0, 70) + "..." :' Enter Location Here....' %>
+        <% if(user.location){ %>
+
+          <% if(user.location.address){ %>
+
+            <% if(user.location.address.length > 0){ %>
+              <% address = user.location.address ? user.location.address.substring(0, 70) + "..." :' Enter Location Here....' %>
+            <%}%>
+
+          <%}%>
+
         <%}%>
 
       <%}%>
