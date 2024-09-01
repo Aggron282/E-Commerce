@@ -456,8 +456,7 @@ const GetHomePage = async (req,res,next) => {
     res.render(new_feedback.render,new_feedback)
 
  }).catch((err)=>{
-   console.log(err);
-   StatusError(next,err,500);
+    StatusError(next,err,500);
  });
 
 }

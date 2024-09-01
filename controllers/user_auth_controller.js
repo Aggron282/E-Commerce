@@ -69,7 +69,7 @@ const PostUserLogin = (req,res,next) => {
             console.log(found_user);
             req.session.user = found_user;
             feedback.popup_message = "Success!"
-            
+
             // console.log(found_user);
             // console.log(found_user);
             req.session.save((err)=>{
@@ -83,9 +83,10 @@ const PostUserLogin = (req,res,next) => {
           }
         }
         else{
-          feedback.popup_message = "No User Found!"
 
+          feedback.popup_message = "No User Found!"
           res.status(401).render(LOGINPAGE,feedback);
+
         }
 
         // }).catch((err)=>{

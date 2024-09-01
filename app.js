@@ -154,8 +154,7 @@ app.use((error,req,res,next)=>{
   console.log(error);
 
   res.status(500).render(ERRORPAGEURL,{
-    errMessage:error,
-    error:error,
+    err:error.msg,
     statusCode:error.statusCode
   });
 
@@ -166,12 +165,14 @@ app.use((req,res)=>{
 });
 
 app.use((err, req, res, next) => {
+
   res.locals.error = err;
   //------------------------vvvvvvv added
   const status = err.status || 500;
   console.log(err);
   res.status(status);
-  res.render('error');
+  res.render(ERRORPAGEURL,{err:err.msg,statusCode:error.statusCode});
+
 });
 
 mongoose.connect("mongodb+srv://mawile12:sableye12@cluster0.mv38jgm.mongodb.net/shop?retryWrites=true&w=majority").then((s)=>{
