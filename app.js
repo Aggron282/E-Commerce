@@ -33,7 +33,7 @@ var StoreSession =  new MongoDBStore({
 const ERRORPAGEURL = path.join(rootDir,"views","error","error.ejs");
 const ERRORPAGE404URL = path.join(rootDir,"views","error","404.ejs");
 
-
+var hasInit = false;
 app.set("views","views")
 app.set("view engine","ejs");
 
@@ -135,6 +135,7 @@ app.use(express.static(path.join(__dirname,"public")));
 app.use("/images",express.static(path.join(__dirname,"images")))
 
 app.use(cors());
+
 
 app.use(auth_routes);
 app.use(admin_routes);

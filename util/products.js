@@ -56,11 +56,9 @@ function FindProductsFromCatagory(catagory_name,organized_products){
 
     var product_catagory_name = organized_products[i].catagory.toLowerCase();
     var limit = catagory_name.length > product_catagory_name.length ? catagory_name.length : product_catagory_name.length;
-    console.log(limit)
 
     for(var k =0; k < catagory_name.length; k++ ){
 
-      console.log(product_catagory_name[k], catagory_name[k])
 
       if(product_catagory_name[k] == catagory_name[k] ){
         letters_matched++;
@@ -70,7 +68,6 @@ function FindProductsFromCatagory(catagory_name,organized_products){
 
       if(letters_matched >= letters_needed){
         isFound = true;
-        console.log( organized_products[i]);
         products = organized_products[i].products;
         break;
       }
@@ -229,12 +226,12 @@ function catagoryMatch(catagories, catagory_needed,counter) {
         catagories_[i].counter = 0;
       }
 
-      if(catagories_[i].counter >= Math.floor(catagories_[i].items.length / 3) ){
+      if(catagories_[i].counter >= Math.floor(catagories_[i].products.length / 3) ){
         catagories_[i].counter = 0;
       }
 
       current = catagories_[i];
-
+      console.log(catagories_[i])
       return {all:catagories_,current:current};
 
     }

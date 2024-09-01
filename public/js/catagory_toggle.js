@@ -90,7 +90,7 @@ function Init(){
       var page_counter_attribute = e.target.getAttribute("counter");
       var catagory_attribute = e.target.getAttribute("catagory");
 
-      ToggleCatagories(page_counter,catagory);
+      ToggleCatagories(page_counter,catagory_attribute);
 
     });
 

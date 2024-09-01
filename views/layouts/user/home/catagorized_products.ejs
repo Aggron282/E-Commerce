@@ -1,7 +1,7 @@
 
 <div class="catagory_products container-fluid">
 
-  
+
   <% for(var k = 0; k < catagories.length  ; k++) { %>
 
     <% var starting_counter = 0%>
@@ -23,11 +23,11 @@
     <div class="items_row relative">
 
       <div class="catagory_arrow catagory_arrow--left" catagory = <%= c %> counter = -1  >
-        <img src = "./../images/arrow.png" />
+        <img src = "./../images/arrow.png" catagory = <%= c %> counter = -1/>
       </div>
 
       <div class="catagory_arrow catagory_arrow--right"  catagory = <%= c %> counter =1>
-        <img src = "./../images/arrow.png" />
+        <img src = "./../images/arrow.png" catagory = <%= c %> counter =1 />
       </div>
 
       <div class="catagory_populate_container" id = <%= `_${c}` %>>

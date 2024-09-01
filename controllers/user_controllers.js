@@ -22,7 +22,7 @@ const DETAILPAGEURL = path.join(rootDir,"views","detail.ejs");
 const CARTPAGEURL = path.join(rootDir,"views","user","cart.ejs");
 const HOMEPAGEURL = path.join(rootDir,"views","user","index.ejs");
 const CURATEDPRODUCTSURL = path.join(rootDir,"views","user","curated_products.ejs");
-
+var redirects_counter = 0;
 
 const CURATED_ITEMS_LIMIT = 8;
 
@@ -159,67 +159,89 @@ function GetPageData(counter,products){
 
 }
 
+function ReturnIsAdmin(req){
+
+  var isAdmin = req.params.isAdmin  == "true"? true : false;
+
+  if(isAdmin){
+
+    if(!req.admin){
+      return  false;
+    }else{
+      return true;
+    }
+
+  }else{
+    return false;
+  }
+
+}
+
+function CheckPopup(feedback_){
+
+  console.log(redirects_counter)
+  var data = null
+  if(redirects_counter >= 1 ){
+     data = null;
+  }
+  else{
+    data = feedback_.popup_message;
+  }
+
+  redirects_counter +=1;
+
+  return data;
+
+}
+
 const GetSearchResults = async (req,res,next) => {
 
   var product = req.params.product;
   var page_counter = parseInt(req.params.page_counter) - 1;
-  var isAdmin = req.params.isAdmin  == "true"? true : false;
-  if(isAdmin){
-    if(!req.admin){
-      isAdmin = false;
-    }
-  }
+
+
   Product.find({}).then(async (all_products)=>{
 
-     var new_catagories = await product_util.OrganizeCatagories(all_products);
-     var similar_products = await product_util.FindSimilarProducts(product,all_products);
-     var page_length = Math.floor(similar_products.length / CURATED_ITEMS_LIMIT);
+       var new_catagories = await product_util.OrganizeCatagories(all_products);
+       var similar_products = await product_util.FindSimilarProducts(product,all_products);
+       var page_length = Math.floor(similar_products.length / CURATED_ITEMS_LIMIT);
 
-     var limited_products = GetPageData(page_counter,similar_products);
+       var limited_products = GetPageData(page_counter,similar_products);
 
-     var new_feedback = {...feedback};
+       var new_feedback = {...feedback};
 
-     new_feedback.items.top_deals = null;
-     new_feedback.items.all_products = all_products;
-     new_feedback.user = req.user;
-     new_feedback.limited_products = limited_products;
-     new_feedback.cart = req.user ? req.user.cart : null;
-     new_feedback.catagories = new_catagories;
-     new_feedback.popup_message = null;
-     new_feedback.page_length = page_length;
-     new_feedback.page_counter = page_counter + 1;
-     new_feedback.action = "/user/profile/edit";
-     new_feedback.current_catagory = "";
-     new_feedback.searched_term = product;
-     new_feedback.isAdmin = isAdmin;
-     new_feedback.render = CURATEDPRODUCTSURL;
+       new_feedback.items.top_deals = null;
+       new_feedback.items.all_products = all_products;
+       new_feedback.user = req.user;
+       new_feedback.limited_products = limited_products;
+       new_feedback.cart = req.user ? req.user.cart : null;
+       new_feedback.catagories = new_catagories;
+       new_feedback.page_length = page_length;
+       new_feedback.page_counter = page_counter + 1;
+       new_feedback.action = "/user/profile/edit";
+       new_feedback.current_catagory = "";
+       new_feedback.searched_term = product;
+       new_feedback.isAdmin = ReturnIsAdmin(req);
+       new_feedback.render = CURATEDPRODUCTSURL;
 
+       new_feedback.popup_message = CheckPopup(new_feedback);
 
-    res.render(new_feedback.render, new_feedback);
+       res.render(new_feedback.render, new_feedback);
 
     });
 
 }
 
-
-
 const GetCatagoryResults = (req,res) => {
 
   var catagory = req.params.catagory ? req.params.catagory : req.body.catagory;
-  console.log(req.params)
-  var isAdmin = req.params.isAdmin  == "true"? true : false;
-  if(isAdmin){
-    if(!req.admin){
-      isAdmin = false;
-    }
-  }
+
   var page_counter = 0;
 
   Product.find({}).then(async (all_products)=>{
 
     var new_catagories = await product_util.OrganizeCatagories(all_products);
     var products_in_catagory = await product_util.FindProductsFromCatagory(catagory,new_catagories);
-    console.log(products_in_catagory);
     var page_length = Math.floor(products_in_catagory.length / CURATED_ITEMS_LIMIT);
 
     var limited_products = GetPageData(page_counter,products_in_catagory);
@@ -243,8 +265,10 @@ const GetCatagoryResults = (req,res) => {
     new_feedback.catagory_input = catagory;
     new_feedback.searched_term = new_feedback.searched_term;
     new_feedback.render = CURATEDPRODUCTSURL;
-    new_feedback.isAdmin = isAdmin;
-     res.render(new_feedback.render, new_feedback);
+    new_feedback.isAdmin = ReturnIsAdmin(req);
+
+
+    res.render(new_feedback.render, new_feedback);
 
   });
 
@@ -275,9 +299,6 @@ const EditProfile = (req,res) => {
   const update = {$set:{ email : data.username, name:data.name, password:data.password, profileImg: file} };
 
   User.findOneAndUpdate(filter,update).then((response)=>{
-    if(!response){
-      redirect("/login");
-    }
 
       req.user = response;
 
@@ -290,8 +311,12 @@ const EditProfile = (req,res) => {
 
       feedback = new_feedback;
 
+      redirects_counter = 0;
+
       res.redirect(current_url);
 
+    }).catch((err)=>{
+      StatusError(next,err,500);
     });
 
 }
@@ -308,7 +333,11 @@ const DeleteCartItem = async (req,res,next) => {
     var id = req.body._id;
 
     req.user.deleteProduct(id,(response)=>{
+
+      feedback.popup_message = "Deleted Item From Cart";
+      redirects_counter = 0;
       res.redirect("/cart");
+
     });
 
 }
@@ -334,6 +363,9 @@ const AddOrder = async(req,res,next) =>{
      new_order.save();
 
      req.user.ClearCart();
+
+     feedback.popup_message = "Your Order has been Placed! Check Orders Tab to Confirm"
+     redirects_counter = 0;
 
      res.redirect("/");
 
@@ -437,6 +469,7 @@ const GetHomePage = async (req,res,next) => {
     var top_deals = product_util.OrganizeDiscounts(all_products);
 
     var new_feedback = {...feedback};
+
     new_feedback.items.top_deals = top_deals;
     new_feedback.items.all_products = all_products;
     new_feedback.isAdmin = false;
@@ -445,11 +478,11 @@ const GetHomePage = async (req,res,next) => {
     new_feedback.isAuthenticated = req.session.isAuthenticated;
     new_feedback.cart = req.user ? req.user.cart : null;
     new_feedback.catagories = new_catagories;
-    var redirect = "/";
-    new_feedback.popup_message = new_feedback.redirect == redirect ? new_feedback.popup_message : null;
-    new_feedback.redirect = redirect;
+    new_feedback.redirect = "/";
     new_feedback.limited_products = null;
     new_feedback.isAdmin = false;
+
+    new_feedback.popup_message = CheckPopup(new_feedback);
 
     feedback = new_feedback;
 
@@ -478,10 +511,7 @@ const GetProductDetailPage = async (req,res,next) =>{
 
          var new_feedback = {...feedback};
 
-         var redirect = "/product/"+id;
-
-         new_feedback.popup_message = new_feedback.redirect == redirect ? new_feedback.popup_message : null;
-         new_feedback.redirect = redirect;
+         new_feedback.redirect = "/product/"+id;
          new_feedback.items.top_deals = null;
          new_feedback.isAuthenticated = req.session.isAuthenticated;
 
@@ -492,6 +522,9 @@ const GetProductDetailPage = async (req,res,next) =>{
          new_feedback.catagories = new_catagories;
          new_feedback.render = DETAILPAGEURL;
          new_feedback.item = product;
+
+
+         new_feedback.popup_message = CheckPopup(new_feedback);
 
          res.render(new_feedback.render,new_feedback);
 
@@ -593,10 +626,8 @@ Product.find().then(async (all_products) =>{
      new_feedback.items.top_deals = null;
      new_feedback.items.all_products = all_products;
      new_feedback.user = req.user;
-     var redirect = "/cart";
      new_feedback.isAuthenticated = req.session.isAuthenticated;
-     new_feedback.popup_message = new_feedback.redirect == redirect ? new_feedback.popup_message : null;
-     new_feedback.redirect = redirect;
+     new_feedback.redirect = "/cart";
      new_feedback.limited_products = null;
      new_feedback.cart = req.user ? req.user.cart : null;
      new_feedback.catagories = new_catagories;
@@ -604,6 +635,8 @@ Product.find().then(async (all_products) =>{
      new_feedback.session_id = session;
      new_feedback.total_price = total_price;
      new_feedback.cart.items = items ? items : [];
+     new_feedback.popup_message = CheckPopup(new_feedback);
+
      feedback = new_feedback;
 
 
@@ -624,11 +657,10 @@ const ToggleCatagories = (req,res,next) => {
     var counter = parseInt(data.counter);
     var catagory = data.catagory;
     var view_per_toggle = 4;
-
-    var new_catagories = product_util.OrganizeCatagories(default_catagories,all_products);
+    var new_catagories = product_util.OrganizeCatagories(all_products);
     var updated_catagories = product_util.catagoryMatch(new_catagories,catagory,counter);
     var cart;
-
+    console.log(counter);
     if(req.user){
       cart = req.user.cart;
     }else{
