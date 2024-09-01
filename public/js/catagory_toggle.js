@@ -23,12 +23,12 @@ function RenderItems(catagory){
 
     var current_catagory_counter = i + catagory.counter;
 
-    if(catagory.items[current_catagory_counter])
+    if(catagory.products[current_catagory_counter])
     {
-       name = catagory.items[current_catagory_counter].title.substring(0, 30) + "...";
-       img = "./"+catagory.items[current_catagory_counter].thumbnail
-       price = catagory.items[current_catagory_counter].price
-       description = catagory.items[current_catagory_counter].description.substring(0, 100) + "...";
+       name = catagory.products[current_catagory_counter].title.substring(0, 30) + "...";
+       img = "./"+catagory.products[current_catagory_counter].thumbnail
+       price = catagory.products[current_catagory_counter].price
+       description = catagory.products[current_catagory_counter].description.substring(0, 100) + "...";
      }
 
      html += `
@@ -43,7 +43,7 @@ function RenderItems(catagory){
          <div class="catagory_product_text_box margin-top-5">
            <p class="catagory_product_text catagory_product_text--description">${description}</p>
            <p class="catagory_product_text catagory_product_text--price">$ ${ price }</p>
-              <a href = ${"/product/"+catagories[k].products[i_]._id}>
+              <a href = ${"/product/"+catagory.products[current_catagory_counter]._id}>
                 <p class="catagory_product_detail">See Details</p>
               </a>
          </div>
