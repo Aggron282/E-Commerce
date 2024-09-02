@@ -139,13 +139,15 @@
 .catagory_arrow{
   border:1.5px solid #e6e6e6;
   border-radius:5px;
-  position: absolute;
-  top:30%;
-  width:20px;
-  height:20px;
+  position: absolute !important;
+  top:40%;
   z-index:1;
   transition:  all .2s;
   opacity:.6;
+}
+
+.extra_pages{
+  float:left;margin-left:5%;
 }
 
 .catagory_arrow:hover{
@@ -163,7 +165,8 @@
 
 .catagory_arrow img {
   width:100%;
-  margin-top:50%;
+  width:50px;
+  height:50px;
   filter: brightness(00);
 }
 

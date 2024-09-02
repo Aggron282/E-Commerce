@@ -27,11 +27,11 @@
       </div>
 
       <div class="catagory_arrow catagory_arrow--right"  catagory = <%= c %> counter =1>
-        <img src = "./../images/arrow.png" catagory = <%= c %> counter =1 />
+        <img src = "./../images/arrow.png" catagory = <%= c %> counter =1/>
       </div>
 
-      <div class="catagory_populate_container" id = <%= `_${c}` %>>
-        <div class="row">
+      <div class="catagory_populate_container" >
+        <div class="row"id = <%= `_${c}` %>>
 
         <% for(var i = 0; i <= 3; i++) { %>
 
@@ -89,5 +89,3 @@
     </div>
 
   <% } %>
-
-</div>

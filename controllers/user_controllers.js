@@ -25,7 +25,8 @@ const CURATEDPRODUCTSURL = path.join(rootDir,"views","user","curated_products.ej
 var redirects_counter = 0;
 
 const CURATED_ITEMS_LIMIT = 8;
-
+var new_catagories = null;
+var page_counter = 0;
 
 var feedback ={
   items:{
@@ -48,8 +49,6 @@ var feedback ={
   isAdmin:false,
   isAuthenticated:null
 };
-
-
 
 const ResetPopups = (req,res) => {
 
@@ -108,7 +107,9 @@ const GetCurrentCart = (req,res,next)=>{
 const GetCatagories = (req,res,next) => {
 
    Product.find().then( (all_products) =>{
-    var new_catagories = product_util.OrganizeCatagories(all_products);
+
+    new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
+
     res.json(new_catagories);
   });
 
@@ -202,12 +203,12 @@ const GetSearchResults = async (req,res,next) => {
 
   Product.find({}).then(async (all_products)=>{
 
-       var new_catagories = await product_util.OrganizeCatagories(all_products);
+      new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
        var similar_products = await product_util.FindSimilarProducts(product,all_products);
        var page_length = Math.floor(similar_products.length / CURATED_ITEMS_LIMIT);
 
        var limited_products = GetPageData(page_counter,similar_products);
-
+       console.log(page_counter);
        var new_feedback = {...feedback};
 
        new_feedback.items.top_deals = null;
@@ -217,7 +218,7 @@ const GetSearchResults = async (req,res,next) => {
        new_feedback.cart = req.user ? req.user.cart : null;
        new_feedback.catagories = new_catagories;
        new_feedback.page_length = page_length;
-       new_feedback.page_counter = page_counter + 1;
+       new_feedback.page_counter = page_counter ;
        new_feedback.action = "/user/profile/edit";
        new_feedback.current_catagory = "";
        new_feedback.searched_term = product;
@@ -235,17 +236,17 @@ const GetSearchResults = async (req,res,next) => {
 const GetCatagoryResults = (req,res) => {
 
   var catagory = req.params.catagory ? req.params.catagory : req.body.catagory;
+  var page_counter = parseInt(req.params.page_counter);
 
-  var page_counter = 0;
 
   Product.find({}).then(async (all_products)=>{
 
-    var new_catagories = await product_util.OrganizeCatagories(all_products);
+    new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
     var products_in_catagory = await product_util.FindProductsFromCatagory(catagory,new_catagories);
     var page_length = Math.floor(products_in_catagory.length / CURATED_ITEMS_LIMIT);
 
     var limited_products = GetPageData(page_counter,products_in_catagory);
-
+    console.log(page_counter);
     var cart = req.user ? req.user.cart : null;
 
     var new_feedback = {...feedback};
@@ -259,7 +260,7 @@ const GetCatagoryResults = (req,res) => {
     new_feedback.popup_message = null;
     new_feedback.isAuthenticated = req.session.isAuthenticated;
     new_feedback.page_length = page_length;
-    new_feedback.page_counter = page_counter + 1;
+    new_feedback.page_counter = page_counter;
     new_feedback.action = "/user/profile/edit";
     new_feedback.current_catagory = catagory;
     new_feedback.catagory_input = catagory;
@@ -464,7 +465,7 @@ const GetHomePage = async (req,res,next) => {
   Product.find().then(async (all_products) =>{
 
     var highest_product = null;
-    var new_catagories =  product_util.OrganizeCatagories(all_products);
+    new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
 
     var top_deals = product_util.OrganizeDiscounts(all_products);
 
@@ -500,7 +501,7 @@ const GetProductDetailPage = async (req,res,next) =>{
 
   Product.find().then(async (all_products) =>{
 
-     var new_catagories = product_util.OrganizeCatagories(all_products);
+    new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
 
      Product.findById(id).then((product)=>{
 
@@ -619,7 +620,7 @@ const GetCartPage = async (req,res) =>{
 
 Product.find().then(async (all_products) =>{
 
-     var new_catagories = product_util.OrganizeCatagories(all_products);
+     new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
 
      var new_feedback = {...feedback};
 
@@ -657,10 +658,11 @@ const ToggleCatagories = (req,res,next) => {
     var counter = parseInt(data.counter);
     var catagory = data.catagory;
     var view_per_toggle = 4;
-    var new_catagories = product_util.OrganizeCatagories(all_products);
+    console.log(data)
+    new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
     var updated_catagories = product_util.catagoryMatch(new_catagories,catagory,counter);
     var cart;
-    console.log(counter);
+    console.log(updated_catagories);
     if(req.user){
       cart = req.user.cart;
     }else{

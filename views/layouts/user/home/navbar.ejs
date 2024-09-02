@@ -59,26 +59,28 @@
             <span class="navbar_user_search_container">    </span>
 
             <% var input_item = searched_term ? searched_term : "" %>
+
             <form class=" navbar_user_input--form">
-            <input class="form-control no-border navbar_user_input--search" name = "input"  placeholder = "Search for Item" value = <%= input_item %>>
+              <input class="form-control no-border navbar_user_input--search" name = "input"  placeholder = "Search for Item" value = <%= input_item %>>
             </form>
+
       </div>
 
       <% if (!isAuthenticated){ %>
 
-      <div class="navbar_user_col--signin">
+          <div class="navbar_user_col--signin">
 
-          <p class="navbar_user_subtitle--welcome medium-font ">
-            Hello! Sign in to
-            <br/>
+              <p class="navbar_user_subtitle--welcome medium-font ">
+                Hello! Sign in to
+                <br/>
 
-            <span class="bold medium-font navbar_user_login_container">
-              <a href="/login">Customer</a> |  <a href="/admin/login">Admin</a>
-            </span>
+                <span class="bold medium-font navbar_user_login_container">
+                  <a href="/login">Customer</a> |  <a href="/admin/login">Admin</a>
+                </span>
 
-          </p>
+              </p>
 
-      </div>
+          </div>
 
       <% } %>
 
@@ -140,7 +142,7 @@
        <% var limit = catagories.length >= 6 ? 6 : catagories.length %>
            <% for(var i = 0; i < limit; i++){ %>
 
-                <a href = "/search/product/catagory=<%=catagories[i].catagory%>/page_counter=1" >
+                <a href = "/search/product/catagory=<%=catagories[i].catagory%>/page_counter=0" >
 
                   <p class="navbar_user_sub_catagory--title" data = <%= catagories[i].catagory %> ><%= catagories[i].catagory %>
                     <span class="navbar_user_sub_catagory--underline" data = <%= catagories[i].catagory %>  ></span>

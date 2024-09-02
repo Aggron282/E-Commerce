@@ -217,23 +217,22 @@ function catagoryMatch(catagories, catagory_needed,counter) {
   var current;
 
   for(i = 0; i < catagories_.length; i ++){
-
+    console.log(catagories_[i].catagory, catagory_needed)
     if(catagories_[i].catagory == catagory_needed){
 
-      catagories_[i].counter +=  counter * 4;
+      catagories_[i].counter +=  4;
 
       if(catagories_[i].counter < 0){
         catagories_[i].counter = 0;
       }
 
-      if(catagories_[i].counter >= Math.floor(catagories_[i].products.length / 3) ){
+      if(catagories_[i].counter > Math.floor(catagories_[i].products.length  / 4) ){
         catagories_[i].counter = 0;
       }
-
+      console.log(catagories_)
       current = catagories_[i];
-      console.log(catagories_[i])
       return {all:catagories_,current:current};
-
+      break;
     }
 
   }

@@ -127,8 +127,8 @@
       <div class="result_page_container clear ">
 
         <% var prev_class = "result_page_number" %>
-
-        <% if(page_counter - 1 <= 0) {%>
+        <% console.log(page_counter) %>
+        <% if(page_counter <= 1) {%>
           <% prev_class = "result_page_number--inactive" %>
         <%}%>
 
@@ -169,7 +169,7 @@
 
                <% if(page_counter < page_length){ %>
 
-                   <p class="result_page_number result_page_number--current">...</p>
+                   <p class="extra_pages"p>
 
                    <p class="result_page_number result_page_number--last" page = <%= page_length %>>
                      Last
@@ -200,7 +200,6 @@
   <script src = "https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src = "/js/util.js" ></script>
   <script src = "/js/search_results.js" ></script>
-  <script src = "/js/catagory_render.js" ></script>
   <script src = "/js/edit_profile.js" ></script>
   <script src = "/js/update_location.js" ></script>
   <script src = "/js/navbar.js" ></script>
@@ -221,8 +220,10 @@
 
       result_page_numbers[i].addEventListener("click",(e)=>{
           var page_number = e.target.getAttribute("page");
+
           var new_href = href.substring(0,href.length - 1,-1);
           new_href += page_number;
+
           window.location.assign(new_href);
       });
 
