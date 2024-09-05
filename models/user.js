@@ -80,8 +80,7 @@ user.methods.ClearCart = function(){
 
 }
 
-user.methods.AddCart = function(id){
-
+user.methods.AddCart = function(id,quantity){
   Product.findById(id).then((item) =>{
 
     if (this.cart.items.length <= 0) {
@@ -89,10 +88,9 @@ user.methods.AddCart = function(id){
         items:[{
           prodId:item._id,
           data:item,
-          quantity:1
+          quantity:quantity
         }]
       }
-
       this.save();
 
       return;
@@ -107,29 +105,26 @@ user.methods.AddCart = function(id){
          var updated_product = {
            prodId:item._id,
            data:item,
-           quantity:item.quantity
+           quantity:quantity
          };
 
-
          if(existing_product){
-           updated_product.quantity = updated_product.quantity + 1;
+           updated_product.quantity = updated_product.quantity + quantity;
            items[exisiting_product_index] = updated_product;
          }else{
-           updated_product.quantity = 1;
            items.push(updated_product);
          }
 
          var updated_cart = {
            items:items
          }
-         console.log(this);
          this.cart = updated_cart;
          this.save();
 
         }
 
    });
-   
+
 }
 
 user.methods.deleteProduct = function(id,cb){

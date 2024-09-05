@@ -83,7 +83,7 @@ const UpdateLocation = (req,res) =>{
 
     res.json({user:new_user,popup:"Updated Location"});
 
-  }).catch(err => console.log(err));
+  }).catch(err => console.log(err));s
 
 }
 
@@ -180,7 +180,6 @@ function ReturnIsAdmin(req){
 
 function CheckPopup(feedback_){
 
-  console.log(redirects_counter)
   var data = null
   if(redirects_counter >= 1 ){
      data = null;
@@ -208,7 +207,6 @@ const GetSearchResults = async (req,res,next) => {
        var page_length = Math.floor(similar_products.length / CURATED_ITEMS_LIMIT);
 
        var limited_products = GetPageData(page_counter,similar_products);
-       console.log(page_counter);
        var new_feedback = {...feedback};
 
        new_feedback.items.top_deals = null;
@@ -246,7 +244,6 @@ const GetCatagoryResults = (req,res) => {
     var page_length = Math.floor(products_in_catagory.length / CURATED_ITEMS_LIMIT);
 
     var limited_products = GetPageData(page_counter,products_in_catagory);
-    console.log(page_counter);
     var cart = req.user ? req.user.cart : null;
 
     var new_feedback = {...feedback};
@@ -381,16 +378,16 @@ const AddToCart = async (req,res,next)=>{
   var id = req.body.productId;
   var id_ = id.replace("/","");
   var product = req.body;
-
+  var quantity = product.quantity;
   if(!req.user || !req.session.isAuthenticated ){
     res.json({error:401});
   }
   else{
-
     Product.findById(id_).then((data)=>{
-        req.user.AddCart(data);
+        req.user.AddCart(id_,quantity);
         res.json(data);
     }).catch((err)=>{
+      console.log(err)
       StatusError(next,err,500);
     });
 
@@ -658,11 +655,9 @@ const ToggleCatagories = (req,res,next) => {
     var counter = parseInt(data.counter);
     var catagory = data.catagory;
     var view_per_toggle = 4;
-    console.log(data)
     new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
     var updated_catagories = product_util.catagoryMatch(new_catagories,catagory,counter);
     var cart;
-    console.log(updated_catagories);
     if(req.user){
       cart = req.user.cart;
     }else{

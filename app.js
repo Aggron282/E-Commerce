@@ -152,7 +152,7 @@ app.use((error,req,res,next)=>{
 
   const status = error.status || 500;
 
-  console.log(error);
+
 
   res.status(500).render(ERRORPAGEURL,{
     err:error.msg,
@@ -170,7 +170,6 @@ app.use((err, req, res, next) => {
   res.locals.error = err;
   //------------------------vvvvvvv added
   const status = err.status || 500;
-  console.log(err);
   res.status(status);
   res.render(ERRORPAGEURL,{err:err.msg,statusCode:error.statusCode});
 

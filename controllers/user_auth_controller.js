@@ -66,12 +66,9 @@ const PostUserLogin = (req,res,next) => {
           // if(isFound){
 
             req.session.isAuthenticated = true;
-            console.log(found_user);
             req.session.user = found_user;
             feedback.popup_message = "Success!"
 
-            // console.log(found_user);
-            // console.log(found_user);
             req.session.save((err)=>{
               res.redirect(USER_LOGIN_CONFIG.home_url);
             });
@@ -111,7 +108,6 @@ const Logout = (req,res) => {
   req.user = null;
   req.isAuthenticated = false;
   req.session.destroy((err)=>{
-    console.log(req.session);
     if(err){
       console.log(err);
     }

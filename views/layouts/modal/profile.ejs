@@ -31,7 +31,6 @@
     </form>
 
     <% var class_ = "profile_change_img--default" %>
-    <% console.log(user) %>
     <% if(user){ %>
       <% var img_ = user.profileImg ? `/images/${user.profileImg}` : "/images/profile_img.png" %>
       <% class_ = user.profileImg ? "" : "profile_change_img--default" %>

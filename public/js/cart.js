@@ -9,14 +9,15 @@ if(document.querySelector("#product_detail_button--add")){
     cart_button.addEventListener("click",(e)=>{
 
       var product_id = e.target.getAttribute("product_id");
-
-      AddToCart(product_id);
+      var quantity = document.querySelector(".product_detail_input--quantity");
+      quantity = parseInt(quantity.value);
+      AddToCart(product_id,quantity);
 
     });
 }
 
 if(document.querySelector(".navbar_user_container--cart")){
-    cart_container = document.querySelector(".navbar_user_container--cart");
+  cart_container = document.querySelector(".navbar_user_container--cart");
 }
 
 if(document.querySelector(".product_item_button--cart")){
@@ -28,8 +29,10 @@ if(document.querySelector(".product_item_button--cart")){
     product_by_search_cart_buttons[i].addEventListener("click",(e)=>{
 
       var product_id = e.target.getAttribute("_id");
-      console.log(product_id);
-      AddToCart(product_id);
+      var quantity = document.querySelector(".product_detail_input--quantity");
+      quantity = parseInt(quantity.value);
+
+      AddToCart(product_id,quantity);
 
     });
 
@@ -40,10 +43,9 @@ if(document.querySelector(".product_item_button--cart")){
 
 
 
-function AddToCart(product_id){
+function AddToCart(product_id,quantity){
 
-  axios.post("/cart",{productId:product_id},{header:{"Content-Type":"application/json"}}).then((res)=>{
-    console.log(res);
+  axios.post("/cart",{productId:product_id,quantity:quantity},{header:{"Content-Type":"application/json"}}).then((res)=>{
 
     if(!res){
       alert("Product Is No Longer In Inventory");
@@ -54,8 +56,6 @@ function AddToCart(product_id){
         if(res.data.error == 401){
           window.location.assign("/login");
         }
-
-        console.log(res.error);
 
     }
 
@@ -76,8 +76,6 @@ function AddToCart(product_id){
             RenderPopup("Add Item To Cart!");
 
           }
-
-
 
       })
 

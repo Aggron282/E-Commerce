@@ -23,7 +23,7 @@
             <div class="col-8 cart_interface_col--items">
 
                 <% if (cart.items) {%>
-
+                  <% console.log(cart.items) %>
                     <% if (cart.items.length > 0) {%>
 
                         <% for (var i = 0; i < cart.items.length; i++) { %>
@@ -32,14 +32,14 @@
                             <div class="row">
 
                               <div class="col-4">
-                                <img class="margin-left-25 cart_interface_product--img" src =   <%= `/${cart.items[i].data.thumbnail}` %> />
+                                <img class="margin-left-25 cart_interface_product--img" src =   <%= `/images/${cart.items[i].data.thumbnail}` %> />
                               </div>
 
                               <div class="col-6">
 
                                 <p class="cart_interface--title cart_interface--text width-100"> <%= cart.items[i].data.title %> </p>
                                 <p class="cart_interface--title cart_interface--text width-100"> $<%= cart.items[i].data.price %>.99 </p>
-                                <p class="cart_interface--title cart_interface--text width-100"> Qty: <%= cart.items[i].data.quantity %> </p>
+                                <p class="cart_interface--title cart_interface--text width-100"> Qty: <%= cart.items[i].quantity %> </p>
 
                                 <form method = "POST" action = "/cart/delete" >
                                   <input  type="hidden" name = "_id" value= <%= cart.items[i].data._id %> />

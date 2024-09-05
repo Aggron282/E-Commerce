@@ -33,7 +33,6 @@ function RenderLogin(req,res,auth_config,input_config,feedback){
 
   feedback.type = auth_config.type;
   feedback.url = auth_config.login_url;
-  console.log("SKMS")
   res.render(LOGINPAGEURL,feedback);
   res.end();
 

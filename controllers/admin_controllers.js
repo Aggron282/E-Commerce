@@ -50,7 +50,6 @@ const HardResetProducts = (req,res) => {
     });
 
     Product.insertMany(products).then((inster_)=>{
-      console.log(req.admin.products);
       res.json({products:products});
     });
 
@@ -236,7 +235,6 @@ const GetMainPage = async (req,res,next) =>{
 const GetProductDetailPage = async (req,res,next) =>{
 
     var id = req.params._id;
-    console.log(id);
     if(!id || id.length < 10){
         res.redirect("/admin")
         return;
@@ -353,8 +351,6 @@ const EditOneProduct = async (req,res,next) =>{
   var new_product = {...found_product._doc};
   var thumbnail = new_product.thumbnail;
 
-  console.log(new_product,req.file);
-
   if( req.file && req.file.filename){
      thumbnail = req.file.filename;
   }
@@ -383,7 +379,6 @@ const EditOneProduct = async (req,res,next) =>{
   var product = new Product(new_product);
 
   Product.findOneAndReplace({_id:product._id},new_product).then((r)=>{
-    console.log(r);
     const filter = { _id : new ObjectId(new_admin_._id) };
     const update = {$set:{ products : new_products}};
 
@@ -427,7 +422,6 @@ const AddProduct = async (req,res,nect) => {
   products.save();
 
   var new_admin = {...req.admin._doc};
-  console.log(new_admin);
   new_admin.products.push(products);
 
   var new_products = new_admin.products;

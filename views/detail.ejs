@@ -68,12 +68,15 @@
             <span class="product_id" id="product_id_hash" _id = "<%= item._id %>"></span>
 
             <% var inactive = item.quantity > 0 ? "" : "sold_out" %>
-            <% var qty = item.quantity > 0 ? "Qty:"+item.quantity : "This Product is Currently Sold Out" %>
+            <% var qty = item.quantity > 0 ? "In Stock:"+item.quantity : "This Product is Currently Sold Out" %>
 
             <p class="product_detail--sold <%= inactive %>"><%= qty %></p>
 
             <br />
-
+            <% if(!isAdmin){ %>
+              <p> Qty: </p>
+              <input class="product_detail_input product_detail_input--quantity" type = "number" value = 1>
+            <%}%>
            <% if(!isAdmin) {%>
               <button product_id = "<%= item._id %>" class="product_detail_button"  id= "product_detail_button--add">Add to Cart</button>
             <%}else{%>
@@ -127,5 +130,17 @@
 <script src = "/js/edit_profile.js" ></script>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyACepJIoDZ1rhhju2bK-lO23qIzaKwXsnY&loading=async&libraries=maps,marker&v=beta" defer></script>
+<script>
+  var qty = document.querySelector(".product_detail_input--quantity");
+  qty.addEventListener("change",(e)=>{
+    if(e.target.value <=0){
+      e.target.value = parseInt(0);
+      e.target.innerHTML = 0;
 
+    }else{
+        e.target.value = parseInt(e.target.value);
+    }
+  });
+
+</script>
 <%- include("./layouts/end.ejs") %>
