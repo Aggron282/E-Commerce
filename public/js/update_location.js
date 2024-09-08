@@ -1,8 +1,12 @@
 var location_choice = document.querySelector("#update_location");
+var location_choice_admin = document.querySelector("#update_location--admin");
+
 var location_modal = document.querySelector(".update_location_container");
 var exit_location =document.querySelector(".update_location--exit");
 var location_form = document.querySelector(".update_location_form");
 var update_location_url = location_form.getAttribute("action");
+var update_location_admin_check = location_form.getAttribute("isAdmin");
+
 var address_input = document.querySelector(".update_location_input");
 var location_button = document.querySelector(".update_location_button--submit");
 var map_container = document.querySelector(".update_location_map");
@@ -16,9 +20,23 @@ var dropdown_ = dropdown_list_admin ? dropdown_list_admin : dropdown_list_user;
 var current_location_data;
 var current_address_data;
 
-function RenderMapElement({latitude,longitude}){
+var data_url = "";
 
-  var html = `<gmp-map center="${latitude}, ${longitude}" zoom="13"  id = "google_map" map-id="map_interface" style="height: 200px"></gmp-map>`;
+function RenderMapElement(location){
+
+  var lat;
+  var long;
+
+  if(!location){
+      lat = 0;
+      long = 0;
+  }else{
+    lat = location.latitude;
+    long = location.longitude;
+  }
+
+
+  var html = `<gmp-map center="${lat}, ${long}" zoom="13"  id = "google_map" map-id="map_interface" style="height: 200px"></gmp-map>`;
 
   map_container.innerHTML = html;
 
@@ -34,12 +52,25 @@ function RenderPopup(message){
 
 var canEditLocation = false;
 
-location_choice.addEventListener("click",(e)=>{
+if(location_choice){
+  location_choice.addEventListener("click",(e)=>{
 
-  ToggleDropdown(dropdown_,false);
-  ToggleLocationModal(null);
+    ToggleDropdown(dropdown_,false);
+    ToggleLocationModal(null);
 
-});
+  });
+}
+
+if(location_choice_admin){
+
+  location_choice_admin.addEventListener("click",(e)=>{
+
+    ToggleDropdown(dropdown_,false);
+    ToggleLocationModal(null);
+
+  });
+
+}
 
 if(navbar_delivery_col){
 
@@ -61,10 +92,13 @@ if(navbar_update_location_list_dropdown){
 }
 
 exit_location.addEventListener("click",(e)=>{
+
   ToggleLocationModal(false)
 });
 
 location_form.addEventListener("submit",(e)=>{
+  location_form.preventDefault();
+
   e.preventDefault();
   SubmitAndUpdateLocation();
 });
@@ -98,7 +132,7 @@ async function SubmitAndUpdateLocation(){
     }else{
 
         RenderMapElement(new_location_data.coords);
-
+        console.log(new_location_data)
         var update_location = await axios.post(update_location_url,new_location_data);
 
         if(update_location.data){
@@ -110,7 +144,8 @@ async function SubmitAndUpdateLocation(){
       }
 
     }else{
-      window.location.assign("/login");
+      var login_url = update_location_admin_check == "true" ?  "/admin/login" : "/login";
+      window.location.assign(login_url);
     }
 
 }
@@ -171,11 +206,23 @@ function ToggleLocationModal(toggle){
 
 }
 
-async function InitLocation(){
-  var data = await axios.get("/user/profile/data");
+async function PopulateLocationModal(url){
+
+  var data = await axios.get(url);
   var data_ = data.data;
-  address_input.value = data_.location.address;
-    RenderMapElement(data_.location.coords);
+  var location = null;
+  if(data_.location){
+    address_input.value = data_.location.address ? data_.location.address : "" ;
+    location = data_.location.coords
+  }
+
+  RenderMapElement(location);
+
 }
 
-InitLocation();
+
+if(location_choice){
+  PopulateLocationModal("/user/profile/data");
+}else if(location_choice_admin){
+  PopulateLocationModal("/admin/profile/data");
+}

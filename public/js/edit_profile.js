@@ -42,11 +42,11 @@ function PopulateAndSetEditProfileModal(toggle,url){
 //-----------------------------------------------Get and Post Profile Data-----------------------------
 
 async function PopulateProfileForm (url){
-  console.log(url);
+
   var profile =  axios.get(url).then((response)=>{
-    console.log(response);
+
     var data = response.data;
-    console.log(data.name);
+
     profile_name.value = data.name;
     profile_username.value = data.email;
     profile_password.value = "";
@@ -60,7 +60,6 @@ async function PopulateProfileForm (url){
 
 function SubmitProfileEdit({name,username,password,confirm},e){
 
-  console.log(e);
   e.preventDefault();
 
   if(password.length <=-1){
@@ -79,8 +78,6 @@ function SubmitProfileEdit({name,username,password,confirm},e){
   }
 
 }
-
-
 
 
 //-----------------------------------------------Add EventListeners to Elements ------------------------
@@ -112,6 +109,7 @@ if(submit_profile){
         password: profile_password.value,
         confirm : profile_confirm.value
       }
+
       e.preventDefault();
       SubmitProfileEdit(config,e);
 
@@ -130,6 +128,7 @@ if(submit_form){
         password: profile_password.value,
         confirm : profile_confirm.value
       }
+
       e.preventDefault();
       SubmitProfileEdit(config,e);
 

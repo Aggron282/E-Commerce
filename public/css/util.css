@@ -38,7 +38,6 @@ body{
 .main_content{
   visibility: hidden;
   opacity: 0;
-  height:10px;
   z-index:-199;
 }
 
@@ -56,7 +55,6 @@ body{
   opacity: 1 !important;
   position: relative !important;
   z-index: 199 !important;
-  height:auto !important;
 
   visibility: visible !important;
 }

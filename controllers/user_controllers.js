@@ -17,16 +17,20 @@ const User = require("../models/user.js");
 const PlaceholderImages = require("./../data/items_placeholder_other_rated.js");
 const Reviews = require("./../data/reviews.js");
 
+const ReviewSchema = require("./../models/company_reviews.js");
+
+
 const CHECKOUTPAGEURL = path.join(rootDir,"views","user","checkout.ejs");
 const DETAILPAGEURL = path.join(rootDir,"views","detail.ejs");
 const CARTPAGEURL = path.join(rootDir,"views","user","cart.ejs");
 const HOMEPAGEURL = path.join(rootDir,"views","user","index.ejs");
 const CURATEDPRODUCTSURL = path.join(rootDir,"views","user","curated_products.ejs");
 var redirects_counter = 0;
-
+var admin_controller = require("./admin_controllers.js");
 const CURATED_ITEMS_LIMIT = 8;
 var new_catagories = null;
 var page_counter = 0;
+
 
 var feedback ={
   items:{
@@ -71,9 +75,8 @@ const UpdateLocation = (req,res) =>{
   var data = req.body;
   var address = data.address;
   var coords = data.coords;
-
+  console.log(coords);
   User.findById(req.user._id).then((user_)=>{
-
 
     user_.location = data;
 
@@ -82,8 +85,44 @@ const UpdateLocation = (req,res) =>{
     new_user.save();
 
     res.json({user:new_user,popup:"Updated Location"});
+    res.end();
+    return;
+  }).catch(err => console.log(err));
 
-  }).catch(err => console.log(err));s
+}
+
+const PostCompanyReview = async (req,res,next) => {
+
+  var body = req.body;
+  var name = body.name;
+  var title = body.title;
+  var profileImg = body.profileImg;
+  var description = body.description;
+
+  var review_config = {
+    title:name,
+    description:description,
+    profileImg:profileImg,
+    name:body.name
+  }
+
+  var new_review = new ReviewSchema(review_config);
+  new_review.save();
+
+  ReviewSchema.find({}).then((reviews)=>{
+
+    res.json({reviews:reviews});
+
+  });
+
+}
+
+const GetReviews = (req,res)=>{
+
+  ReviewSchema.find({}).then((reviews)=>{
+    console.log(reviews);
+    res.json({reviews:reviews});
+  })
 
 }
 
@@ -194,81 +233,110 @@ function CheckPopup(feedback_){
 
 }
 
+async function OutputSearchResults(req,product,page_counter,all_products){
+
+   new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
+   var similar_products = await product_util.FindSimilarProducts(product,all_products);
+   var page_length = Math.floor(similar_products.length / CURATED_ITEMS_LIMIT);
+
+   var limited_products = GetPageData(page_counter,similar_products);
+   var new_feedback = {...feedback};
+
+   new_feedback.items.top_deals = null;
+   new_feedback.items.all_products = all_products;
+   new_feedback.user = req.user;
+   new_feedback.limited_products = limited_products;
+   new_feedback.cart = req.user ? req.user.cart : null;
+   new_feedback.catagories = new_catagories;
+   new_feedback.page_length = page_length;
+   new_feedback.page_counter = page_counter ;
+   new_feedback.action = "/user/profile/edit";
+   new_feedback.current_catagory = "";
+   new_feedback.searched_term = product;
+   new_feedback.isAdmin = ReturnIsAdmin(req);
+   new_feedback.render = CURATEDPRODUCTSURL;
+   new_feedback.isAuthenticatedAdmin = req.session.isAuthenticatedAdmin;
+   new_feedback.popup_message = CheckPopup(new_feedback);
+
+   return new_feedback;
+}
+
 const GetSearchResults = async (req,res,next) => {
 
   var product = req.params.product;
   var page_counter = parseInt(req.params.page_counter) - 1;
+  var adminI = req.params.isAdmin;
 
+  if(!adminI ){
 
-  Product.find({}).then(async (all_products)=>{
+    Product.find({}).then(async (all_products)=>{
 
-      new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
-       var similar_products = await product_util.FindSimilarProducts(product,all_products);
-       var page_length = Math.floor(similar_products.length / CURATED_ITEMS_LIMIT);
+      var new_feedback = await OutputSearchResults(req,product,page_counter,all_products);
+      res.render(new_feedback.render, new_feedback);
 
-       var limited_products = GetPageData(page_counter,similar_products);
-       var new_feedback = {...feedback};
+      });
 
-       new_feedback.items.top_deals = null;
-       new_feedback.items.all_products = all_products;
-       new_feedback.user = req.user;
-       new_feedback.limited_products = limited_products;
-       new_feedback.cart = req.user ? req.user.cart : null;
-       new_feedback.catagories = new_catagories;
-       new_feedback.page_length = page_length;
-       new_feedback.page_counter = page_counter ;
-       new_feedback.action = "/user/profile/edit";
-       new_feedback.current_catagory = "";
-       new_feedback.searched_term = product;
-       new_feedback.isAdmin = ReturnIsAdmin(req);
-       new_feedback.render = CURATEDPRODUCTSURL;
-
-       new_feedback.popup_message = CheckPopup(new_feedback);
-
-       res.render(new_feedback.render, new_feedback);
-
-    });
+  }else if(req.admin){
+    var new_feedback = await OutputSearchResults(req,product,page_counter,req.admin.products);
+    res.render(new_feedback.render, new_feedback);
+  }else{
+    res.redirect("/admin/login");
+  }
 
 }
 
-const GetCatagoryResults = (req,res) => {
+async function OutputCatagorySearch(req,catagory,page_counter,all_products){
+
+  new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
+
+  var products_in_catagory = await product_util.FindProductsFromCatagory(catagory,new_catagories);
+  var page_length = Math.floor(products_in_catagory.length / CURATED_ITEMS_LIMIT);
+
+  var limited_products = GetPageData(page_counter,products_in_catagory);
+  var cart = req.user ? req.user.cart : null;
+
+  var new_feedback = {...feedback};
+
+  new_feedback.items.top_deals = null;
+  new_feedback.items.all_products = all_products;
+  new_feedback.user = req.user;
+  new_feedback.limited_products = limited_products;
+  new_feedback.cart = req.user ? req.user.cart : null;
+  new_feedback.catagories = new_catagories;
+  new_feedback.popup_message = null;
+  new_feedback.isAuthenticatedAdmin = req.session.isAuthenticatedAdmin;
+  new_feedback.page_length = page_length;
+  new_feedback.page_counter = page_counter;
+  new_feedback.action = "/user/profile/edit";
+  new_feedback.current_catagory = catagory;
+  new_feedback.catagory_input = catagory;
+  new_feedback.searched_term = new_feedback.searched_term;
+  new_feedback.render = CURATEDPRODUCTSURL;
+  new_feedback.isAdmin = ReturnIsAdmin(req);
+
+  return new_feedback;
+
+}
+
+const GetCatagoryResults = async (req,res) => {
 
   var catagory = req.params.catagory ? req.params.catagory : req.body.catagory;
   var page_counter = parseInt(req.params.page_counter);
+  var adminI = req.params.isAdmin;
 
+  if(!adminI){
 
-  Product.find({}).then(async (all_products)=>{
+    Product.find({}).then(async (all_products)=>{
 
-    new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
-    var products_in_catagory = await product_util.FindProductsFromCatagory(catagory,new_catagories);
-    var page_length = Math.floor(products_in_catagory.length / CURATED_ITEMS_LIMIT);
+      var new_feedback = await OutputCatagorySearch(req,catagory,page_counter,all_products);
+      res.render(new_feedback.render, new_feedback);
 
-    var limited_products = GetPageData(page_counter,products_in_catagory);
-    var cart = req.user ? req.user.cart : null;
+    });
 
-    var new_feedback = {...feedback};
-
-    new_feedback.items.top_deals = null;
-    new_feedback.items.all_products = all_products;
-    new_feedback.user = req.user;
-    new_feedback.limited_products = limited_products;
-    new_feedback.cart = req.user ? req.user.cart : null;
-    new_feedback.catagories = new_catagories;
-    new_feedback.popup_message = null;
-    new_feedback.isAuthenticated = req.session.isAuthenticated;
-    new_feedback.page_length = page_length;
-    new_feedback.page_counter = page_counter;
-    new_feedback.action = "/user/profile/edit";
-    new_feedback.current_catagory = catagory;
-    new_feedback.catagory_input = catagory;
-    new_feedback.searched_term = new_feedback.searched_term;
-    new_feedback.render = CURATEDPRODUCTSURL;
-    new_feedback.isAdmin = ReturnIsAdmin(req);
-
-
+  }else{
+    var new_feedback = await OutputCatagorySearch(req,catagory,page_counter,req.admin.products);
     res.render(new_feedback.render, new_feedback);
-
-  });
+  }
 
 }
 
@@ -465,7 +533,8 @@ const GetHomePage = async (req,res,next) => {
     new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
 
     var top_deals = product_util.OrganizeDiscounts(all_products);
-
+    var reviews = await ReviewSchema.find({});
+    console.log(reviews);
     var new_feedback = {...feedback};
 
     new_feedback.items.top_deals = top_deals;
@@ -479,6 +548,7 @@ const GetHomePage = async (req,res,next) => {
     new_feedback.redirect = "/";
     new_feedback.limited_products = null;
     new_feedback.isAdmin = false;
+    new_feedback.reviews = reviews;
 
     new_feedback.popup_message = CheckPopup(new_feedback);
 
@@ -681,10 +751,13 @@ module.exports.GetCatagories = GetCatagories;
 module.exports.ToggleCatagories = ToggleCatagories;
 module.exports.GetSearchResults = GetSearchResults;
 module.exports.DeleteCart = DeleteCart;
+module.exports.PostCompanyReview = PostCompanyReview;
 module.exports.GetCurrentCart = GetCurrentCart;
 module.exports.GetHomePage = GetHomePage;
 module.exports.ResetPopups = ResetPopups;
 module.exports.GetProducts = GetProducts;
 module.exports.AddToCart = AddToCart;
 module.exports.AddOrder = AddOrder;
+module.exports.GetReviews = GetReviews;
+
 module.exports.GetProductDetailPage = GetProductDetailPage;

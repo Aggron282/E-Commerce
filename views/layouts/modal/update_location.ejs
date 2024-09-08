@@ -11,14 +11,20 @@
   </div>
 
   <% var update_url = isAdmin ? "/admin/location/update" : "/user/location/update" %>
+  <% var isAuth = false %>
+  <% if(isAdmin){%>
+    <%  isAuth = isAuthenticatedAdmin ? true : false %>
+  <%}else{%>
+    <%  isAuth = isAuthenticated ? true : false %>
+  <%}%>
 
-  <form class="update_location_form" isAuth = "<%=isAuthenticated%>" action = "<%= update_url %>">
+  <div class="update_location_form" isAdmin = "<%= isAdmin %>" isAuth = "<%= isAuth %>" action = "<%= update_url %>">
 
     <input class="update_location_input" placeholder="Enter Address"  name = "address">
 
     <button class=" update_location_button update_location_button--submit" type="Submit">Update Location</button>
 
-  </form>
+  </div>
 
 
 </div>

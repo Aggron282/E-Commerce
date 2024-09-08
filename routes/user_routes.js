@@ -15,6 +15,8 @@ router.get("/cart/pay",userControllers.AddOrder);
 router.get("/cart",isAuth,userControllers.GetCartPage);
 router.get("/cart/cart_data",isAuth,userControllers.GetCurrentCart);
 router.get("/orders/",isAuth,userControllers.GetOrders);
+router.post("/company/review",isAuth,userControllers.PostCompanyReview);
+router.get("/company/review",userControllers.GetReviews);
 
 // Page URLS
 router.get("/",userControllers.GetHomePage);

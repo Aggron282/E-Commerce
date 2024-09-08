@@ -27,7 +27,35 @@ var feedback = {
   user:null,
   redirect:"",
   isAdmin:true,
+  isAuthenticatedAdmin:false,
   popup_message:null
+}
+
+var redirects_counter = 0;
+var page_counter = 0;
+var new_catagories = null;
+
+const ResetPopups = (req,res) => {
+
+  feedback.popup_message = null;
+  res.json(true);
+}
+
+
+function CheckPopup(feedback_){
+
+  var data = null
+  if(redirects_counter >= 1 ){
+     data = null;
+  }
+  else{
+    data = feedback_.popup_message;
+  }
+
+  redirects_counter +=1;
+
+  return data;
+
 }
 
 const HardResetProducts = (req,res) => {
@@ -128,10 +156,13 @@ const EditAdmin = (req,res) => {
     profileImg = req.file.filename ? req.file.filename : null;
   }
 
+  redirects_counter = 0;
+
   const update = {$set:{ username : data.username, name:data.name, password:data.password, profileImg:profileImg} };
 
   Admin.findOneAndUpdate(filter,update).then((response)=>{
       req.admin = response;
+      feedback.popup_message = "Edited Your Profile!"
       res.redirect("/admin");
   });
 
@@ -169,12 +200,13 @@ const UpdateLocation = (req,res) =>{
   Admin.findById(req.admin._id).then((admin_)=>{
 
     admin_.location = data;
-
+    console.log(admin_);
     var new_admin = new Admin(admin_);
 
     new_admin.save();
-
-    res.json({admin:new_admin});
+    feedback.popup_message = "Updated Location!"
+    redirects_counter = 0;
+    res.json({user:new_admin,popup:"Updated Location"});
 
   }).catch(err => console.log(err));
 
@@ -219,16 +251,18 @@ const GetMainPage = async (req,res,next) =>{
     return;
   }
    var new_feedback = {...feedback};
-   var new_catagories = await product_util.OrganizeCatagories(req.admin.products);
+   new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(req.admin.products);
 
   new_feedback.products= req.admin.products,
   new_feedback.action = "/admin/profile/edit";
   new_feedback.totalProducts = totalProducts
-  new_feedback.isAuthenticated = req.isAuthenticated;
-
+  new_feedback.isAuthenticatedAdmin = req.session.isAuthenticatedAdmin;
+  console.log(req.session.isAuthenticatedAdmin)
   new_feedback.catagories = new_catagories;
+
   feedback = new_feedback;
-  res.render(HOMEPAGEURL,new_feedback);
+  feedback.popup_message = CheckPopup(feedback);
+  res.render(HOMEPAGEURL,feedback);
 
 }
 
@@ -245,7 +279,7 @@ const GetProductDetailPage = async (req,res,next) =>{
         res.redirect("/admin")
       }
       else{
-        var new_catagories = await product_util.OrganizeCatagories(req.admin.products);
+        new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(req.admin.products);
 
         var new_feedback ={...feedback}
         new_feedback.action = "/product/edit/"+id;
@@ -253,7 +287,9 @@ const GetProductDetailPage = async (req,res,next) =>{
         new_feedback.redirect = "/product/edit/"+id;
         new_feedback.isAdmin = true;
         new_feedback.catagories = new_catagories;
-        new_feedback.isAuthenticated = req.isAuthenticated;
+        new_feedback.isAuthenticatedAdmin = req.session.isAuthenticatedAdmin;
+        new_feedback.popup_message = CheckPopup(new_feedback);
+
         res.render(DETAILPAGEURL,new_feedback);
       }
 
@@ -388,6 +424,7 @@ const EditOneProduct = async (req,res,next) =>{
 
       req.session.admin = new_admin_;
       feedback.popup_message = "Edited Product!"
+      redirects_counter = 0;
       res.redirect(req.url);
 
     });
