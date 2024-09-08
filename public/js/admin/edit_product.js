@@ -18,6 +18,8 @@ var isModalOn = false;
 
 var organized_products = [];
 
+var canDelete = false;
+
 //----------------------------Init-----------
 async function Init(){
 
@@ -237,7 +239,6 @@ async function RenderProductCatagories(){
       if(new_counter >= organized_products[i].products.length){
         break;
       }
-      console.log(organized_products[i].products[k])
       var discount_price = parseFloat(organized_products[i].products[k].price - (organized_products[i].products[k].price * (organized_products[i].products[k].discount / 100)));
       discount_price = Math.round(discount_price * 100) / 100;
       html += `
@@ -458,17 +459,17 @@ function AddEventToEditButtons(){
   for(var i =0; i < delete_button_p.length; i++){
 
     delete_button_p[i].addEventListener("click",async (e)=>{
-
       var prompt_requirement = 'DELETE';
       var product_prompt = prompt(`Type ${prompt_requirement} to delete product (There is no way to add product back once deleted)`);
 
-      if(product_prompt == prompt_requirement){
-
+      if(product_prompt == prompt_requirement && !canDelete){
+        canDelete = true;
         var id = e.target.getAttribute('_id');
-        var product = await axios.post("/product/delete",{_id:id}).catch((err)=>{console.log(err)});
+        console.log(id)
+        var product = await axios.post("/admin/product/delete",{_id:id}).catch((err)=>{console.log(err)});
 
         if(product){
-          alert("Deleted Product");
+        
           Init();
         }
 
@@ -476,6 +477,9 @@ function AddEventToEditButtons(){
       else{
         alert("Canceled");
       }
+
+      canDelete = false;
+
 
     });
 

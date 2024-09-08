@@ -9,9 +9,9 @@ const upload = multer({dest:"images/"});
 
 // Admin Product Changes
 router.post("/admin/product/edit",isAuth,adminControllers.EditOneProduct);
-router.post("/product/delete",isAuth,adminControllers.DeleteOneProduct);
+router.post("/admin/product/delete",isAuth,adminControllers.DeleteOneProduct);
 router.post("/admin/product/add",isAuth,adminControllers.AddProduct);
-router.delete("/admin/delete_product/:_id",isAuth,adminControllers.DeleteOneProductByParams);
+router.get("/admin/product/delete/:_id",isAuth,adminControllers.DeleteOneProductByParams);
 
 // Admin URL Pages
 router.get("/admin",isAuth,adminControllers.GetMainPage);

@@ -310,70 +310,40 @@ const GetOrderPage =(req,res,next)=>{
 
 //--------------------------------------------------------------------------------
 // Admin Products Changes
-const DeleteOneProduct = (req,res,next) =>{
+const DeleteOneProduct =  (req,res,next) =>{
 
   var id = req.body._id;
+console.log(id,"SSS",req.body)
+  DeleteProduct(req,res,id);
 
-  Admin.findOne({_id:new ObjectId(req.admin._id)}).then((admin)=>{
+}
 
-      var new_admin = admin;
-      var new_products = []
+const DeleteProduct = async (req,res,id) => {
 
-      for(var i = 0; i < admin.products.length; i ++){
 
-          if(id == admin.products[i]._id){
-            console.log("Same Product");
-          }
-          else{
-            new_products.push(admin.products[i]);
-          }
+    const new_products = req.admin.products.filter((product) => {
+      return JSON.stringify(id) != JSON.stringify(product._id)
+    });
+    var new_admin = {...req.admin};
+    new_admin.products = new_products;
 
-      }
+    console.log(new_products.length)
+    var new_product = await  Product.findByIdAndDelete(id);
+    var update_query = {$set: {'products': new_products}};
+    console.log(req.admin.password)
+    var replace_admin_products = await Admin.findByIdAndUpdate({_id:req.admin._id},update_query,(r)=>{
+      req.admin = new_admin;
+      res.json(r);
+    })
 
-     new_admin.products = new_products;
-
-     Admin.replaceOne({_id:new ObjectId(req.admin._id)},new_admin).then((admin)=>{
-
-        req.admin = new_admin;
-
-        Product.deleteOne({_id:new ObjectId(id)}).then((response)=>{
-
-          if(response){
-            console.log("Deleted Successfully");
-          }
-          else{
-            console.log("Could not Delete");
-          }
-
-          res.json(true);
-
-        });
-
-      });
-
-    }).catch((err)=>{
-      StatusError(next,err,500);
-  });
 
 }
 
 const DeleteOneProductByParams = (req,res,next) =>{
 
   var id = req.params.id;
-
-  Product.deleteOne({_id:new ObjectId(id)}).then((response)=>{
-
-    if(response){
-      console.log("Deleted Successfully");
-    }else{
-      console.log("Could not Delete");
-    }
-
-    res.status(200).json({message:"Deleted Successfully"});
-
-  }).catch((err)=>{
-    StatusError(next,err,500);
-  });
+  console.log(id);
+  DeleteProduct(req,res,id);
 
 }
 
@@ -422,7 +392,7 @@ const EditOneProduct = async (req,res,next) =>{
 
       new_admin_.products = new_products;
 
-      req.session.admin = new_admin_;
+      req.admin = new_admin_;
       feedback.popup_message = "Edited Product!"
       redirects_counter = 0;
       res.redirect(req.url);
