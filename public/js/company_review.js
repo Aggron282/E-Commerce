@@ -2,6 +2,7 @@ var add_review_button = document.querySelector(".add_review_button");
 var review_container = document.querySelector(".add_review_container");
 var review_display_container = document.querySelector(".review_display_container");
 var reviews_container = document.querySelector(".reviews_container");
+
 var canLeaveReview = true;
 
 const RenderReviews = (reviews) => {
@@ -10,10 +11,10 @@ const RenderReviews = (reviews) => {
 
   for(var i =0; i < reviews.length; i++) {
 
-    var review_name = reviews[i].name;
-    var profile_img = reviews[i].profileImg.length > 0 ? reviews[i].profileImg : "review2.png" ;
-    var description = reviews[i].description ;
-    var title = reviews[i].title;
+      var review_name = reviews[i].name;
+      var profile_img = reviews[i].profileImg.length > 0 ? reviews[i].profileImg : "review2.png" ;
+      var description = reviews[i].description ;
+      var title = reviews[i].title;
 
       html += `
       <div class="story">
@@ -53,10 +54,10 @@ function Init(){
 
 }
 
-
 if(add_review_button){
 
   add_review_button.addEventListener("click",(e)=>{
+
     if(canLeaveReview){
       DisplayForm(e);
       canLeaveReview = false;
@@ -69,6 +70,7 @@ if(add_review_button){
 const DisplayForm = (e)=>{
 
   review_display_container.innerHTML = ReturnReviewForm();
+
   e.target.style.visibility = "hidden";
 
   var exit_review = document.querySelector(".exit_review");
@@ -92,24 +94,26 @@ const SubmitForm = async ()=>{
     var title = review_title.value;
     var description = review_description.value;
 
-    console.log(title,description);
-
     if(description.length < 10 || title.length < 4){
       alert("Invalid Input");
       return;
-    }else{
+    }
+    else{
 
       var profile = await axios.get("/user/profile/data");
       var profileImg = profile.data.profileImg;
       var name = profile.data.name;
 
       axios.post("/company/review",{name:name,profileImg:profileImg,title:title,description:description}).then((res)=>{
+
         if(res.data.reviews){
           alert("Thank you for your feedback!");
           RenderReviews(res.data.reviews);
-        }else if(!res.data){
+        }
+        else if(!res.data){
           window.location.assign("/login");
         }
+
       }).catch((err)=>{
         alert(err);
       });
@@ -124,21 +128,22 @@ const ExitForm = () => {
   canLeaveReview = true;
 }
 
-
 const ReturnReviewForm = ()=>{
+
   return `
-  <div class="relative review_display_container--inner">
-  <span class = "exit_review">X</span>
+    <div class="relative review_display_container--inner">
+    <span class = "exit_review">X</span>
 
-    <p class="review_display_title">Tell us how we are doing!</p>
-    <form action = "/company/review" method = "POST" class="review_form">
-      <input name = "title" class="form-control review_input" placeholder ="Enter Title">
-      <textarea cols=50 rows= 10 name = "name" class="form-control review_description" value = "" placeholder="Enter Review"></textarea>
+      <p class="review_display_title">Tell us how we are doing!</p>
+      <form action = "/company/review" method = "POST" class="review_form">
+        <input name = "title" class="form-control review_input" placeholder ="Enter Title">
+        <textarea cols=50 rows= 10 name = "name" class="form-control review_description" value = "" placeholder="Enter Review"></textarea>
 
-      <button class="review_submit_button">Submit</button>
-    </form>
-    </div>
-  `
+        <button class="review_submit_button">Submit</button>
+      </form>
+      </div>
+      `
+
 }
 
 Init();

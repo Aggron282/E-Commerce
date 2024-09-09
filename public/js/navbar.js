@@ -9,7 +9,6 @@ var main_content = document.querySelector(".main_content");
 
 function ToggleDropdown(dropdown,isOpen){
 
-  console.log(dropdown);
   isDropdownOpen = isOpen;
 
   if(isOpen){
@@ -38,18 +37,20 @@ if(profile_user){
 }
 
 if(main_content){
-main_content.addEventListener("click",(e)=>{
 
-  if(isDropdownOpen){
+  main_content.addEventListener("click",(e)=>{
 
-    if(profile_admin){
-      ToggleLocationModal(dropdown_list_admin,false);
+    if(isDropdownOpen){
+
+      if(profile_admin){
+        ToggleLocationModal(dropdown_list_admin,false);
+      }
+      else{
+        ToggleLocationModal(dropdown_list_user,false);
+      }
+
     }
-    else{
-      ToggleLocationModal(dropdown_list_user,false);
-    }
 
-  }
+  });
 
-});
 }

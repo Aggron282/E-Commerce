@@ -3,7 +3,6 @@ var bcrypt = require("bcrypt");
 var fileHelper = require("./../util/file.js");
 //AIzaSyACepJIoDZ1rhhju2bK-lO23qIzaKwXsnY
 //const nodemailer = require("nodemailer");
-//const crypto = require("crypto");
 const {validationResult} = require("express-validator");
 
 var User = require("./../models/user.js")
@@ -59,11 +58,11 @@ const CreateAccount = (req,res) => {
 
   if(errors.isEmpty()){
 
-    Admin.findOne({email:email}).then((response)=>{
+    Admin.findOne({email:email}).then(async (response)=>{
 
       if(!response){
 
-          // bcrypt.hash(password,12).then((encrypt)=>{
+          bcrypt.hash(password,12).then(async (encrypt)=>{
 
             const new_admin = new Admin({
               email: email,
@@ -77,15 +76,12 @@ const CreateAccount = (req,res) => {
 
             req.session.admin = new_admin;
 
-            req.session.save((err)=>{
-              feedback.popup_message = "Created Your Account!"
-              res.redirect(ADMIN_LOGIN_CONFIG.login_url);
-            });
+            await req.session.save();
+            feedback.popup_message = "Created Your Account!"
+            res.redirect(ADMIN_LOGIN_CONFIG.login_url);
 
-            // res.redirect(USER_LOGIN_CONFIG.login_url);
 
-        // }).then(result =>{
-        // });
+         });
 
       }
       else{
@@ -127,8 +123,9 @@ const PostAdminLogin = async (req,res,next) => {
 
       if(found_user){
 
-        // bcrypt.compare(config.password,found_user.password).then((isFound)=>{
-          if(found_user.password == config.password){
+        bcrypt.compare(config.password,found_user.password).then((isFound)=>{
+
+          if(isFound){
 
             req.session.isAuthenticatedAdmin = true;
             req.session.admin = found_user;
@@ -146,6 +143,8 @@ const PostAdminLogin = async (req,res,next) => {
             return;
           }
 
+        })
+
       }
       else{
         auth.RenderLogin(req,res,ADMIN_LOGIN_CONFIG,config,feedback);
@@ -155,6 +154,7 @@ const PostAdminLogin = async (req,res,next) => {
     }).catch((err)=>{
       auth.RenderLogin(req,res,ADMIN_LOGIN_CONFIG,config,feedback);
     });
+
 
   }
 

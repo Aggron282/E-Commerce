@@ -1,4 +1,4 @@
-var fs = require("fs");
+const fs = require("fs");
 
 const DeleteFile = (filePath) =>{
 
@@ -9,9 +9,8 @@ const DeleteFile = (filePath) =>{
     }
 
   });
-  
-}
 
+}
 
 
 module.exports = DeleteFile;

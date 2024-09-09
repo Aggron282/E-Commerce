@@ -37,8 +37,4 @@ const admin = new Schema(
 
 );
 
-admin.methods.deleteProduct = function(id,cb){
-  cb("Delete One Product");
-}
-
 module.exports = mongoose.model("admins",admin);

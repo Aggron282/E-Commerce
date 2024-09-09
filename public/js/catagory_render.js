@@ -5,9 +5,7 @@ var PAGE_LIMIT = 5;
 var PAGE_INCREMENT = 5;
 
 var counter = 0;
-
 var selected_catagory = null;
-
 
 function RenderHTMLToCatagory(catagories,catagory_name){
 

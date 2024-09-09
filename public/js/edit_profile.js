@@ -3,14 +3,18 @@ var edit_profile_admin = document.querySelector("#edit_profile_admin");
 
 var submit_form = document.querySelector(".profile_change_form");
 var profile_container = document.querySelector(".profile_change_container");
+
 var exit_profile = document.querySelector(".profile_change--exit");
 var submit_profile = document.querySelector(".profile_change_button--submit");
+
 var profile_name = document.querySelector(".profile_change_input--name");
 var profile_username = document.querySelector(".profile_change_input--username");
 var profile_password = document.querySelector(".profile_change_input--password");
 var profile_confirm = document.querySelector(".profile_change_input--confirm");
 var profile_dropdown_opener = document.querySelector(".navbar_user_col--profile");
+
 var main_content = document.querySelector(".main_content");
+
 var dropdown = document.querySelector(".navbar_dropdown_list_container--user") ? document.querySelector(".navbar_dropdown_list_container--user") : document.querySelector(".navbar_dropdown_list_container--admin");
 
 var canEditProfile = false;
@@ -28,7 +32,6 @@ function PopulateAndSetEditProfileModal(toggle,url){
 
   if(canEditProfile){
     PopulateProfileForm(url);
-    console.log(main_content);
     main_content.classList.remove("main_content--active")
     profile_container.classList.add("profile_change_container--active");
   }

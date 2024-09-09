@@ -3,12 +3,18 @@ var add_product = document.getElementsByClassName("add_p");
 var main_interface = document.querySelector(".main_content");
 var modal_wrapper = document.querySelector(".add_product_modal");
 var edit_button = document.getElementsByClassName("edit_button_p");
-var delete_button_p = document.getElementsByClassName("delete_button_p");
 var product_form = document.querySelector("#product_form");
 var exit_modal = document.querySelector(".exit_modal");
 var edit_delete = document.getElementsByClassName("edit_delete_container");
 var edit_delete_button  =  document.querySelector(".edit_delete_p");
 var catagory_products_admin_container = document.querySelector(".main_interface--products_container");
+
+var name_content = document.querySelector(".content_text--title");
+var price_content = document.querySelector(".content_text--price");
+var discount_content = document.querySelector(".content_text--discount");
+var catagory_content = document.querySelector(".content_text--catagory");
+var description_content = document.querySelector(".content_text--description");
+var image_content = document.querySelector(".content_img");
 
 var config = null;
 
@@ -17,8 +23,6 @@ var canEdit = false;
 var isModalOn = false;
 
 var organized_products = [];
-
-var canDelete = false;
 
 //----------------------------Init-----------
 async function Init(){
@@ -37,7 +41,6 @@ async function Init(){
   for(var i =0; i < add_product.length; i++){
 
     add_product[i].addEventListener("click",(e)=>{
-      console.log(e.target)
       ToggleModal(true);
       SetForm("/admin/product/add");
     });
@@ -230,8 +233,8 @@ async function RenderProductCatagories(){
 
     html += `<div class="catagory_products_admin" >
       <p class="catagory_name"> ${organized_products[i].catagory} </p>
-    </div>
-    `
+    </div>`
+
     for(var k = 0; k < CATAGORY_LIMIT; k++){
 
       var new_counter = k + organized_products[i].counter;
@@ -239,12 +242,15 @@ async function RenderProductCatagories(){
       if(new_counter >= organized_products[i].products.length){
         break;
       }
+
       var discount_price = parseFloat(organized_products[i].products[k].price - (organized_products[i].products[k].price * (organized_products[i].products[k].discount / 100)));
+
       discount_price = Math.round(discount_price * 100) / 100;
+
       html += `
 
-
       <div class="col-3 no-margin-left margin-top-2_5 admin_catagory_product_col">
+
         <div class= "catagory_product_box product_box--catagory width-100 relative "style="z-index:0;"  catagory = "${ organized_products[i].catagory.toLowerCase() }" it = "${k}"  >
 
           <p class="catagory_product_text--name">${organized_products[i].products[k].title.substring(0,50)}</p>
@@ -264,7 +270,7 @@ async function RenderProductCatagories(){
 
         </div>
 
-     </div>
+      </div>
 
           <div class="edit_delete_container edit_delete_container--inactive ">
 
@@ -431,9 +437,6 @@ function ToggleModal(isOn){
     main_interface.classList.add("main_content--active");
   }
 
-  console.log(modal_wrapper)
-
-
 }
 
 //----------------------------Add Events To Element Functions-----------
@@ -451,35 +454,6 @@ function AddEventToEditButtons(){
 
         PopulateModal(product,"/admin/product/edit");
         PopulateContent(product.title,product.catagory,product.price,product.discount,product.thumbnail,product.description);
-
-    });
-
-  }
-
-  for(var i =0; i < delete_button_p.length; i++){
-
-    delete_button_p[i].addEventListener("click",async (e)=>{
-      var prompt_requirement = 'DELETE';
-      var product_prompt = prompt(`Type ${prompt_requirement} to delete product (There is no way to add product back once deleted)`);
-
-      if(product_prompt == prompt_requirement && !canDelete){
-        canDelete = true;
-        var id = e.target.getAttribute('_id');
-        console.log(id)
-        var product = await axios.post("/admin/product/delete",{_id:id}).catch((err)=>{console.log(err)});
-
-        if(product){
-        
-          Init();
-        }
-
-      }
-      else{
-        alert("Canceled");
-      }
-
-      canDelete = false;
-
 
     });
 
@@ -517,15 +491,6 @@ edit_delete_button.addEventListener("click",()=>{
   ToggleCanEdit();
 });
 
-Init();
-
-
-var name_content = document.querySelector(".content_text--title");
-var price_content = document.querySelector(".content_text--price");
-var discount_content = document.querySelector(".content_text--discount");
-var catagory_content = document.querySelector(".content_text--catagory");
-var description_content = document.querySelector(".content_text--description");
-var image_content = document.querySelector(".content_img");
 
 function PopulateContent(name,catagory,price,discount,thumbnail,description){
 
@@ -548,19 +513,23 @@ function PopulateContent(name,catagory,price,discount,thumbnail,description){
 }
 
 function UpdateAddProductContent(element,value){
-  console.log(element,value);
   element.innerHTML = value;
 }
 
 document.querySelector(".name_input").addEventListener("keyup",(e)=>{
+
   var value = e.target.value;
+
   if(value.length <= 0){
     value = "Name of Your Product";
   }
+
   UpdateAddProductContent(name_content,value);
+
 });
 
 document.querySelector(".price_input").addEventListener("keyup",(e)=>{
+
   var value = e.target.value;
 
   if(value.length > 0){
@@ -568,16 +537,22 @@ document.querySelector(".price_input").addEventListener("keyup",(e)=>{
   }else{
     value = 0;
   }
+
   e.target.value = value;
+
   if(e.target.value == NaN){
     e.target.value  = 0;
     value = 0;
   }
+
   UpdateAddProductContent(price_content,"$"+value);
+
 });
 
 document.querySelector(".discount_input").addEventListener("keyup",(e)=>{
+
   var value = e.target.value;
+  var price = 0;
 
   if(value.length > 0){
     value = Math.abs(parseInt(value));
@@ -591,21 +566,21 @@ document.querySelector(".discount_input").addEventListener("keyup",(e)=>{
     e.target.value  = 0;
     value = 0;
   }
-
-  var price = 0;
 
   if(document.querySelector(".price_input").value > 0){
     price = document.querySelector(".price_input").value;
   }
 
-    if(value > 0){
-      price_content.classList.add("cross-out");
-    }else{
-      price_content.classList.remove("cross-out");
-    }
+  if(value > 0){
+    price_content.classList.add("cross-out");
+  }else{
+    price_content.classList.remove("cross-out");
+  }
 
   var discount_price = parseFloat(price - (price * (value / 100)));
+
   discount_price = Math.round(discount_price * 100) / 100;
+
   UpdateAddProductContent(discount_content,"$"+discount_price );
 
 });
@@ -613,16 +588,26 @@ document.querySelector(".discount_input").addEventListener("keyup",(e)=>{
 document.querySelector(".catagory_input").addEventListener("keyup",(e)=>{
 
   var value = e.target.value;
+
   if(value.length <= 0){
     value = "Catagory";
   }
+
   UpdateAddProductContent(catagory_content,value);
+
 });
 
 document.querySelector(".description_input").addEventListener("keyup",(e)=>{
+
   var value = e.target.value;
+
   if(value.length <= 0){
     value = "Enter Description";
   }
+
   UpdateAddProductContent(description_content,value);
+
 });
+
+
+Init();

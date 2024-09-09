@@ -127,28 +127,5 @@ user.methods.AddCart = function(id,quantity){
 
 }
 
-user.methods.deleteProduct = function(id,cb){
-
-    var new_items = [];
-
-    for(var i =0; i <this.cart.items.length; i++){
-
-      if(id != this.cart.items[i].prodId ){
-        new_items.push(this.cart.items[i]);
-      }
-
-    }
-
-    var new_cart = {
-      items:new_items,
-    };
-
-    this.cart = new_cart;
-
-    this.save();
-
-    cb("Delete One Product");
-
-}
 
 module.exports = mongoose.model("User",user);

@@ -1,4 +1,4 @@
-var geocode = require("node-geocoder");
+const geocode = require("node-geocoder");
 const reverse_geocode  = require('reverse-geocode');
 
 // const options = {

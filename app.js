@@ -1,56 +1,63 @@
-var express = require("express");
-var ejs = require("ejs");
-var cors = require("cors");
-var bodyParser = require("body-parser");
-const csrf = require('csrf');
-const bcrypt = require("bcrypt")
-var path = require("path");
-var session = require("express-session");
-var multer = require("multer");
-var mongoose = require("mongoose");
 
-var app = express();
-
-var MongoDBStore = require('connect-mongodb-session')(session);
-
-var port = process.env.PORT || 3003 ;
-
-var user_routes = require("./routes/user_routes.js");
-var admin_routes = require("./routes/admin_routes.js");
-var auth_routes = require("./routes/auth_routes.js");
-
-var rootDir = require("./util/path.js");
 
 var Admin = require("./models/admin.js");
 var User = require("./models/user.js");
 var Products = require("./models/products.js");
+
+var express = require("express");
+var ejs = require("ejs");
+var cors = require("cors");
+var bodyParser = require("body-parser");
+var csrf = require('csrf');
+var bcrypt = require("bcrypt")
+var path = require("path");
+var session = require("express-session");
+var multer = require("multer");
+var mongoose = require("mongoose");
+var db_util = require("./util/db.js");
+var MongoDBStore = require('connect-mongodb-session')(session);
+
+var user_routes = require("./routes/user_routes.js");
+var admin_routes = require("./routes/admin_routes.js");
+var uni_routes = require("./routes/uni_routes.js");
+var user_auth_routes = require("./routes/user_auth_routes.js");
+var admin_auth_routes = require("./routes/auth_admin_routes.js");
+
+
+var rootDir = require("./util/path.js");
+var port = process.env.PORT || 3003 ;
+var hasInit = false;
+
+var app = express();
 
 var StoreSession =  new MongoDBStore({
   uri:"mongodb+srv://mawile12:sableye12@cluster0.mv38jgm.mongodb.net/shop?",
   collection:"session"
 });
 
+
 const ERRORPAGEURL = path.join(rootDir,"views","error","error.ejs");
 const ERRORPAGE404URL = path.join(rootDir,"views","error","404.ejs");
 
-var hasInit = false;
 app.set("views","views")
 app.set("view engine","ejs");
 
 const fileStorage = multer.diskStorage({
+
   destination: (req,file,cb) =>{
     cb(null,"images")
   },
   filename: (req,file,cb) =>{
     cb(null,new Date().toISOString().replace(/:/g, '-') + file.originalname);
   }
+
 })
 
 // app.use(cookieParser());
 // app.use(csrf);
+
 app.use(session({secret:"43489438994388948949842894389",saveUninitialized:false,store:StoreSession}));
 app.use(multer({storage:fileStorage}).single("thumbnail"));
-
 
 function SetDefaultAdmin(){
 
@@ -136,11 +143,13 @@ app.use("/images",express.static(path.join(__dirname,"images")))
 
 app.use(cors());
 
+app.use(user_auth_routes);
+app.use(admin_auth_routes);
 
-app.use(auth_routes);
 app.use(admin_routes);
 app.use(user_routes);
 
+app.use(uni_routes);
 
 app.get("/error",((req,res)=>{
   res.render();
@@ -151,8 +160,6 @@ app.use((error,req,res,next)=>{
   res.locals.error = error;
 
   const status = error.status || 500;
-
-
 
   res.status(500).render(ERRORPAGEURL,{
     err:error.msg,
@@ -170,6 +177,7 @@ app.use((err, req, res, next) => {
   res.locals.error = err;
   //------------------------vvvvvvv added
   const status = err.status || 500;
+
   res.status(status);
   res.render(ERRORPAGEURL,{err:err.msg,statusCode:error.statusCode});
 
@@ -189,7 +197,9 @@ mongoose.connect("mongodb+srv://mawile12:sableye12@cluster0.mv38jgm.mongodb.net/
               prodId:"",
               quantity:1
           }
+
         }
+
       }
 
       var new_user = new User(schema_);

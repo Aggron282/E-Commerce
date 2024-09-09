@@ -4,7 +4,6 @@ var slideshow_bubble_element = document.getElementsByClassName("bubble_showcase"
 var slideshow_counter = 1;
 var slideshow_max_counter = 4;
 
-
 function Init(){
 
   for(var i =0; i <slideshow_bubble_element.length; i++){

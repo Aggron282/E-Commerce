@@ -3,8 +3,4 @@ function capitalizeFirstLetter(string) {
 }
 
 
-
-
-
-
 module.exports.capitalizeFirstLetter = capitalizeFirstLetter;

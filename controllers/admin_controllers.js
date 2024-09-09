@@ -1,25 +1,29 @@
-var path = require("path");
-var fs = require("fs");
-var PDFDocument = require("pdfkit");
+let totalProducts;
+var redirects_counter = 0;
+var page_counter = 0;
+var new_catagories = null;
 
-var ObjectId = require("mongodb").ObjectId;
+const path = require("path");
+const fs = require("fs");
+const bcrypt = require("bcrypt");
+const PDFDocument = require("pdfkit");
 
-var StatusError = require("./../util/status_error.js");
+const ObjectId = require("mongodb").ObjectId;
 
-var fileHelper = require("./../util/file.js");
-var rootDir = require("./../util/path.js");
-var location = require("./../util/location.js");
+const StatusError = require("./../util/status_error.js");
+
+const fileHelper = require("./../util/file.js");
+const rootDir = require("./../util/path.js");
+const location = require("./../util/location.js");
+const product_util = require("./../util/products.js");
+const popup_util = require("./../util/popup.js");
 
 const Product = require("./../models/products.js");
 const Order = require("./../models/orders.js");
-var Admin = require("./../models/admin.js")
-
-let totalProducts;
+const Admin = require("./../models/admin.js")
 
 const HOMEPAGEURL = path.join(rootDir,"views","admin","admin.ejs");
 const DETAILPAGEURL = path.join(rootDir,"views","detail.ejs");
-
-var product_util = require("./../util/products.js");
 
 var feedback = {
   item:null,
@@ -31,31 +35,11 @@ var feedback = {
   popup_message:null
 }
 
-var redirects_counter = 0;
-var page_counter = 0;
-var new_catagories = null;
 
 const ResetPopups = (req,res) => {
 
   feedback.popup_message = null;
   res.json(true);
-}
-
-
-function CheckPopup(feedback_){
-
-  var data = null
-  if(redirects_counter >= 1 ){
-     data = null;
-  }
-  else{
-    data = feedback_.popup_message;
-  }
-
-  redirects_counter +=1;
-
-  return data;
-
 }
 
 const HardResetProducts = (req,res) => {
@@ -98,79 +82,6 @@ const GetAdminData = (req,res)=>{
 
 }
 
-const ConvertLocation = async (req,res) => {
-
-  var address = req.body.address;
-  var location_data = await location.ConvertLocation(address);
-
-  res.json({location:location_data});
-
-}
-
-const ReverseConvertLocation = async (req,res) => {
-
-  var coords = req.body;
-
-  var location_data = await location.ReverseConvertLocation(coords);
-
-  if(!location_data){
-    res.render(false);
-    return;
-  }
-
-  var data = location_data;
-
-  var formatted_address = {
-    zip:data.zipcode,
-    stateAbr:data.state_abbr,
-    city:data.city,
-    state:data.state
-  }
-
-  var coords = {
-    latitude:data.latitude,
-    longitude:data.longitude
-  }
-
-   res.json({address:formatted_address,coords:coords});
-   res.end();
-
-}
-
-//--------------------------------------------------------------------------------
-// Change Admin Profile
-const EditAdmin = (req,res) => {
-
-  var data  = req.body;
-
-  if(!req.admin){
-    res.redirect("/admin/login");
-    return;
-  }
-
-  const filter = { _id : new ObjectId(req.admin._id) };
-
-  var profileImg = null;
-
-  if(req.file){
-    profileImg = req.file.filename ? req.file.filename : null;
-  }
-
-  redirects_counter = 0;
-
-  const update = {$set:{ username : data.username, name:data.name, password:data.password, profileImg:profileImg} };
-
-  Admin.findOneAndUpdate(filter,update).then((response)=>{
-      req.admin = response;
-      feedback.popup_message = "Edited Your Profile!"
-      res.redirect("/admin");
-  });
-
-}
-
-//--------------------------------------------------------------------------------
-// Get Product Data
-
 const GetProductsData = async (req,res,next) =>{
   res.json(req.admin.products);
 }
@@ -190,28 +101,6 @@ const GetOneProductByParams = async (req,res,next) =>{
     });
 
 }
-
-const UpdateLocation = (req,res) =>{
-
-  var data = req.body;
-  var address = data.address;
-  var coords = data.coords;
-
-  Admin.findById(req.admin._id).then((admin_)=>{
-
-    admin_.location = data;
-    console.log(admin_);
-    var new_admin = new Admin(admin_);
-
-    new_admin.save();
-    feedback.popup_message = "Updated Location!"
-    redirects_counter = 0;
-    res.json({user:new_admin,popup:"Updated Location"});
-
-  }).catch(err => console.log(err));
-
-}
-
 
 const GetOneProduct = (req,res,next) => {
 
@@ -242,61 +131,135 @@ const GetOneProduct = (req,res,next) => {
 }
 
 //--------------------------------------------------------------------------------
-// Get URL Pages
-const GetMainPage = async (req,res,next) =>{
+// Change Admin Profile
+const EditAdmin = (req,res) => {
 
-  feedback.user = req.user;
+  var data  = req.body;
+
   if(!req.admin){
     res.redirect("/admin/login");
     return;
   }
+
+  const filter = { _id : new ObjectId(req.admin._id) };
+
+  var profileImg = null;
+
+  if(req.file){
+    profileImg = req.file.filename ? req.file.filename : null;
+  }
+
+  redirects_counter = 0;
+  var new_password = data.password.length > 0 ? data.password : req.admin.password;
+
+  bcrypt.hash(new_password,12).then((encrypt)=>{
+
+      const update = {$set:{ username : data.username, name:data.name, password:encrypt, profileImg:profileImg} };
+
+      Admin.findOneAndUpdate(filter,update).then((response)=>{
+        req.admin = response;
+        feedback.popup_message = "Edited Your Profile!"
+        res.redirect("/admin");
+      });
+
+  });
+
+}
+
+//--------------------------------------------------------------------------------
+//Update Location
+
+const UpdateLocation = (req,res) =>{
+
+  var data = req.body;
+  var address = data.address;
+  var coords = data.coords;
+
+  Admin.findById(req.admin._id).then((admin_)=>{
+
+    admin_.location = data;
+
+    var new_admin = new Admin(admin_);
+
+    new_admin.save();
+    feedback.popup_message = "Updated Location!"
+    redirects_counter = 0;
+    res.json({user:new_admin,popup:"Updated Location"});
+
+  }).catch(err => console.log(err));
+
+}
+
+//--------------------------------------------------------------------------------
+// Get URL Pages
+const GetMainPage = async (req,res,next) =>{
+
+   feedback.user = req.user;
+
+   if(!req.admin){
+     res.redirect("/admin/login");
+     return;
+   }
+
    var new_feedback = {...feedback};
+
    new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(req.admin.products);
 
-  new_feedback.products= req.admin.products,
-  new_feedback.action = "/admin/profile/edit";
-  new_feedback.totalProducts = totalProducts
-  new_feedback.isAuthenticatedAdmin = req.session.isAuthenticatedAdmin;
-  console.log(req.session.isAuthenticatedAdmin)
-  new_feedback.catagories = new_catagories;
+   new_feedback.products= req.admin.products,
+   new_feedback.action = "/admin/profile/edit";
+   new_feedback.totalProducts = totalProducts
+   new_feedback.isAuthenticatedAdmin = req.session.isAuthenticatedAdmin;
 
-  feedback = new_feedback;
-  feedback.popup_message = CheckPopup(feedback);
-  res.render(HOMEPAGEURL,feedback);
+   new_feedback.catagories = new_catagories;
+
+   feedback = new_feedback;
+   var popup = popup_util.CheckPopup(feedback);
+   feedback.popup_message = popup.message;
+   redirects_counter = popup.redirects_counter;
+   res.render(HOMEPAGEURL,feedback);
 
 }
 
 const GetProductDetailPage = async (req,res,next) =>{
 
     var id = req.params._id;
+
     if(!id || id.length < 10){
         res.redirect("/admin")
         return;
     }
+
     Product.findById(id).then(async (product)=>{
 
       if(!product){
         res.redirect("/admin")
       }
       else{
+
         new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(req.admin.products);
 
         var new_feedback ={...feedback}
+
         new_feedback.action = "/product/edit/"+id;
         new_feedback.item = product;
         new_feedback.redirect = "/product/edit/"+id;
         new_feedback.isAdmin = true;
         new_feedback.catagories = new_catagories;
         new_feedback.isAuthenticatedAdmin = req.session.isAuthenticatedAdmin;
-        new_feedback.popup_message = CheckPopup(new_feedback);
+
+        var popup = popup_util.CheckPopup(new_feedback);
+
+        new_feedback.popup_message = popup.message;
+
+        redirects_counter = popup.redirects_counter;
 
         res.render(DETAILPAGEURL,new_feedback);
+
       }
 
     }).catch((err)=>{
      StatusError(next,err,500);
     });
-
 
 }
 
@@ -313,36 +276,33 @@ const GetOrderPage =(req,res,next)=>{
 const DeleteOneProduct =  (req,res,next) =>{
 
   var id = req.body._id;
-console.log(id,"SSS",req.body)
   DeleteProduct(req,res,id);
 
 }
 
-const DeleteProduct = async (req,res,id) => {
-
+async function DeleteProduct(req,res,id){
 
     const new_products = req.admin.products.filter((product) => {
       return JSON.stringify(id) != JSON.stringify(product._id)
     });
+
     var new_admin = {...req.admin};
+
     new_admin.products = new_products;
 
-    console.log(new_products.length)
     var new_product = await  Product.findByIdAndDelete(id);
     var update_query = {$set: {'products': new_products}};
-    console.log(req.admin.password)
+
     var replace_admin_products = await Admin.findByIdAndUpdate({_id:req.admin._id},update_query,(r)=>{
       req.admin = new_admin;
       res.json(r);
     })
-
 
 }
 
 const DeleteOneProductByParams = (req,res,next) =>{
 
   var id = req.params.id;
-  console.log(id);
   DeleteProduct(req,res,id);
 
 }
@@ -385,6 +345,7 @@ const EditOneProduct = async (req,res,next) =>{
   var product = new Product(new_product);
 
   Product.findOneAndReplace({_id:product._id},new_product).then((r)=>{
+
     const filter = { _id : new ObjectId(new_admin_._id) };
     const update = {$set:{ products : new_products}};
 
@@ -394,7 +355,9 @@ const EditOneProduct = async (req,res,next) =>{
 
       req.admin = new_admin_;
       feedback.popup_message = "Edited Product!"
+
       redirects_counter = 0;
+
       res.redirect(req.url);
 
     });
@@ -429,6 +392,7 @@ const AddProduct = async (req,res,nect) => {
   products.save();
 
   var new_admin = {...req.admin._doc};
+
   new_admin.products.push(products);
 
   var new_products = new_admin.products;
@@ -504,8 +468,7 @@ const DownloadOrder = (req,res,next) =>{
 
 
 module.exports.EditAdmin = EditAdmin;
-module.exports.ConvertLocation = ConvertLocation;
-module.exports.ReverseConvertLocation = ReverseConvertLocation;
+
 module.exports.EditOneProduct = EditOneProduct;
 module.exports.AddProduct = AddProduct;
 module.exports.DeleteOneProductByParams = DeleteOneProductByParams;

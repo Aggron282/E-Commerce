@@ -61,7 +61,8 @@
             <% var input_item = searched_term ? searched_term : "" %>
 
             <form class=" navbar_user_input--form">
-              <input class="form-control no-border navbar_user_input--search" name = "input"  placeholder = "Search for Item" value = <%= input_item %>>
+              <input class="form-control no-border navbar_user_input--search" name = "input"
+                placeholder = "Search for Item" value = <%= input_item %>>
             </form>
 
       </div>
@@ -142,7 +143,7 @@
        <% var limit = catagories.length >= 6 ? 6 : catagories.length %>
            <% for(var i = 0; i < limit; i++){ %>
 
-                <a href = "/search/product/catagory=<%=catagories[i].catagory%>/page_counter=0" >
+                <a href = "/search/product/catagory=<%=catagories[i].catagory%>/page_counter=0/isAdmin=false" >
 
                   <p class="navbar_user_sub_catagory--title" data = <%= catagories[i].catagory %> ><%= catagories[i].catagory %>
                     <span class="navbar_user_sub_catagory--underline" data = <%= catagories[i].catagory %>  ></span>

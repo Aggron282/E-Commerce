@@ -1,41 +1,42 @@
+const CURATED_ITEMS_LIMIT = 8;
+
+var redirects_counter = 0;
+var page_counter = 0;
+var new_catagories = null;
+
 const path = require("path");
 const pdf = require('pdfkit');
+const bcrypt = require("bcrypt");
 const stripe = require("stripe")("sk_test_51OjAfEL9aEOLpUqjCLjitVLvOalLj9CCZEpk9SPkxZnmh2xJZSsB8Fp8mrkAO8lNUaogi51OVptQ9Tc56el67Skg008Rlc9dP2");
+const ObjectId = require("mongodb").ObjectId;
+
 const rootDir = require("./../util/path.js");
 const fileHelper = require("./../util/file.js");
 const text_util = require("./../util/text.js");
 const product_util = require("./../util/products.js");
-
-const ObjectId = require("mongodb").ObjectId;
+const popup_util = require("./../util/popup.js");
 
 const StatusError = require("./../util/status_error.js");
+
+const admin_controller = require("./admin_controllers.js");
+const uni_controller = require("./uni_controller");
 
 const Product = require("./../models/products.js");
 const Order = require("../models/orders.js");
 const User = require("../models/user.js");
-
-const PlaceholderImages = require("./../data/items_placeholder_other_rated.js");
-const Reviews = require("./../data/reviews.js");
-
-const ReviewSchema = require("./../models/company_reviews.js");
-
+const Review = require("./../models/company_reviews.js");
 
 const CHECKOUTPAGEURL = path.join(rootDir,"views","user","checkout.ejs");
 const DETAILPAGEURL = path.join(rootDir,"views","detail.ejs");
 const CARTPAGEURL = path.join(rootDir,"views","user","cart.ejs");
 const HOMEPAGEURL = path.join(rootDir,"views","user","index.ejs");
 const CURATEDPRODUCTSURL = path.join(rootDir,"views","user","curated_products.ejs");
-var redirects_counter = 0;
-var admin_controller = require("./admin_controllers.js");
-const CURATED_ITEMS_LIMIT = 8;
-var new_catagories = null;
-var page_counter = 0;
 
 
 var feedback ={
   items:{
     top_deals:null,
-    placeholder:PlaceholderImages,
+    placeholder:[],
     all:null
   },
   redirect:"/",
@@ -49,16 +50,11 @@ var feedback ={
   render:HOMEPAGEURL,
   root:".",
   action:"/user/",
-  reviews:Reviews,
+  reviews:[],
   isAdmin:false,
   isAuthenticated:null
 };
 
-const ResetPopups = (req,res) => {
-
-  feedback.popup_message = null;
-  res.json(true);
-}
 //----------------------------------------------------------------------------------------
 // Get Data Functions
 const GetOrders = async(req,res)=>{
@@ -69,13 +65,12 @@ const GetOrders = async(req,res)=>{
 
 }
 
-
 const UpdateLocation = (req,res) =>{
 
   var data = req.body;
   var address = data.address;
   var coords = data.coords;
-  console.log(coords);
+
   User.findById(req.user._id).then((user_)=>{
 
     user_.location = data;
@@ -86,7 +81,9 @@ const UpdateLocation = (req,res) =>{
 
     res.json({user:new_user,popup:"Updated Location"});
     res.end();
+
     return;
+
   }).catch(err => console.log(err));
 
 }
@@ -106,23 +103,13 @@ const PostCompanyReview = async (req,res,next) => {
     name:body.name
   }
 
-  var new_review = new ReviewSchema(review_config);
+  var new_review = new Review(review_config);
+
   new_review.save();
 
-  ReviewSchema.find({}).then((reviews)=>{
-
+  Review.find({}).then((reviews)=>{
     res.json({reviews:reviews});
-
   });
-
-}
-
-const GetReviews = (req,res)=>{
-
-  ReviewSchema.find({}).then((reviews)=>{
-    console.log(reviews);
-    res.json({reviews:reviews});
-  })
 
 }
 
@@ -143,27 +130,6 @@ const GetCurrentCart = (req,res,next)=>{
 
 }
 
-const GetCatagories = (req,res,next) => {
-
-   Product.find().then( (all_products) =>{
-
-    new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
-
-    res.json(new_catagories);
-  });
-
-}
-
-const GetProducts = async (req,res,next) =>{
-
-  var products = Product.find().then((data)=>{
-    res.json(data);
-  }).catch((err)=>{
-    StatusError(next,err,500);
-  });
-
-}
-
 const GetProfile = (req,res)=>{
 
   if(!req.user){
@@ -175,178 +141,12 @@ const GetProfile = (req,res)=>{
 
 }
 
-function GetPageData(counter,products){
-
-  var starting_counter = CURATED_ITEMS_LIMIT * counter;
-
-  var limited_products = [];
-
-  if(starting_counter <= 0){
-    starting_counter = 0;
-  }
-
-  for(var k = 0; k < CURATED_ITEMS_LIMIT; k++ ){
-
-    if(starting_counter + k < products.length){
-      limited_products.push(products[starting_counter + k]);
-    }else{
-      break;
-    }
-
-  }
-
-    return limited_products
-
-}
-
-function ReturnIsAdmin(req){
-
-  var isAdmin = req.params.isAdmin  == "true"? true : false;
-
-  if(isAdmin){
-
-    if(!req.admin){
-      return  false;
-    }else{
-      return true;
-    }
-
-  }else{
-    return false;
-  }
-
-}
-
-function CheckPopup(feedback_){
-
-  var data = null
-  if(redirects_counter >= 1 ){
-     data = null;
-  }
-  else{
-    data = feedback_.popup_message;
-  }
-
-  redirects_counter +=1;
-
-  return data;
-
-}
-
-async function OutputSearchResults(req,product,page_counter,all_products){
-
-   new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
-   var similar_products = await product_util.FindSimilarProducts(product,all_products);
-   var page_length = Math.floor(similar_products.length / CURATED_ITEMS_LIMIT);
-
-   var limited_products = GetPageData(page_counter,similar_products);
-   var new_feedback = {...feedback};
-
-   new_feedback.items.top_deals = null;
-   new_feedback.items.all_products = all_products;
-   new_feedback.user = req.user;
-   new_feedback.limited_products = limited_products;
-   new_feedback.cart = req.user ? req.user.cart : null;
-   new_feedback.catagories = new_catagories;
-   new_feedback.page_length = page_length;
-   new_feedback.page_counter = page_counter ;
-   new_feedback.action = "/user/profile/edit";
-   new_feedback.current_catagory = "";
-   new_feedback.searched_term = product;
-   new_feedback.isAdmin = ReturnIsAdmin(req);
-   new_feedback.render = CURATEDPRODUCTSURL;
-   new_feedback.isAuthenticatedAdmin = req.session.isAuthenticatedAdmin;
-   new_feedback.popup_message = CheckPopup(new_feedback);
-
-   return new_feedback;
-}
-
-const GetSearchResults = async (req,res,next) => {
-
-  var product = req.params.product;
-  var page_counter = parseInt(req.params.page_counter) - 1;
-  var adminI = req.params.isAdmin;
-
-  if(!adminI ){
-
-    Product.find({}).then(async (all_products)=>{
-
-      var new_feedback = await OutputSearchResults(req,product,page_counter,all_products);
-      res.render(new_feedback.render, new_feedback);
-
-      });
-
-  }else if(req.admin){
-    var new_feedback = await OutputSearchResults(req,product,page_counter,req.admin.products);
-    res.render(new_feedback.render, new_feedback);
-  }else{
-    res.redirect("/admin/login");
-  }
-
-}
-
-async function OutputCatagorySearch(req,catagory,page_counter,all_products){
-
-  new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
-
-  var products_in_catagory = await product_util.FindProductsFromCatagory(catagory,new_catagories);
-  var page_length = Math.floor(products_in_catagory.length / CURATED_ITEMS_LIMIT);
-
-  var limited_products = GetPageData(page_counter,products_in_catagory);
-  var cart = req.user ? req.user.cart : null;
-
-  var new_feedback = {...feedback};
-
-  new_feedback.items.top_deals = null;
-  new_feedback.items.all_products = all_products;
-  new_feedback.user = req.user;
-  new_feedback.limited_products = limited_products;
-  new_feedback.cart = req.user ? req.user.cart : null;
-  new_feedback.catagories = new_catagories;
-  new_feedback.popup_message = null;
-  new_feedback.isAuthenticatedAdmin = req.session.isAuthenticatedAdmin;
-  new_feedback.page_length = page_length;
-  new_feedback.page_counter = page_counter;
-  new_feedback.action = "/user/profile/edit";
-  new_feedback.current_catagory = catagory;
-  new_feedback.catagory_input = catagory;
-  new_feedback.searched_term = new_feedback.searched_term;
-  new_feedback.render = CURATEDPRODUCTSURL;
-  new_feedback.isAdmin = ReturnIsAdmin(req);
-
-  return new_feedback;
-
-}
-
-const GetCatagoryResults = async (req,res) => {
-
-  var catagory = req.params.catagory ? req.params.catagory : req.body.catagory;
-  var page_counter = parseInt(req.params.page_counter);
-  var adminI = req.params.isAdmin;
-
-  if(!adminI){
-
-    Product.find({}).then(async (all_products)=>{
-
-      var new_feedback = await OutputCatagorySearch(req,catagory,page_counter,all_products);
-      res.render(new_feedback.render, new_feedback);
-
-    });
-
-  }else{
-    var new_feedback = await OutputCatagorySearch(req,catagory,page_counter,req.admin.products);
-    res.render(new_feedback.render, new_feedback);
-  }
-
-}
-
 //----------------------------------------------------------------------------------------
 // Change User Data Functions
 
 const EditProfile = (req,res) => {
 
   var data  = req.body;
-
   var current_url = req.body.current_url;
 
   if(!req.user){
@@ -354,35 +154,35 @@ const EditProfile = (req,res) => {
     return;
   }
 
+  var new_password =  data.password.length > 0 ? data.password : req.user.password;
 
-  if(data.password.length <= 0){
-    data.password = req.user.password;
-  }
+    bcrypt.hash(new_password,12).then((encrypt)=>{
 
-   var file = req.file ? req.file.filename : req.user.profileImg
+      var file = req.file ? req.file.filename : req.user.profileImg
 
-  const filter = { _id : new ObjectId(req.user._id) };
-  const update = {$set:{ email : data.username, name:data.name, password:data.password, profileImg: file} };
+      const filter = { _id : new ObjectId(req.user._id) };
+      const update = {$set:{ email : data.username, name:data.name, password:data.password, profileImg: file} };
 
-  User.findOneAndUpdate(filter,update).then((response)=>{
+      User.findOneAndUpdate(filter,update).then((response)=>{
 
-      req.user = response;
+        req.user = response;
 
-      var new_feedback = {...feedback};
+        var new_feedback = {...feedback};
 
-      new_feedback.user = req.user;
+        new_feedback.user = req.user;
+        new_feedback.popup_message = "Edited Profile!";
+        new_feedback.redirect = feedback.redirect;
 
-      new_feedback.popup_message = "Edited Profile!";
-      new_feedback.redirect = feedback.redirect;
+        feedback = new_feedback;
 
-      feedback = new_feedback;
+        redirects_counter = 0;
 
-      redirects_counter = 0;
+        res.redirect(current_url);
 
-      res.redirect(current_url);
+      }).catch((err)=>{
+        StatusError(next,err,500);
+      });
 
-    }).catch((err)=>{
-      StatusError(next,err,500);
     });
 
 }
@@ -399,11 +199,9 @@ const DeleteCartItem = async (req,res,next) => {
     var id = req.body._id;
 
     req.user.deleteProduct(id,(response)=>{
-
       feedback.popup_message = "Deleted Item From Cart";
       redirects_counter = 0;
       res.redirect("/cart");
-
     });
 
 }
@@ -447,6 +245,7 @@ const AddToCart = async (req,res,next)=>{
   var id_ = id.replace("/","");
   var product = req.body;
   var quantity = product.quantity;
+
   if(!req.user || !req.session.isAuthenticated ){
     res.json({error:401});
   }
@@ -455,7 +254,6 @@ const AddToCart = async (req,res,next)=>{
         req.user.AddCart(id_,quantity);
         res.json(data);
     }).catch((err)=>{
-      console.log(err)
       StatusError(next,err,500);
     });
 
@@ -512,7 +310,9 @@ const GetCheckoutPage = async (req,res) =>{
     new_feedback.limited_products = null;
     new_feedback.cart = req.user ? req.user.cart : null;
     new_feedback.catagories = null;
+
     var redirect = "/checkout";
+
     new_feedback.isAuthenticated = req.session.isAuthenticated;
 
     new_feedback.popup_message = new_feedback.redirect == redirect ? new_feedback.popup_message : null;
@@ -530,11 +330,11 @@ const GetHomePage = async (req,res,next) => {
   Product.find().then(async (all_products) =>{
 
     var highest_product = null;
+
     new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
 
     var top_deals = product_util.OrganizeDiscounts(all_products);
-    var reviews = await ReviewSchema.find({});
-    console.log(reviews);
+    var reviews = await Review.find({});
     var new_feedback = {...feedback};
 
     new_feedback.items.top_deals = top_deals;
@@ -550,7 +350,10 @@ const GetHomePage = async (req,res,next) => {
     new_feedback.isAdmin = false;
     new_feedback.reviews = reviews;
 
-    new_feedback.popup_message = CheckPopup(new_feedback);
+    var popup = popup_util.CheckPopup(feedback);
+
+    new_feedback.popup_message = popup.message;
+    redirects_counter = popup.redirects_counter;
 
     feedback = new_feedback;
 
@@ -582,7 +385,6 @@ const GetProductDetailPage = async (req,res,next) =>{
          new_feedback.redirect = "/product/"+id;
          new_feedback.items.top_deals = null;
          new_feedback.isAuthenticated = req.session.isAuthenticated;
-
          new_feedback.items.all_products = all_products;
          new_feedback.user = req.user;
          new_feedback.limited_products = null;
@@ -591,8 +393,11 @@ const GetProductDetailPage = async (req,res,next) =>{
          new_feedback.render = DETAILPAGEURL;
          new_feedback.item = product;
 
+         var popup = popup_util.CheckPopup(new_feedback);
 
-         new_feedback.popup_message = CheckPopup(new_feedback);
+         new_feedback.popup_message = popup.message;
+
+         redirects_counter = popup.redirects_counter;
 
          res.render(new_feedback.render,new_feedback);
 
@@ -703,7 +508,12 @@ Product.find().then(async (all_products) =>{
      new_feedback.session_id = session;
      new_feedback.total_price = total_price;
      new_feedback.cart.items = items ? items : [];
-     new_feedback.popup_message = CheckPopup(new_feedback);
+
+     var popup = popup_util.CheckPopup(new_feedback);
+
+     new_feedback.popup_message = popup.message;
+
+     redirects_counter = popup.redirects_counter;
 
      feedback = new_feedback;
 
@@ -725,9 +535,11 @@ const ToggleCatagories = (req,res,next) => {
     var counter = parseInt(data.counter);
     var catagory = data.catagory;
     var view_per_toggle = 4;
-    new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
     var updated_catagories = product_util.catagoryMatch(new_catagories,catagory,counter);
     var cart;
+
+    new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
+
     if(req.user){
       cart = req.user.cart;
     }else{
@@ -736,28 +548,22 @@ const ToggleCatagories = (req,res,next) => {
 
     res.json(updated_catagories);
 
-  })
+  });
 
 }
 
-module.exports.GetCatagoryResults = GetCatagoryResults;
 module.exports.UpdateLocation = UpdateLocation;
 module.exports.DeleteCartItem = DeleteCartItem;
 module.exports.GetCartPage = GetCartPage;
 module.exports.GetOrders = GetOrders;
 module.exports.GetProfile = GetProfile;
 module.exports.EditProfile = EditProfile;
-module.exports.GetCatagories = GetCatagories;
 module.exports.ToggleCatagories = ToggleCatagories;
-module.exports.GetSearchResults = GetSearchResults;
 module.exports.DeleteCart = DeleteCart;
 module.exports.PostCompanyReview = PostCompanyReview;
 module.exports.GetCurrentCart = GetCurrentCart;
 module.exports.GetHomePage = GetHomePage;
-module.exports.ResetPopups = ResetPopups;
-module.exports.GetProducts = GetProducts;
 module.exports.AddToCart = AddToCart;
 module.exports.AddOrder = AddOrder;
-module.exports.GetReviews = GetReviews;
 
 module.exports.GetProductDetailPage = GetProductDetailPage;

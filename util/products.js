@@ -42,7 +42,6 @@ function FindSimilarProducts(input,all_products) {
 
 }
 
-
 function FindProductsFromCatagory(catagory_name,organized_products){
 
 
@@ -58,7 +57,6 @@ function FindProductsFromCatagory(catagory_name,organized_products){
     var limit = catagory_name.length > product_catagory_name.length ? catagory_name.length : product_catagory_name.length;
 
     for(var k =0; k < catagory_name.length; k++ ){
-
 
       if(product_catagory_name[k] == catagory_name[k] ){
         letters_matched++;
@@ -85,7 +83,6 @@ function FindProductsFromCatagory(catagory_name,organized_products){
   }
 
   return products;
-
 
 }
 
@@ -168,6 +165,7 @@ function OrganizeDiscounts(all_products){
       isFound = false;
 
       if(products[i]){
+
           var product_doc = products[i]._doc;
 
           for(var z = 0; z < _ids.length; z++){
@@ -188,9 +186,9 @@ function OrganizeDiscounts(all_products){
 
             }
 
-      }
+          }
 
-    }
+      }
 
 
       if(!isFound && highest_discount_product){
@@ -198,16 +196,13 @@ function OrganizeDiscounts(all_products){
         highest_discount_product = null;
         highest_discount = 0;
         products[counter] = null;
-
       }
 
+    }
+
+    return  top_discount_products;
+
 }
-
-  return  top_discount_products;
-
-}
-
-
 
 function catagoryMatch(catagories, catagory_needed,counter) {
 
@@ -215,6 +210,7 @@ function catagoryMatch(catagories, catagory_needed,counter) {
   var current;
 
   for(i = 0; i < catagories_.length; i ++){
+
     if(catagories_[i].catagory == catagory_needed){
 
       catagories_[i].counter +=  4;
@@ -226,9 +222,13 @@ function catagoryMatch(catagories, catagory_needed,counter) {
       if(catagories_[i].counter > Math.floor(catagories_[i].products.length  / 4) ){
         catagories_[i].counter = 0;
       }
+
       current = catagories_[i];
+
       return {all:catagories_,current:current};
+
       break;
+
     }
 
   }
