@@ -1,17 +1,14 @@
 
 <div class="catagory_products container-fluid">
 
-
   <% for(var k = 0; k < catagories.length  ; k++) { %>
 
     <% var starting_counter = 0%>
-
     <% var c = "Catagory"  %>
 
     <% if(catagories[k].catagory){ %>
 
       <% c = catagories[k].catagory %>
-
       <% starting_counter = catagories[k].counter %>
 
      <%}%>
@@ -36,39 +33,42 @@
         <% for(var i = 0; i <= 3; i++) { %>
 
           <% var i_ = i + starting_counter %>
+
           <% if(catagories[k].products[i_]){ %>
+
             <div class="col-3 catagorized_products_col">
 
             <a href = <%="/product/"+catagories[k].products[i_]._id %>>  <div class= "catagory_product_box product_box--catagory width-100" catagory = <%= c %> it = <%= i_ %> >
 
-              <% var name = "Name Will Be Placed Here" %>
-
-              <% var img = "./images/catagory_3.png" %>
-
-              <% var price = "[N/A]" %>
-
-              <% var description = "" %>
-
+                <% var name = "Name Will Be Placed Here" %>
+                <% var img = "./images/catagory_3.png" %>
+                <% var price = "[N/A]" %>
+                <% var description = "" %>
 
                 <% name = catagories[k].products[i_].title.substring(0, 30) + "..."; %>
-
                 <% img = "/images/"+catagories[k].products[i_].thumbnail %>
                 <% price = catagories[k].products[i_].price %>
                 <% description = catagories[k].products[i_].description.substring(0, 100) + "...";  %>
 
+                <p class="catagory_product_text--name"><%= name %></p>
 
-              <p class="catagory_product_text--name"><%= name %></p>
+                <img class="catagory_product_image margin-top-5" src = "<%= img %>" />
 
-              <img class="catagory_product_image margin-top-5" src = "<%= img %>" />
+                <div class="catagory_product_text_box margin-top-5">
 
-              <div class="catagory_product_text_box margin-top-5">
-                <% var cross = catagories[k].products[i_].discount > 0 ? "cross-out" : "" %>
-                <p class="catagory_product_text catagory_product_text--price <%= cross %>">$ <%= price %></p>
-                <% var discount_price = parseFloat(price - (price * (catagories[k].products[i_].discount / 100))) %>
-                <% discount_price = Math.round(discount_price * 100) / 100 %>
-                <p class="catagory_product_text catagory_product_text--price ">$ <%= discount_price %></p>
+                  <% var cross = catagories[k].products[i_].discount > 0 ? "cross-out" : "" %>
 
-              </div></a>
+                  <p class="catagory_product_text catagory_product_text--price <%= cross %>">$ <%= price %></p>
+
+                  <% var discount_price = parseFloat(price - (price * (catagories[k].products[i_].discount / 100))) %>
+
+                  <% discount_price = Math.round(discount_price * 100) / 100 %>
+
+                  <p class="catagory_product_text catagory_product_text--price ">$ <%= discount_price %></p>
+
+                </div>
+
+              </a>
 
                 <%}else{%>
                   <% break %>
@@ -80,12 +80,12 @@
 
         <% } %>
 
-        </div>
-
-       </div>
+      </div>
 
      </div>
 
     </div>
+
+  </div>
 
   <% } %>

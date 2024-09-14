@@ -1,4 +1,5 @@
 const router = require("express").Router();
+
 const user_auth_controller = require("./../controllers/user_auth_controller.js");
 const admin_auth_controller = require("./../controllers/admin_auth_controller.js");
 
@@ -50,14 +51,10 @@ router.post(
 // User Posts
 router.post("/reset",user_auth_controller.PostResetEmail);
 router.post("/reset_password",user_auth_controller.PostNewPassword);
-
 // Admin Posts
-
 router.get("/user/create_account",user_auth_controller.GetCreateAccountPage);
 router.get("/user/login",user_auth_controller.GetUserLoginPage);
-
 // Admin URL Pages
-
 router.get("/create_account",user_auth_controller.GetCreateAccountPage);
 router.get("/reset_password/:token",user_auth_controller.GetNewPasswordPage);
 

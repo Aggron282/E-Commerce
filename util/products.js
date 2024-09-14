@@ -49,34 +49,34 @@ function FindProductsFromCatagory(catagory_name,organized_products){
   var products = [];
   var letters_needed = 3;
   var letters_matched = 0;
-  var isFound = false;
+  var isProductFound = false;
 
   for(var i =0; i < organized_products.length; i++){
 
-    var product_catagory_name = organized_products[i].catagory.toLowerCase();
-    var limit = catagory_name.length > product_catagory_name.length ? catagory_name.length : product_catagory_name.length;
+    var current_catagory_name = organized_products[i].catagory.toLowerCase();
+    var length_of_name = catagory_name.length > current_catagory_name.length ? catagory_name.length : current_catagory_name.length;
 
-    for(var k =0; k < catagory_name.length; k++ ){
+    for(var k =0; k < length_of_name; k++ ){
 
-      if(product_catagory_name[k] == catagory_name[k] ){
+      if(current_catagory_name == catagory_name ){
         letters_matched++;
       }else{
         letters_matched = 0;
       }
 
       if(letters_matched >= letters_needed){
-        isFound = true;
+        isProductFound = true;
         products = organized_products[i].products;
         break;
       }
 
-      if(!product_catagory_name[k] || !catagory_name[k]){
+      if(!current_catagory_name || !catagory_name){
         break;
       }
 
     }
 
-    if(isFound){
+    if(isProductFound){
       break;
     }
 
@@ -98,17 +98,17 @@ function OrganizeCatagories(products){
         catagories.push(products[i].catagory);
       }
 
-      var isFound = false
+      var isProductFound = false
 
       for(var l = 0; l < catagories.length; l++){
 
         if(catagories[l] == products[i].catagory){
-          isFound = true;
+          isProductFound = true;
         }
 
       }
 
-      if(!isFound){
+      if(!isProductFound){
         catagories.push(products[i].catagory);
       }
 
@@ -116,7 +116,7 @@ function OrganizeCatagories(products){
 
     for(var i = 0; i < products.length; i++){
 
-      var isFound = false;
+      var isProductFound = false;
 
       var config = {
         counter:0,
@@ -126,19 +126,19 @@ function OrganizeCatagories(products){
 
       if(organized_products.length <=0){
         organized_products.push(config);
-        isFound = true;
+        isProductFound = true;
       }
 
       for(var k =0; k < organized_products.length; k++){
 
           if(products[i].catagory == organized_products[k].catagory){
-            isFound = true;
+            isProductFound = true;
             organized_products[k].products.push(products[i]);
           }
 
       }
 
-      if(!isFound){
+      if(!isProductFound){
         organized_products.push(config);
       }
 
@@ -150,39 +150,42 @@ function OrganizeCatagories(products){
 
 function OrganizeDiscounts(all_products){
 
+  const limit_top_discount = 5;
+
   var highest_discount_product = {...all_products[0]};
   var products = [...all_products];
-  var limit_top_discount = 5;
   var top_discount_products = [];
-  var _ids = [];
+  var product_ids = [];
+
   var highest_discount = 0;
-  var isFound = false;
+
+  var isProductFound = false;
 
   for(var k = 0; k < limit_top_discount; k++){
 
     for(var i =0; i < products.length; i++){
 
-      isFound = false;
+      isProductFound = false;
 
       if(products[i]){
 
-          var product_doc = products[i]._doc;
+          var current_product = products[i]._doc;
 
-          for(var z = 0; z < _ids.length; z++){
+          for(var z = 0; z < product_ids.length; z++){
 
-            isFound = false;
+            isProductFound = false;
 
-            if(JSON.stringify(product_doc._id) == _ids[z]){
-                isFound = true;
+            if(JSON.stringify(current_product._id) == product_ids[z]){
+                isProductFound = true;
               }
 
             }
 
-            if(product_doc.discount >= highest_discount && !isFound){
-              highest_discount = product_doc.discount;
-              highest_discount_product = product_doc;
+            if(current_product.discount >= highest_discount && !isProductFound){
+              highest_discount = current_product.discount;
+              highest_discount_product = current_product;
               counter = i;
-              _ids.push(JSON.stringify(product_doc._id));
+              product_ids.push(JSON.stringify(current_product._id));
 
             }
 
@@ -190,8 +193,7 @@ function OrganizeDiscounts(all_products){
 
       }
 
-
-      if(!isFound && highest_discount_product){
+      if(!isProductFound && highest_discount_product){
         top_discount_products.push(highest_discount_product);
         highest_discount_product = null;
         highest_discount = 0;
@@ -206,26 +208,26 @@ function OrganizeDiscounts(all_products){
 
 function catagoryMatch(catagories, catagory_needed,counter) {
 
-  var catagories_ = [...catagories];
+  var all_catagories = [...catagories];
   var current;
 
-  for(i = 0; i < catagories_.length; i ++){
+  for(i = 0; i < all_catagories.length; i ++){
 
-    if(catagories_[i].catagory == catagory_needed){
+    var current_catagory =  all_catagories[i];
 
-      catagories_[i].counter +=  4;
+    if(current_catagory.catagory == catagory_needed){
 
-      if(catagories_[i].counter < 0){
-        catagories_[i].counter = 0;
+      current_catagory.counter +=  4;
+
+      if(current_catagory.counter < 0){
+        current_catagory.counter = 0;
       }
 
-      if(catagories_[i].counter > Math.floor(catagories_[i].products.length  / 4) ){
-        catagories_[i].counter = 0;
+      if(current_catagory.counter > Math.floor(current_catagory.products.length  / 4) ){
+        current_catagory.counter = 0;
       }
 
-      current = catagories_[i];
-
-      return {all:catagories_,current:current};
+      return {all:all_catagories,current:current_catagory};
 
       break;
 

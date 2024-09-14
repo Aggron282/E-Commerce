@@ -7,7 +7,7 @@ var PAGE_INCREMENT = 5;
 var counter = 0;
 var selected_catagory = null;
 
-function RenderHTMLToCatagory(catagories,catagory_name){
+const RenderHTMLToCatagory = (catagories,catagory_name) => {
 
   var render_html =  `
   <div class="catagory_container">
@@ -47,7 +47,7 @@ function RenderHTMLToCatagory(catagories,catagory_name){
 
 }
 
-function ToggleCatagoryPage(multiplier){
+const ToggleCatagoryPage = (multiplier) => {
 
     if(!selected_catagory){
       return;
@@ -77,7 +77,7 @@ function ToggleCatagoryPage(multiplier){
 
 }
 
-function BuiltCatagoriesHTML(){
+const BuiltCatagoriesHTML = () =>{
 
   var html  = ``;
   var row = "<div class ='row'>";
@@ -86,11 +86,14 @@ function BuiltCatagoriesHTML(){
 
   for(var i =0; i <PAGE_LIMIT; i++){
 
+    if(!selected_catagory){
+      return;
+    }
     if(counter + i > selected_catagory.products.length){
       break;
     }
 
-    var _id = selected_catagory.products[i]._id;
+    var product_id = selected_catagory.products[i]._id;
     var new_description = selected_catagory.products[i].title.substring(0, 55) + "...";
 
     html += `
@@ -103,7 +106,7 @@ function BuiltCatagoriesHTML(){
           <img class="catagory_product_image" src = ${selected_catagory.products[counter + i].thumbnail} />
         </div>
         <p class="catagory_product_text">$${selected_catagory.products[counter + i].price}.99</p>
-        <a href = "/product/${_id}">  <button class="catagory_product_detail">See Details</button> </a>
+        <a href = "/product/${product_id}">  <button class="catagory_product_detail">See Details</button> </a>
 
       </div>
 
@@ -117,16 +120,16 @@ function BuiltCatagoriesHTML(){
 
 }
 
-function GetCatagories(catagory){
+const GetCatagories = (catagory) => {
 
   axios.get("/catagories").then((res)=>{
 
     var data = res.data;
-    var mod_catagory = titleCase(catagory);
+    catagory = titleCase(catagory);
 
     for(var i =0; i <data.length; i++){
 
-      if(titleCase(catagory) == titleCase(data[i].catagory)){
+      if(catagory == titleCase(data[i].catagory)){
         selected_catagory = data[i];
         counter = 0;
       }
@@ -139,7 +142,7 @@ function GetCatagories(catagory){
 
 }
 
-function Init(){
+const InitCatagories = () => {
 
   for(var i = 0; i < catagory_buttons.length; i++){
 
@@ -147,9 +150,9 @@ function Init(){
 
       counter = 0;
 
-      var catagory_name = e.target.getAttribute("data");
+      var catagory_data = e.target.getAttribute("data");
 
-      GetCatagories(catagory_name);
+      GetCatagories(catagory_data);
       RevealModal();
 
     });
@@ -158,4 +161,4 @@ function Init(){
 
 }
 
-Init();
+InitCatagories();

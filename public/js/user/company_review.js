@@ -1,5 +1,5 @@
 var add_review_button = document.querySelector(".add_review_button");
-var review_container = document.querySelector(".add_review_container");
+var add_review_container = document.querySelector(".add_review_container");
 var review_display_container = document.querySelector(".review_display_container");
 var reviews_container = document.querySelector(".reviews_container");
 
@@ -42,7 +42,7 @@ const RenderReviews = (reviews) => {
 
 }
 
-function Init(){
+const InitReviews = () => {
 
   axios.get("/company/review").then((data)=>{
 
@@ -51,19 +51,6 @@ function Init(){
     RenderReviews(reviews);
 
   })
-
-}
-
-if(add_review_button){
-
-  add_review_button.addEventListener("click",(e)=>{
-
-    if(canLeaveReview){
-      DisplayForm(e);
-      canLeaveReview = false;
-    }
-
-  });
 
 }
 
@@ -89,36 +76,42 @@ const DisplayForm = (e)=>{
 
 const SubmitForm = async ()=>{
 
-    var review_title = document.querySelector(".review_input");
-    var review_description = document.querySelector(".review_description");
-    var title = review_title.value;
-    var description = review_description.value;
+    var title_input = document.querySelector(".review_input");
+    var description_input = document.querySelector(".review_description");
+
+    var title = title_input.value;
+    var description = description_input.value;
 
     if(description.length < 10 || title.length < 4){
       alert("Invalid Input");
       return;
     }
     else{
-
-      var profile = await axios.get("/user/profile/data");
-      var profileImg = profile.data.profileImg;
-      var name = profile.data.name;
-
-      axios.post("/company/review",{name:name,profileImg:profileImg,title:title,description:description}).then((res)=>{
-
-        if(res.data.reviews){
-          alert("Thank you for your feedback!");
-          RenderReviews(res.data.reviews);
-        }
-        else if(!res.data){
-          window.location.assign("/login");
-        }
-
-      }).catch((err)=>{
-        alert(err);
-      });
-
+      SubmitReview(title,description);
     }
+
+}
+
+const SubmitReview = async (title,description) => {
+
+  var profile_data = await axios.get("/user/profile/data");
+
+  var profile_img = profile_data.data.profileImg;
+  var name = profile_data.data.name;
+
+  axios.post("/company/review",{name:name,profileImg:profile_img,title:title,description:description}).then((review_response)=>{
+
+    if(review_response.data.reviews){
+      alert("Thank you for your feedback!");
+      RenderReviews(review_response.data.reviews);
+    }
+    else if(!res.data){
+      window.location.assign("/login");
+    }
+
+  }).catch((err)=>{
+    alert(err);
+  });
 
 }
 
@@ -146,4 +139,17 @@ const ReturnReviewForm = ()=>{
 
 }
 
-Init();
+if(add_review_button){
+
+  add_review_button.addEventListener("click",(e)=>{
+
+    if(canLeaveReview){
+      DisplayForm(e);
+      canLeaveReview = false;
+    }
+
+  });
+
+}
+
+InitReviews();

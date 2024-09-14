@@ -1,8 +1,10 @@
 <div class="profile_change_container">
 
     <p class="profile_change--exit">X</p>
+
     <% var type = isAdmin ? "admin" : "user" %>
-    <form  class="profile_change_form" action ="<%= type %>/profile/edit" method = "POST" enctype="multipart/form-data">
+
+    <form  class="profile_change_form" action ="/<%= type %>/profile/edit" method = "POST" enctype="multipart/form-data">
 
         <div class="profile_change_img_container">
 
@@ -31,6 +33,7 @@
     </form>
 
     <% var class_ = "profile_change_img--default" %>
+
     <% if(user){ %>
       <% var img_ = user.profileImg ? `/images/${user.profileImg}` : "/images/profile_img.png" %>
       <% class_ = user.profileImg ? "" : "profile_change_img--default" %>

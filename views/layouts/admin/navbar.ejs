@@ -20,7 +20,7 @@
     Add Product
   </div>
 
-  <div class="nav_container edit_delete_p">
+  <div class="nav_container edit_delete_p edit_delete_p--navbar">
       Edit / Delete
   </div>
 
@@ -38,10 +38,11 @@
 
   </div>
 
-  <div class = "navbar_user_sub_banner">
+  <div class = "navbar_catagory_banner">
 
     <% var limit = catagories.length >= 6 ? 6 : catagories.length %>
-        <% for(var i = 0; i < limit; i++){ %>
+
+      <% for(var i = 0; i < limit; i++){ %>
 
              <a href = "/search/product/catagory=<%=catagories[i].catagory%>/page_counter=1/isAdmin=true" >
 
@@ -51,14 +52,13 @@
 
              </a>
 
+        <%}%>
 
-          <%}%>
-
-          <div class="catagory_search_container">
-            <form  class="catagory_search_form catagory_search_form--admin" >
-              <input class="catagory_search_admin form-control" placeholder = "Enter Catagory" name = "catagory" >
-            </form>
-          </div>
+        <div class="catagory_search_container">
+          <form  class="catagory_search_form catagory_search_form--admin" >
+            <input class="catagory_search_admin form-control" placeholder = "Enter Catagory" name = "catagory" >
+          </form>
+        </div>
 
   </div>
 

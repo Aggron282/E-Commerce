@@ -25,6 +25,7 @@ const ReverseConvertLocation = async ({latitude,longitude}) => {
   }
 
   const geocoder = geocode(options);
+
   var address = await reverse_geocode.lookup(latitude,longitude,"us");
 
   return address;
@@ -33,6 +34,9 @@ const ReverseConvertLocation = async ({latitude,longitude}) => {
 
 const ConvertLocation =  async (place) =>{
 
+    if(!place){
+      return false;
+    }
     if(place.length < 2){
       place = "place";
     }

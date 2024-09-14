@@ -1,16 +1,6 @@
-//
-var delete_button_p = document.getElementsByClassName("delete_button_p");
-var canDelete = false;
+var canDelete = true;
 
-for(var i =0; i < delete_button_p.length; i++){
-
-  delete_button_p[i].addEventListener("click",async (e)=>{
-    await DeleteProduct(e);
-  });
-
-}
-
-async function DeleteProduct(e){
+const DeleteProduct = async (e) => {
 
   var prompt_requirement = 'DELETE';
 
@@ -18,7 +8,7 @@ async function DeleteProduct(e){
 
   if(product_prompt == prompt_requirement && !canDelete){
 
-    canDelete = true;
+    canDelete = false;
 
     var id = e.target.getAttribute('_id');
     var product = await axios.post("/admin/product/delete",{_id:id}).catch((err)=>{console.log(err)});
@@ -32,6 +22,6 @@ async function DeleteProduct(e){
     alert("Canceled");
   }
 
-  canDelete = false;
+  canDelete = true;
 
 }

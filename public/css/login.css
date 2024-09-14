@@ -20,6 +20,14 @@
   position: relative;
 }
 
+.submit_button--new_password{
+  width:50%;
+  margin-left:25%;
+  margin-top:5%;
+  background:black;
+  color:white
+}
+
 .create_account_text--title{
   font-size:30px;
   text-align: center;
@@ -165,6 +173,7 @@ form p{
   font-size:14px;
   padding:1%;
 }
+
 .container-fluid {
   position: relative;
 }

@@ -1,3 +1,5 @@
+var popup_container = document.querySelector(".popup_container")
+
 function titleCase(str) {
 
   if(!str){
@@ -20,6 +22,18 @@ function titleCase(str) {
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function RenderPopup(message){
+
+  if(popup_container){
+      popup_container.innerHTML = (
+      `<span class="popup_message popup_message--active popup_message--server ">
+        ${message}
+      </span>`
+    );
+   }
+
 }
 
 

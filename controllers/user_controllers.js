@@ -12,6 +12,7 @@ const ObjectId = require("mongodb").ObjectId;
 
 const rootDir = require("./../util/path.js");
 const fileHelper = require("./../util/file.js");
+
 const text_util = require("./../util/text.js");
 const product_util = require("./../util/products.js");
 const popup_util = require("./../util/popup.js");
@@ -31,7 +32,6 @@ const DETAILPAGEURL = path.join(rootDir,"views","detail.ejs");
 const CARTPAGEURL = path.join(rootDir,"views","user","cart.ejs");
 const HOMEPAGEURL = path.join(rootDir,"views","user","index.ejs");
 const CURATEDPRODUCTSURL = path.join(rootDir,"views","user","curated_products.ejs");
-
 
 var feedback ={
   items:{
@@ -59,8 +59,8 @@ var feedback ={
 // Get Data Functions
 const GetOrders = async(req,res)=>{
 
-  Order.find({"user.userId":req.user._id}).then((orders)=>{
-    res.json(orders);
+  Order.find({"user.userId":req.user._id}).then((found_orders)=>{
+    res.json(found_orders);
   });
 
 }
@@ -71,11 +71,11 @@ const UpdateLocation = (req,res) =>{
   var address = data.address;
   var coords = data.coords;
 
-  User.findById(req.user._id).then((user_)=>{
+  User.findById(req.user._id).then((found_user)=>{
 
-    user_.location = data;
+    found_user.location = data;
 
-    var new_user = new User(user_);
+    var new_user = new User(found_user);
 
     new_user.save();
 
@@ -93,13 +93,13 @@ const PostCompanyReview = async (req,res,next) => {
   var body = req.body;
   var name = body.name;
   var title = body.title;
-  var profileImg = body.profileImg;
+  var profile_img = body.profileImg;
   var description = body.description;
 
   var review_config = {
     title:name,
     description:description,
-    profileImg:profileImg,
+    profileImg:profile_img,
     name:body.name
   }
 
@@ -107,8 +107,8 @@ const PostCompanyReview = async (req,res,next) => {
 
   new_review.save();
 
-  Review.find({}).then((reviews)=>{
-    res.json({reviews:reviews});
+  Review.find({}).then((found_reviews)=>{
+    res.json({reviews:found_reviews});
   });
 
 }
@@ -119,7 +119,8 @@ const GetCurrentCart = (req,res,next)=>{
 
       if(req.user.cart){
         res.json(req.user.cart);
-      }else{
+      }
+      else{
         res.json({error:"No Cart"})
       }
 
@@ -146,26 +147,28 @@ const GetProfile = (req,res)=>{
 
 const EditProfile = (req,res) => {
 
-  var data  = req.body;
-  var current_url = req.body.current_url;
+    var data  = req.body;
+    var current_url = req.body.current_url;
 
-  if(!req.user){
-    res.redirect("/user/login");
-    return;
-  }
+    if(!req.user){
+      res.redirect("/user/login");
+      return;
+    }
 
-  var new_password =  data.password.length > 0 ? data.password : req.user.password;
+    var new_password =  data.password.length > 0 ? data.password : req.user.password;
 
-    bcrypt.hash(new_password,12).then((encrypt)=>{
+    bcrypt.hash(new_password,12).then((encrypted_password)=>{
 
       var file = req.file ? req.file.filename : req.user.profileImg
 
-      const filter = { _id : new ObjectId(req.user._id) };
-      const update = {$set:{ email : data.username, name:data.name, password:data.password, profileImg: file} };
+      const filter_by_id = { _id : new ObjectId(req.user._id) };
+      const update_profile = {$set:{ email : data.username, name:data.name, password:encrypted_password, profileImg: file} };
 
-      User.findOneAndUpdate(filter,update).then((response)=>{
+      User.findOneAndUpdate(filter_by_id,update_profile).then((update_response)=>{
 
-        req.user = response;
+        redirects_counter = 0;
+
+        req.user = update_response;
 
         var new_feedback = {...feedback};
 
@@ -174,8 +177,6 @@ const EditProfile = (req,res) => {
         new_feedback.redirect = feedback.redirect;
 
         feedback = new_feedback;
-
-        redirects_counter = 0;
 
         res.redirect(current_url);
 
@@ -198,10 +199,14 @@ const DeleteCartItem = async (req,res,next) => {
 
     var id = req.body._id;
 
-    req.user.deleteProduct(id,(response)=>{
-      feedback.popup_message = "Deleted Item From Cart";
+    req.user.deleteProduct(id,(delete_response)=>{
+
       redirects_counter = 0;
+
+      feedback.popup_message = "Deleted Item From Cart";
+
       res.redirect("/cart");
+
     });
 
 }
@@ -212,16 +217,18 @@ const AddOrder = async(req,res,next) =>{
 
   req.user.execPopulate("cart.items.prodId").then((user)=>{
 
-    const product_data = [...user.cart.items];
+    redirects_counter = 0;
 
-    const user_data = {
+    const items_in_cart = [...user.cart.items];
+
+    const user_info = {
       userId: user._id,
       name:user.name
     }
 
     const new_order = new Order({
-        products:product_data,
-        user:user_data
+        products:items_in_cart,
+        user:user_info
       });
 
      new_order.save();
@@ -229,7 +236,6 @@ const AddOrder = async(req,res,next) =>{
      req.user.ClearCart();
 
      feedback.popup_message = "Your Order has been Placed! Check Orders Tab to Confirm"
-     redirects_counter = 0;
 
      res.redirect("/");
 
@@ -242,17 +248,22 @@ const AddOrder = async(req,res,next) =>{
 const AddToCart = async (req,res,next)=>{
 
   var id = req.body.productId;
-  var id_ = id.replace("/","");
-  var product = req.body;
-  var quantity = product.quantity;
+  id = id.replace("/","");
+
+  var product_added = req.body;
+  var quantity_added = product_added.quantity;
 
   if(!req.user || !req.session.isAuthenticated ){
     res.json({error:401});
   }
   else{
-    Product.findById(id_).then((data)=>{
-        req.user.AddCart(id_,quantity);
+
+    Product.findById(id).then((data)=>{
+
+        req.user.AddCart(id,quantity_added);
+
         res.json(data);
+
     }).catch((err)=>{
       StatusError(next,err,500);
     });
@@ -267,28 +278,29 @@ const AddToCart = async (req,res,next)=>{
 const GetCheckoutPage = async (req,res) =>{
 
   var user = req.user;
-  var item;
-  var total_price = 0;
+  var current_items_in_cart;
+  var total_price_in_cart = 0;
+  var redirect = "/checkout";
 
   if(req.user.cart.items.length > 0){
 
-    for(var i =0; i <req.user.cart.items.length; i ++ ){
-      item = req.user.cart.items[i];
-      total_price += item.data.price  * item.quantity;
+    for(var i =0; i < req.user.cart.items.length; i ++ ){
+      current_item_in_cart = req.user.cart.items[i];
+      total_price_in_cart += current_item_in_cart.data.price  * current_item_in_cart.quantity;
     }
 
   }
 
    stripe.checkout.sessions.create({
     payment_method_types: ["card"],
-    line_items: req.user.cart.items.map((p)=>{
+    line_items: req.user.cart.items.map((item_in_cart_)=>{
         return {
-          quantity: p.quantity,
-          catagories:default_catagories,
+          quantity: item_in_cart_.quantity,
+          catagories:[],
           price_data:{
-            unit_amount:p.data.price * 100,
+            unit_amount:item_in_cart_.data.price * 100,
             product_data:{
-              name: p.data.title,
+              name: item_in_cart_.data.title,
               description:p.data.description
             },
             cart:req.user.cart,
@@ -310,11 +322,7 @@ const GetCheckoutPage = async (req,res) =>{
     new_feedback.limited_products = null;
     new_feedback.cart = req.user ? req.user.cart : null;
     new_feedback.catagories = null;
-
-    var redirect = "/checkout";
-
     new_feedback.isAuthenticated = req.session.isAuthenticated;
-
     new_feedback.popup_message = new_feedback.redirect == redirect ? new_feedback.popup_message : null;
     new_feedback.redirect = redirect;
     new_feedback.render = CHECKOUTPAGEURL;
@@ -329,12 +337,13 @@ const GetHomePage = async (req,res,next) => {
 
   Product.find().then(async (all_products) =>{
 
-    var highest_product = null;
+    var popup = popup_util.CheckPopup(feedback);
+    redirects_counter = popup.redirects_counter;
 
     new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
 
     var top_deals = product_util.OrganizeDiscounts(all_products);
-    var reviews = await Review.find({});
+    var all_reviews = await Review.find({});
     var new_feedback = {...feedback};
 
     new_feedback.items.top_deals = top_deals;
@@ -348,12 +357,8 @@ const GetHomePage = async (req,res,next) => {
     new_feedback.redirect = "/";
     new_feedback.limited_products = null;
     new_feedback.isAdmin = false;
-    new_feedback.reviews = reviews;
-
-    var popup = popup_util.CheckPopup(feedback);
-
+    new_feedback.reviews = all_reviews;
     new_feedback.popup_message = popup.message;
-    redirects_counter = popup.redirects_counter;
 
     feedback = new_feedback;
 
@@ -369,7 +374,7 @@ const GetProductDetailPage = async (req,res,next) =>{
 
    var id = req.params._id;
 
-  Product.find().then(async (all_products) =>{
+   Product.find().then(async (all_products) =>{
 
     new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
 
@@ -416,8 +421,8 @@ const GetCartPage = async (req,res) =>{
     var user = req.user;
     var total_price = 0;
     var cart = null;
-    var items = null;
-    var session = null;
+    var all_cart_items = null;
+    var checkout_session = null;
 
     if(req.user.cart){
 
@@ -427,12 +432,12 @@ const GetCartPage = async (req,res) =>{
 
       if(cart.items.length > 0){
 
-        items  = cart.items;
+        all_cart_items  = cart.items;
 
-        for(var i =0; i <items.length; i ++ ){
+        for(var i =0; i <all_cart_items.length; i ++ ){
 
-          var item = req.user.cart.items[i];
-          var found = false
+          var cart_item = req.user.cart.items[i];
+          var didFindItemInCart = false
 
           if(existing_items.length <= 0){
             existing_items.push(item);
@@ -442,14 +447,14 @@ const GetCartPage = async (req,res) =>{
                 for(var k =0; k < existing_items.length; k ++ )
                 {
 
-                    if(existing_items[k].data.title == item.data.title){
+                    if(existing_items[k].data.title == cart_item.data.title){
                       existing_items[k].data.quantity += 1;
-                      found = true;
+                      didFindItemInCart = true;
                     }
 
                 }
 
-                if(!found){
+                if(!didFindItemInCart){
                   existing_items.push(item);
                 }
 
@@ -459,14 +464,14 @@ const GetCartPage = async (req,res) =>{
 
         }
 
-        var line_items =  req.user.cart.items.map((p)=>{
+        var line_items =  req.user.cart.items.map((product_in_cart_)=>{
             return {
-              quantity: p.quantity,
+              quantity: product_in_cart_.quantity,
               price_data:{
-                unit_amount:p.data.price * 100,
+                unit_amount:product_in_cart_.data.price * 100,
                 product_data:{
-                  name: p.data.title,
-                  description:p.data.description
+                  name: product_in_cart_.data.title,
+                  description:product_in_cart_.data.description
                 },
                 currency:"usd",
             }
@@ -484,13 +489,17 @@ const GetCartPage = async (req,res) =>{
 
         var session_data =  await stripe.checkout.sessions.create(config);
 
-        session = session_data.id;
+        checkout_session = session_data.id;
 
       }
 
 }
 
 Product.find().then(async (all_products) =>{
+
+     var popup = popup_util.CheckPopup(new_feedback);
+
+     redirects_counter = popup.redirects_counter;
 
      new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
 
@@ -509,14 +518,9 @@ Product.find().then(async (all_products) =>{
      new_feedback.total_price = total_price;
      new_feedback.cart.items = items ? items : [];
 
-     var popup = popup_util.CheckPopup(new_feedback);
-
      new_feedback.popup_message = popup.message;
 
-     redirects_counter = popup.redirects_counter;
-
      feedback = new_feedback;
-
 
     res.render(new_feedback.render,new_feedback);
 

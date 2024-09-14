@@ -1,22 +1,24 @@
-var toggle_buttons_elements = document.getElementsByClassName("catagory_arrow");
-var product_boxes_elements = document.getElementsByClassName("product_box");
+var toggle_buttons = document.getElementsByClassName("catagory_arrow");
+var product_boxes = document.getElementsByClassName("product_box");
 
 var catagories = null;
 var page_counter = 0;
 var increase_increment = 4;
 
-function RenderItems(catagory){
+const RenderItems = (catagory) => {
+
+  var populate_container = document.querySelector("#_"+catagory.catagory);
+
+  var html = ``;
 
   var name = "Name Will Be Placed Here";
   var img = "./images/catagory_3.png";
   var price = "[N/A]";
   var description = "";
-  var html = ``;
   var discount_price=''
-  var populate_el = document.querySelector("#_"+catagory.catagory);
-  var cross = "";
+  var cross_class = "";
 
-  populate_el.innerHTML = "";
+  populate_container.innerHTML = "";
 
    for(var i = 0; i <= 3; i++) {
 
@@ -27,12 +29,12 @@ function RenderItems(catagory){
 
        var product = catagory.products[current_catagory_counter];
 
-       name = .title.substring(0, 30) + "...";
+       name = product.title.substring(0, 30) + "...";
        img = "/images/"+product.thumbnail
        price = product.price
-       description = product.substring(0, 100) + "...";
+       description = product.description.substring(0, 100) + "...";
        discount_price = parseFloat(price - (price * (product.discount / 100)))
-       cross = product.discount > 0 ? "cross-out" : ""
+       cross_class = product.discount > 0 ? "cross-out" : ""
        discount_price = Math.round(discount_price * 100) / 100
 
      }
@@ -49,9 +51,9 @@ function RenderItems(catagory){
             <img class="catagory_product_image margin-top-5"src = ${ img } />
 
              <div class="catagory_product_text_box margin-top-5">
-               <p class="catagory_product_text catagory_product_text--price ${cross}">$ ${ price }</p>
 
-                    <p class="catagory_product_text catagory_product_text--price ">$ ${ discount_price} </p>
+               <p class="catagory_product_text catagory_product_text--price ${cross_class}">$ ${ price }</p>
+               <p class="catagory_product_text catagory_product_text--price ">$ ${ discount_price} </p>
 
              </div>
 
@@ -63,11 +65,11 @@ function RenderItems(catagory){
 
  }
 
- populate_el.innerHTML = html;
+ populate_container.innerHTML = html;
 
 }
 
-async function ToggleCatagories(page_counter,catagory) {
+const ToggleCatagories = async (page_counter,catagory) => {
 
   const api_options ={
     method: "POST",
@@ -90,16 +92,16 @@ async function ToggleCatagories(page_counter,catagory) {
 
 }
 
-function Init(){
+const InitToggle = () => {
 
-  for(var i = 0; i < toggle_buttons_elements.length; i ++){
+  for(var i = 0; i < toggle_buttons.length; i ++){
 
-    toggle_buttons_elements[i].addEventListener("click",async (e)=>{
+    toggle_buttons[i].addEventListener("click",async (e)=>{
 
-      var page_counter_attribute = e.target.getAttribute("counter");
-      var catagory_attribute = e.target.getAttribute("catagory");
+      var page_counter = e.target.getAttribute("counter");
+      var catagory_name = e.target.getAttribute("catagory");
 
-      ToggleCatagories(page_counter,catagory_attribute);
+      ToggleCatagories(page_counter,catagory_name);
 
     });
 
@@ -108,4 +110,4 @@ function Init(){
 }
 
 
-Init();
+InitToggle();

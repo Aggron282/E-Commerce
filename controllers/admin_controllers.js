@@ -7,14 +7,11 @@ const path = require("path");
 const fs = require("fs");
 const bcrypt = require("bcrypt");
 const PDFDocument = require("pdfkit");
-
 const ObjectId = require("mongodb").ObjectId;
 
 const StatusError = require("./../util/status_error.js");
 
-const fileHelper = require("./../util/file.js");
 const rootDir = require("./../util/path.js");
-const location = require("./../util/location.js");
 const product_util = require("./../util/products.js");
 const popup_util = require("./../util/popup.js");
 
@@ -26,20 +23,13 @@ const HOMEPAGEURL = path.join(rootDir,"views","admin","admin.ejs");
 const DETAILPAGEURL = path.join(rootDir,"views","detail.ejs");
 
 var feedback = {
-  item:null,
+  product:null,
   root:"",
   user:null,
   redirect:"",
   isAdmin:true,
   isAuthenticatedAdmin:false,
   popup_message:null
-}
-
-
-const ResetPopups = (req,res) => {
-
-  feedback.popup_message = null;
-  res.json(true);
 }
 
 const HardResetProducts = (req,res) => {
@@ -49,19 +39,19 @@ const HardResetProducts = (req,res) => {
     return;
   }
 
-  Product.deleteMany().then((delete_)=>{
+  Product.deleteMany().then((delete_response)=>{
 
-    if(!delete_){
+    if(!delete_response){
       res.json(false)
       return;
     }
 
-    var products = req.admin.products.map((p)=>{
-      delete p._id;
-      return p;
+    var products = req.admin.products.map((product_)=>{
+      delete product_._id;
+      return product_;
     });
 
-    Product.insertMany(products).then((inster_)=>{
+    Product.insertMany(products).then((insert_response)=>{
       res.json({products:products});
     });
 
@@ -71,15 +61,7 @@ const HardResetProducts = (req,res) => {
 //--------------------------------------------------------------------------------
 // Get Data Functions
 const GetAdminData = (req,res)=>{
-
-  if(!req.admin){
-    res.redirect("/login");
-    return;
-  }
-  else{
-    res.json(req.admin);
-  }
-
+  res.json(req.admin);
 }
 
 const GetProductsData = async (req,res,next) =>{
@@ -88,9 +70,9 @@ const GetProductsData = async (req,res,next) =>{
 
 const GetOneProductByParams = async (req,res,next) =>{
 
-  var _id = req.params.id;
+  var id = req.params.id;
 
-  var products = Product.findById(_id).then((data)=>{
+  Product.findById(id).then((data)=>{
 
       var new_product = data;
 
@@ -104,25 +86,27 @@ const GetOneProductByParams = async (req,res,next) =>{
 
 const GetOneProduct = (req,res,next) => {
 
-  var _id = req.body._id;
-  var isFound = false;
+  var id = req.body._id;
+  var didFindProduct = false;
 
   if(!req.admin){
     res.redirect("/admin/login");
     return;
   }
 
-  for(var i =0; i < req.admin.products.length; i++){
+  var admin_products = req.admin.products
 
-    if(JSON.stringify(_id) == JSON.stringify(req.admin.products[i]._id)){
-        isFound = true;
+  for(var i =0; i < admin_products.length; i++){
+
+    if(JSON.stringify(id) == JSON.stringify(admin_products[i]._id)){
+        didFindProduct = true;
         break;
      }
 
   }
 
-  if(isFound){
-    res.json(req.admin.products[i]);
+  if(didFindProduct){
+    res.json(admin_products[i]);
   }
   else{
     res.json(false);
@@ -136,28 +120,29 @@ const EditAdmin = (req,res) => {
 
   var data  = req.body;
 
+  redirects_counter = 0;
+
   if(!req.admin){
     res.redirect("/admin/login");
     return;
   }
 
-  const filter = { _id : new ObjectId(req.admin._id) };
+  const filter_by_id = { _id : new ObjectId(req.admin._id) };
 
-  var profileImg = null;
+  var profile_img = null;
 
   if(req.file){
-    profileImg = req.file.filename ? req.file.filename : null;
+    profile_img = req.file.filename ? req.file.filename : null;
   }
 
-  redirects_counter = 0;
   var new_password = data.password.length > 0 ? data.password : req.admin.password;
 
   bcrypt.hash(new_password,12).then((encrypt)=>{
 
-      const update = {$set:{ username : data.username, name:data.name, password:encrypt, profileImg:profileImg} };
+      const update_profile_values = {$set:{ username : data.username, name:data.name, password:encrypt, profileImg:profile_img} };
 
-      Admin.findOneAndUpdate(filter,update).then((response)=>{
-        req.admin = response;
+      Admin.findOneAndUpdate(filter_by_id,update_profile_values).then((update_response)=>{
+        req.admin = update_response;
         feedback.popup_message = "Edited Your Profile!"
         res.redirect("/admin");
       });
@@ -171,20 +156,25 @@ const EditAdmin = (req,res) => {
 
 const UpdateLocation = (req,res) =>{
 
+  const popup_string = "Updated Location!"
+
   var data = req.body;
   var address = data.address;
   var coords = data.coords;
 
-  Admin.findById(req.admin._id).then((admin_)=>{
+  redirects_counter = 0;
 
-    admin_.location = data;
+  Admin.findById(req.admin._id).then((admin_found)=>{
 
-    var new_admin = new Admin(admin_);
+    admin_found.location = data;
+
+    var new_admin = new Admin(admin_found);
 
     new_admin.save();
-    feedback.popup_message = "Updated Location!"
-    redirects_counter = 0;
-    res.json({user:new_admin,popup:"Updated Location"});
+
+    feedback.popup_message = popup_string;
+
+    res.json({user:new_admin,popup:popup_string});
 
   }).catch(err => console.log(err));
 
@@ -194,28 +184,30 @@ const UpdateLocation = (req,res) =>{
 // Get URL Pages
 const GetMainPage = async (req,res,next) =>{
 
-   feedback.user = req.user;
+
+   var popup = popup_util.CheckPopup(feedback);
+
+   redirects_counter = popup.redirects_counter;
 
    if(!req.admin){
      res.redirect("/admin/login");
      return;
    }
 
-   var new_feedback = {...feedback};
-
    new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(req.admin.products);
 
-   new_feedback.products= req.admin.products,
+   var new_feedback = {...feedback};
+
+   new_feedback.user = req.user;
+   new_feedback.products = req.admin.products,
    new_feedback.action = "/admin/profile/edit";
    new_feedback.totalProducts = totalProducts
    new_feedback.isAuthenticatedAdmin = req.session.isAuthenticatedAdmin;
-
+   new_feedback.popup_message = popup.message;
    new_feedback.catagories = new_catagories;
 
    feedback = new_feedback;
-   var popup = popup_util.CheckPopup(feedback);
-   feedback.popup_message = popup.message;
-   redirects_counter = popup.redirects_counter;
+
    res.render(HOMEPAGEURL,feedback);
 
 }
@@ -223,35 +215,33 @@ const GetMainPage = async (req,res,next) =>{
 const GetProductDetailPage = async (req,res,next) =>{
 
     var id = req.params._id;
+    var popup = popup_util.CheckPopup(new_feedback);
+
+    redirects_counter = popup.redirects_counter;
 
     if(!id || id.length < 10){
         res.redirect("/admin")
         return;
     }
 
-    Product.findById(id).then(async (product)=>{
+    Product.findById(id).then(async (found_product)=>{
 
-      if(!product){
+      if(!found_product){
         res.redirect("/admin")
       }
       else{
 
         new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(req.admin.products);
 
-        var new_feedback ={...feedback}
+        var new_feedback = {...feedback}
 
         new_feedback.action = "/product/edit/"+id;
-        new_feedback.item = product;
+        new_feedback.item = found_product;
         new_feedback.redirect = "/product/edit/"+id;
         new_feedback.isAdmin = true;
         new_feedback.catagories = new_catagories;
         new_feedback.isAuthenticatedAdmin = req.session.isAuthenticatedAdmin;
-
-        var popup = popup_util.CheckPopup(new_feedback);
-
         new_feedback.popup_message = popup.message;
-
-        redirects_counter = popup.redirects_counter;
 
         res.render(DETAILPAGEURL,new_feedback);
 
@@ -282,8 +272,8 @@ const DeleteOneProduct =  (req,res,next) =>{
 
 async function DeleteProduct(req,res,id){
 
-    const new_products = req.admin.products.filter((product) => {
-      return JSON.stringify(id) != JSON.stringify(product._id)
+    const new_products = req.admin.products.filter((product_) => {
+      return JSON.stringify(id) != JSON.stringify(product_._id)
     });
 
     var new_admin = {...req.admin};
@@ -293,10 +283,10 @@ async function DeleteProduct(req,res,id){
     var new_product = await  Product.findByIdAndDelete(id);
     var update_query = {$set: {'products': new_products}};
 
-    var replace_admin_products = await Admin.findByIdAndUpdate({_id:req.admin._id},update_query,(r)=>{
+    var replace_admin_products = await Admin.findByIdAndUpdate({_id:req.admin._id},update_query,(update_response)=>{
       req.admin = new_admin;
       res.json(r);
-    })
+    });
 
 }
 
@@ -310,46 +300,44 @@ const DeleteOneProductByParams = (req,res,next) =>{
 const EditOneProduct = async (req,res,next) =>{
 
   var body = req.body;
-  var new_admin = req.admin;
-  var products = [...new_admin.products];
+  var products = [...req.admin.products];
 
   var found_product = await Product.findOne({_id:new ObjectId(body._id)});
-  var new_product = {...found_product._doc};
-  var thumbnail = new_product.thumbnail;
 
-  if( req.file && req.file.filename){
-     thumbnail = req.file.filename;
+  var product_config = {...found_product._doc};
+
+  var product_thumbnail = new_product.thumbnail;
+
+  if(req.file && req.file.filename){
+     product_thumbnail = req.file.filename;
   }
 
-  new_product.title = body.title;
-  new_product.thumbnail = thumbnail;
-  new_product.description = body.description;
-  new_product.price = body.price;
-  new_product.banner = body.banner;
-  new_product.catagory = body.catagory;
-  new_product.quantity = body.quantity;
-  new_product.userId = req.admin._id;
-  new_product.discount = body.discount;
+  product_config.title = body.title;
+  product_config.thumbnail = product_thumbnail;
+  product_config.description = body.description;
+  product_config.price = body.price;
+  product_config.banner = body.banner;
+  product_config.catagory = body.catagory;
+  product_config.quantity = body.quantity;
+  product_config.userId = req.admin._id;
+  product_config.discount = body.discount;
 
-  var new_products = products.map((p)=>{
+  var new_products = products.map((product_)=>{
 
-    if(JSON.stringify(p._id) == JSON.stringify(new_product._id)){
-      return p = new_product;
+    if(JSON.stringify(product_._id) == JSON.stringify(new_product._id)){
+      return product_ = new_product;
     }
 
-    return p;
+    return product_;
 
   });
 
-  var new_admin_ = new Admin(new_admin);
-  var product = new Product(new_product);
+  Product.findOneAndReplace({_id:product_config._id},new_product).then((replace_response)=>{
 
-  Product.findOneAndReplace({_id:product._id},new_product).then((r)=>{
+    const filter_by_id = { _id : new ObjectId(req.admin._id) };
+    const update_products = {$set:{ products : new_products}};
 
-    const filter = { _id : new ObjectId(new_admin_._id) };
-    const update = {$set:{ products : new_products}};
-
-    Admin.findOneAndUpdate(filter,update,{new: true,useFindAndModify:false}).then((err,doc)=>{
+    Admin.findOneAndUpdate(filter_by_id,update_products,{new: true,useFindAndModify:false}).then((err,doc)=>{
 
       new_admin_.products = new_products;
 
@@ -375,7 +363,7 @@ const AddProduct = async (req,res,nect) => {
     filename = req.file.filename ? req.file.filename : "";
   }
 
-  var schema = {
+  var product_config = {
     title:body.title,
     quantity:body.quantity,
     description:body.description,
@@ -387,24 +375,20 @@ const AddProduct = async (req,res,nect) => {
     userId:req.user
   }
 
-  var products = new Product(schema);
-
-  products.save();
-
+  var new_product = new Product(product_config);
+  var new_products = new_admin.products;
   var new_admin = {...req.admin._doc};
 
-  new_admin.products.push(products);
+  const filter_by_id = { _id : new ObjectId(new_admin._id) };
+  const update_products = {$set:{ products : new_products}};
 
-  var new_products = new_admin.products;
+  new_product.save();
 
-  const filter = { _id : new ObjectId(new_admin._id) };
+  new_admin.products.push(new_product);
 
-  const update = {$set:{ products : new_products}};
-
-  Admin.findOneAndUpdate(filter,update,{new: true,useFindAndModify:false}).then((err,doc)=>{
+  Admin.findOneAndUpdate(filter_by_id,update_products,{new: true,useFindAndModify:false}).then((err,doc)=>{
 
     feedback.popup_message = "Added Product";
-
     res.redirect("/admin");
 
   })

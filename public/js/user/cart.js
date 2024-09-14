@@ -1,17 +1,23 @@
-var cart_button ;
-var product_by_search_cart_buttons;
-var cart_container;
+var cart_button = null;
+var cart_container = null;
 
-if(document.querySelector("#product_detail_button--add")){
+var product_by_search_cart_buttons = [];
 
-    cart_button= document.querySelector("#product_detail_button--add");
+var add_to_cart_from_detail = document.querySelector("#product_detail_button--add");
+var navbar_user_container = document.querySelector(".navbar_user_container--cart");
+var product_item_cart = document.querySelector(".product_item_button--cart");
 
-    cart_button.addEventListener("click",(e)=>{
+if(navbar_user_container){
+  cart_container = document.querySelector(".navbar_user_container--cart");
+}
+
+if(add_to_cart_from_detail){
+
+    add_to_cart_from_detail.addEventListener("click",(e)=>{
 
       var product_id = e.target.getAttribute("product_id");
-      var quantity = document.querySelector(".product_detail_input--quantity");
-
-      quantity = parseInt(quantity.value);
+      var quantity_input = document.querySelector(".product_detail_input--quantity");
+      var quantity = parseInt(quantity_input.value);
 
       AddToCart(product_id,quantity);
 
@@ -19,11 +25,7 @@ if(document.querySelector("#product_detail_button--add")){
 
 }
 
-if(document.querySelector(".navbar_user_container--cart")){
-  cart_container = document.querySelector(".navbar_user_container--cart");
-}
-
-if(document.querySelector(".product_item_button--cart")){
+if(product_item_cart){
 
    product_by_search_cart_buttons = document.getElementsByClassName("product_item_button--cart")
 
@@ -32,8 +34,9 @@ if(document.querySelector(".product_item_button--cart")){
     product_by_search_cart_buttons[i].addEventListener("click",(e)=>{
 
       var product_id = e.target.getAttribute("_id");
-      var quantity = document.querySelector(".product_detail_input--quantity");
-      quantity = parseInt(quantity.value);
+      var quantity_input = document.querySelector(".product_detail_input--quantity");
+
+      quantity = parseInt(quantity_input.value);
 
       AddToCart(product_id,quantity);
 
@@ -43,7 +46,7 @@ if(document.querySelector(".product_item_button--cart")){
 
 }
 
-function AddToCart(product_id,quantity){
+const AddToCart = (product_id,quantity) => {
 
   axios.post("/cart",{productId:product_id,quantity:quantity},{header:{"Content-Type":"application/json"}}).then((res)=>{
 

@@ -48,7 +48,6 @@
 
                               </div>
 
-
                             </div>
 
                         </div>
@@ -83,35 +82,19 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyACepJIoDZ1rhhju2bK-lO23qIzaKwXsnY&loading=async&libraries=maps,marker&v=beta" defer></script>
 
-<script src= "/js/slideshow.js"></script>
-<script src = "/js/cart.js" ></script>
 <script src = "/js/util.js" ></script>
 <script src= "/js/search_results.js"></script>
-<script src = "/js/catagory_render.js" ></script>
-<script src = "/js/catagory_toggle.js" ></script>
 <script src = "/js/search_results.js" ></script>
 <script src = "/js/edit_profile.js" ></script>
+<script src = "/js/update_location.js" ></script>
 <script src = "/js/navbar.js" ></script>
 
-<script src = "/js/update_location.js" ></script>
-
-<script>
-
-  var stripe = Stripe("pk_test_51OjAfEL9aEOLpUqjiSrhltnG3aHmrvWEppeBUnNx9OR1oXRGA4GaLJEaU3Z1fKEXd89z0uZhd04ONLoB3NQpdTmt00u5Ujogny")
-  var order_button = document.getElementById("order_button");
-
-  order_button.addEventListener("click",(e)=>{
-      stripe.redirectToCheckout({
-        sessionId:"<%= session_id %>",
-
-      })
-  });
-
-</script>
-
-<script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyACepJIoDZ1rhhju2bK-lO23qIzaKwXsnY&loading=async&libraries=maps,marker&v=beta" defer>
-</script>
+<script src= "/js/user/slideshow.js"></script>
+<script src = "/js/user/cart.js" ></script>
+<script src = "/js/user/catagory_render.js" ></script>
+<script src = "/js/user/catagory_toggle.js" ></script>
+<script src = "/js/user/payments.js"></script>
 
 <%- include("./../layouts/end.ejs") %>

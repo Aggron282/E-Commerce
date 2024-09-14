@@ -9,12 +9,18 @@ var User = require("./../models/user.js")
 
 var auth = require("./../util/auth.js");
 var rootDir = require("./../util/path.js");
+
 const StatusError = require("./../util/status_error.js");
 
 const LOGINPAGE = path.join(rootDir,"views","auth","login.ejs");
 const CREATEACCOUNTPAGE = path.join(rootDir,"views","auth","create_account.ejs");
-const FUTURETIMEFIXED = 360000000;
 
+const SECONDS = 1000;
+const MINUTES = 60 * SECONDS;
+const HOUR = 60 * MINUTES;
+const DAY = 24 * HOUR;
+
+const FUTURETIMEFIXED = 2 * DAY;
 
 const USER_LOGIN_CONFIG = {
   login_url:"/login",

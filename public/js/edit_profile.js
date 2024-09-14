@@ -7,10 +7,10 @@ var profile_container = document.querySelector(".profile_change_container");
 var exit_profile = document.querySelector(".profile_change--exit");
 var submit_profile = document.querySelector(".profile_change_button--submit");
 
-var profile_name = document.querySelector(".profile_change_input--name");
-var profile_username = document.querySelector(".profile_change_input--username");
-var profile_password = document.querySelector(".profile_change_input--password");
-var profile_confirm = document.querySelector(".profile_change_input--confirm");
+var profile_name_input = document.querySelector(".profile_change_input--name");
+var profile_username_input = document.querySelector(".profile_change_input--username");
+var profile_password_input = document.querySelector(".profile_change_input--password");
+var profile_confirm_input = document.querySelector(".profile_change_input--confirm");
 var profile_dropdown_opener = document.querySelector(".navbar_user_col--profile");
 
 var main_content = document.querySelector(".main_content");
@@ -18,22 +18,25 @@ var main_content = document.querySelector(".main_content");
 var dropdown = document.querySelector(".navbar_dropdown_list_container--user") ? document.querySelector(".navbar_dropdown_list_container--user") : document.querySelector(".navbar_dropdown_list_container--admin");
 
 var canEditProfile = false;
-var profile = null;
+var profile_data = null;
 
 //-----------------------------------------------Set Form and Reveal Modal-----------------------------
-function PopulateAndSetEditProfileModal(toggle,url){
+const PopulateAndSetEditProfileModal = (toggleCanEditProfile,profile_url_form) => {
 
-  if(toggle){
-    canEditProfile = toggle;
+  if(toggleCanEditProfile){
+    canEditProfile = toggleCanEditProfile;
   }
   else{
     canEditProfile = !canEditProfile;
   }
 
   if(canEditProfile){
-    PopulateProfileForm(url);
+
+    PopulateProfileForm(profile_url_form);
+
     main_content.classList.remove("main_content--active")
     profile_container.classList.add("profile_change_container--active");
+
   }
   else{
     main_content.classList.add("main_content--active")
@@ -44,24 +47,22 @@ function PopulateAndSetEditProfileModal(toggle,url){
 
 //-----------------------------------------------Get and Post Profile Data-----------------------------
 
-async function PopulateProfileForm (url){
+const PopulateProfileForm = async (profile_url_form) => {
 
-  var profile =  axios.get(url).then((response)=>{
+  axios.get(profile_url_form).then((response)=>{
 
-    var data = response.data;
+    var profile_response = response.data;
 
-    profile_name.value = data.name;
-    profile_username.value = data.email;
-    profile_password.value = "";
-    profile_confirm.value = "";
-
-    profile = data;
+    profile_name_input.value = profile_response.name;
+    profile_username_input.value = profile_response.email;
+    profile_password_input.value = "";
+    profile_confirm_input.value = "";
 
   }).catch((err)=>{console.log(err)});
 
 }
 
-function SubmitProfileEdit({name,username,password,confirm},e){
+const SubmitProfileEdit = ({name,username,password,confirm},e) => {
 
   e.preventDefault();
 
@@ -82,6 +83,18 @@ function SubmitProfileEdit({name,username,password,confirm},e){
 
 }
 
+const ConfigureAndSubmit = (e) =>{
+
+  var config = {
+     name: profile_name_input.value,
+     username: profile_username_input.value,
+     password: profile_password_input.value,
+     confirm : profile_confirm_input.value
+   }
+
+   e.preventDefault();
+   SubmitProfileEdit(config,e);
+}
 
 //-----------------------------------------------Add EventListeners to Elements ------------------------
 if(edit_profile){
@@ -105,36 +118,15 @@ if(edit_profile_admin){
 if(submit_profile){
 
   submit_profile.addEventListener("click",(e)=>{
-
-    var config = {
-        name: profile_name.value,
-        username: profile_username.value,
-        password: profile_password.value,
-        confirm : profile_confirm.value
-      }
-
-      e.preventDefault();
-      SubmitProfileEdit(config,e);
-
+    ConfigureAndSubmit(e);
   });
 
 }
 
-
 if(submit_form){
 
   submit_form.addEventListener("submit",(e)=>{
-
-    var config = {
-        name: profile_name.value,
-        username: profile_username.value,
-        password: profile_password.value,
-        confirm : profile_confirm.value
-      }
-
-      e.preventDefault();
-      SubmitProfileEdit(config,e);
-
+    ConfigureAndSubmit(e);
   });
 
 }
@@ -147,9 +139,9 @@ if(profile_dropdown_opener){
 
 }
 
-if(document.querySelector(".main_content")){
+if(main_content){
 
-  document.querySelector(".main_content").addEventListener("click",(e)=>{
+  main_content.addEventListener("click",(e)=>{
 
     if(isDropdownOpen){
       ToggleDropdown(dropdown,false);

@@ -3,11 +3,12 @@ var dropdown_list_user = document.querySelector(".navbar_dropdown_list_container
 
 var profile_admin = document.querySelector(".profile_icon--admin");
 var profile_user = document.querySelector(".profile_icon--user");
-var isDropdownOpen = false;
 var main_content = document.querySelector(".main_content");
 
+var isDropdownOpen = false;
 
-function ToggleDropdown(dropdown,isOpen){
+
+const ToggleDropdown = (dropdown,isOpen) => {
 
   isDropdownOpen = isOpen;
 

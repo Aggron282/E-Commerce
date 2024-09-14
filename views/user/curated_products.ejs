@@ -23,6 +23,7 @@
     <link href = "/css/product_boxes.css" rel = "stylesheet" />
     <link href = "/css/popup.css" rel = "stylesheet" />
     <link href = "/css/dropdown_navbar.css" rel = "stylesheet" />
+
     <% if(isAdmin){%>
       <link href = "/css/admin.css" rel = "stylesheet" />
       <link href = "/css/admin_header.css" rel = "stylesheet" />
@@ -38,21 +39,21 @@
     <link href ='/css/curated_products.css' rel="stylesheet"/>
     <link href ='/css/util.css' rel="stylesheet"/>
 
-
   </head>
 
 <body>
+
   <main>
 
     <div class="black_overlay"></div>
 
     <% if(isAdmin){ %>
-    <%- include("./../layouts/admin/navbar.ejs") %>
+      <%- include("./../layouts/admin/navbar.ejs") %>
     <%}else{%>
-    <%- include("./../layouts/user/home/navbar.ejs") %>
+      <%- include("./../layouts/user/home/navbar.ejs") %>
     <%}%>
-    <%- include("./../layouts/modal/popup_message.ejs") %>
 
+    <%- include("./../layouts/modal/popup_message.ejs") %>
 
     <div class="profile_change_overlay">
       <%- include("./../layouts/modal/profile.ejs") %>
@@ -63,12 +64,12 @@
 
       <div class="curated_products_container">
 
-        <div class="sort_container">
-
-        </div>
+        <div class="sort_container"></div>
 
         <div class="product_results_container">
+
           <% var results = current_catagory ? current_catagory : searched_term %>
+
           <p class="product_list_text product_list_text--title"> Results - <%= results %> </p>
           <p class="product_list_text product_list_text--subtitle"> Check each product page for other buying options. Price and other details may vary based on product size and color. </p>
 
@@ -105,13 +106,9 @@
                     <p class="product_item_text product_item_text--title"> <%= title %> </p>
                     <p class="product_item_text product_item_text--price"> <%= price %> </p>
 
-
                   </a>
 
-
               </div>
-
-
 
             <%}%>
 
@@ -196,39 +193,16 @@
 
   </main>
 
-
   <script src = "https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyACepJIoDZ1rhhju2bK-lO23qIzaKwXsnY&loading=async&libraries=maps,marker&v=beta" defer></script>
+
   <script src = "/js/util.js" ></script>
   <script src = "/js/search_results.js" ></script>
   <script src = "/js/edit_profile.js" ></script>
   <script src = "/js/update_location.js" ></script>
   <script src = "/js/navbar.js" ></script>
+  <script src = "/js/pages.js"></script>
 
-  <script src = "/js/cart.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyACepJIoDZ1rhhju2bK-lO23qIzaKwXsnY&loading=async&libraries=maps,marker&v=beta" defer></script>
-  <script>
+  <script src = "/js/user/cart.js"></script>
 
-    var title_el = document.querySelector(".product_item_text--title");
-    var new_title = titleCase(title_el.innerHTML);
-
-    title_el.innerHTML = new_title;
-
-    var href = window.location.href;
-    var result_page_numbers = document.getElementsByClassName("result_page_number");
-
-    for(var i =0; i < result_page_numbers.length; i++){
-
-      result_page_numbers[i].addEventListener("click",(e)=>{
-          var page_number = e.target.getAttribute("page");
-
-          var new_href = href.substring(0,href.length - 1,-1);
-          new_href += page_number;
-
-          window.location.assign(new_href);
-      });
-
-    }
-
-
-  </script>
-<%- include("./../layouts/end.ejs") %>
+  <%- include("./../layouts/end.ejs") %>

@@ -5,8 +5,8 @@ function CheckPopup(feedback_,redirects_counter){
   if(redirects_counter >= 1 ){
      data = null;
   }
-  else{
-    data = feedback_.popup_message;
+  else if (feedback_){
+    data = feedback_.popup_message ? feedback_.popup_message : null;
   }
 
   redirects_counter +=1;

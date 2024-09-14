@@ -8,6 +8,7 @@ const path = require("path");
 const pdf = require('pdfkit');
 const bcrypt = require("bcrypt");
 const stripe = require("stripe")("sk_test_51OjAfEL9aEOLpUqjCLjitVLvOalLj9CCZEpk9SPkxZnmh2xJZSsB8Fp8mrkAO8lNUaogi51OVptQ9Tc56el67Skg008Rlc9dP2");
+
 const ObjectId = require("mongodb").ObjectId;
 
 const rootDir = require("./../util/path.js");
@@ -81,9 +82,7 @@ const GetReviews = (req,res)=>{
 const GetCatagories = (req,res,next) => {
 
    Product.find().then( (all_products) =>{
-
     new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
-
     res.json(new_catagories);
   });
 
@@ -103,7 +102,6 @@ const GetProducts = async (req,res,next) =>{
 function GetPageData(counter,products){
 
   var starting_counter = CURATED_ITEMS_LIMIT * counter;
-
   var limited_products = [];
 
   if(starting_counter <= 0){
@@ -120,7 +118,7 @@ function GetPageData(counter,products){
 
   }
 
-    return limited_products
+  return limited_products
 
 }
 
@@ -135,27 +133,25 @@ const ConvertLocation = async (req,res) => {
 
 const ReverseConvertLocation = async (req,res) => {
 
-  var coords = req.body;
+  var body = req.body;
 
-  var location_data = await location.ReverseConvertLocation(coords);
+  var location_data = await location.ReverseConvertLocation(body);
 
   if(!location_data){
     res.render(false);
     return;
   }
 
-  var data = location_data;
-
   var formatted_address = {
-    zip:data.zipcode,
-    stateAbr:data.state_abbr,
-    city:data.city,
-    state:data.state
+    zip:location_data.zipcode,
+    stateAbr:location_data.state_abbr,
+    city:location_data.city,
+    state:location_data.state
   }
 
   var coords = {
-    latitude:data.latitude,
-    longitude:data.longitude
+    latitude:location_data.latitude,
+    longitude:location_data.longitude
   }
 
    res.json({address:formatted_address,coords:coords});
@@ -163,11 +159,11 @@ const ReverseConvertLocation = async (req,res) => {
 
 }
 
-async function OutputSearchResults(req,product,page_counter,all_products){
+async function OutputSearchResults(req,product_searched,page_counter,all_products){
 
    new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
 
-   var similar_products = await product_util.FindSimilarProducts(product,all_products);
+   var similar_products = await product_util.FindSimilarProducts(product_searched,all_products);
    var page_length = Math.floor(similar_products.length / CURATED_ITEMS_LIMIT);
    var limited_products = uni_controller.GetPageData(page_counter,similar_products);
    var new_feedback = {...feedback};
@@ -182,7 +178,7 @@ async function OutputSearchResults(req,product,page_counter,all_products){
    new_feedback.page_counter = page_counter ;
    new_feedback.action = "/user/profile/edit";
    new_feedback.current_catagory = "";
-   new_feedback.searched_term = product;
+   new_feedback.searched_term = product_searched;
    new_feedback.isAdmin = ReturnIsAdmin(req);
    new_feedback.render = CURATEDPRODUCTSURL;
    new_feedback.isAuthenticatedAdmin = req.session.isAuthenticatedAdmin;
@@ -193,33 +189,39 @@ async function OutputSearchResults(req,product,page_counter,all_products){
 
 const GetSearchResults = async (req,res,next) => {
 
-  var product = req.params.product;
+  var product_searched = req.params.product;
   var page_counter = parseInt(req.params.page_counter) - 1;
-  var adminI = req.params.isAdmin;
+  var isAdmin = req.params.isAdmin;
 
-  if(!adminI ){
+
+  if(!isAdmin || isAdmin == "false"){
 
     Product.find({}).then(async (all_products)=>{
 
-      var new_feedback = await OutputSearchResults(req,product,page_counter,all_products);
+      var new_feedback = await OutputSearchResults(req,product_searched,page_counter,all_products);
+
       res.render(new_feedback.render, new_feedback);
 
-      });
+    });
 
   }else if(req.admin){
-    var new_feedback = await OutputSearchResults(req,product,page_counter,req.admin.products);
+
+    var new_feedback = await OutputSearchResults(req,product_searched,page_counter,req.admin.products);
+
     res.render(new_feedback.render, new_feedback);
-  }else{
+
+  }
+  else{
     res.redirect("/admin/login");
   }
 
 }
 
-async function OutputCatagorySearch(req,catagory,page_counter,all_products){
+async function OutputCatagorySearch(req,catagory_searched,page_counter,all_products){
 
   new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
 
-  var products_in_catagory = await product_util.FindProductsFromCatagory(catagory,new_catagories);
+  var products_in_catagory = await product_util.FindProductsFromCatagory(catagory_searched,new_catagories);
   var page_length = Math.floor(products_in_catagory.length / CURATED_ITEMS_LIMIT);
   var limited_products = uni_controller.GetPageData(page_counter,products_in_catagory);
   var cart = req.user ? req.user.cart : null;
@@ -236,8 +238,8 @@ async function OutputCatagorySearch(req,catagory,page_counter,all_products){
   new_feedback.page_length = page_length;
   new_feedback.page_counter = page_counter;
   new_feedback.action = "/user/profile/edit";
-  new_feedback.current_catagory = catagory;
-  new_feedback.catagory_input = catagory;
+  new_feedback.current_catagory = catagory_searched;
+  new_feedback.catagory_input = catagory_searched;
   new_feedback.searched_term = new_feedback.searched_term;
   new_feedback.render = CURATEDPRODUCTSURL;
   new_feedback.isAdmin = ReturnIsAdmin(req);
@@ -248,26 +250,25 @@ async function OutputCatagorySearch(req,catagory,page_counter,all_products){
 
 const GetCatagoryResults = async (req,res) => {
 
-  var catagory = req.params.catagory ? req.params.catagory : req.body.catagory;
+  var catagory_searched = req.params.catagory ? req.params.catagory : req.body.catagory;
   var page_counter = parseInt(req.params.page_counter);
-  var adminI = req.params.isAdmin;
+  var isAdmin = req.params.isAdmin;
 
-  if(!adminI){
+  if(!isAdmin || isAdmin == "false"){
 
     Product.find({}).then(async (all_products)=>{
 
-      var new_feedback = await OutputCatagorySearch(req,catagory,page_counter,all_products);
+      var new_feedback = await OutputCatagorySearch(req,catagory_searched,page_counter,all_products);
       res.render(new_feedback.render, new_feedback);
 
     });
 
   }else{
-    var new_feedback = await OutputCatagorySearch(req,catagory,page_counter,req.admin.products);
+    var new_feedback = await OutputCatagorySearch(req,catagory_searched,page_counter,req.admin.products);
     res.render(new_feedback.render, new_feedback);
   }
 
 }
-
 
 module.exports.ReverseConvertLocation = ReverseConvertLocation;
 module.exports.ConvertLocation = ConvertLocation;

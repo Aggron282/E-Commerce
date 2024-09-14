@@ -12,6 +12,7 @@
 
   <% var update_url = isAdmin ? "/admin/location/update" : "/user/location/update" %>
   <% var isAuth = false %>
+
   <% if(isAdmin){%>
     <%  isAuth = isAuthenticatedAdmin ? true : false %>
   <%}else{%>

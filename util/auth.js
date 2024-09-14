@@ -1,5 +1,6 @@
 var rootDir = require("./../util/path.js");
 var path = require("path");
+
 const {validationResult} = require("express-validator");
 
 const CREATEACCOUNTPAGEURL = path.join(rootDir,"views","auth","create_account.ejs");
@@ -33,7 +34,7 @@ function RenderLogin(req,res,auth_config,input_config,feedback){
 
   feedback.type = auth_config.type;
   feedback.url = auth_config.login_url;
-  
+
   res.render(LOGINPAGEURL,feedback);
 
 }

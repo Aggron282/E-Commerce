@@ -15,6 +15,13 @@ const StatusError = require("./../util/status_error.js");
 const CREATEACCOUNTPAGEURL = path.join(rootDir,"views","auth","create_account.ejs");
 const LOGINPAGEURL = path.join(rootDir,"views","auth","login.ejs");
 
+const SECONDS = 1000;
+const MINUTES = 60 * SECONDS;
+const HOUR = 60 * MINUTES;
+const DAY = 24 * HOUR;
+
+const FUTURETIMEFIXED = 2 * DAY;
+
 
 const ADMIN_LOGIN_CONFIG = {
   login_url:"/admin/login",
@@ -42,7 +49,6 @@ const GetAdminLoginPage = async (req,res) => {
 }
 
 const CreateAccount = (req,res) => {
-
 
   const email = req.body.email;
   const name = req.body.name;
@@ -77,9 +83,10 @@ const CreateAccount = (req,res) => {
             req.session.admin = new_admin;
 
             await req.session.save();
-            feedback.popup_message = "Created Your Account!"
-            res.redirect(ADMIN_LOGIN_CONFIG.login_url);
 
+            feedback.popup_message = "Created Your Account!"
+
+            res.redirect(ADMIN_LOGIN_CONFIG.login_url);
 
          });
 
@@ -97,17 +104,13 @@ const CreateAccount = (req,res) => {
     res.render(CREATEACCOUNTPAGEURL,feedback);
   }
 
-
 }
-
 
 const GetCreateAccountPage = (req,res) => {
 
   feedback.url = ADMIN_LOGIN_CONFIG.create_url;
-
   feedback.userInput.email = "";
   feedback.userInput.password = "";
-
   feedback.redirect = "/create_account";
 
   res.render(CREATEACCOUNTPAGEURL,feedback);
@@ -154,7 +157,6 @@ const PostAdminLogin = async (req,res,next) => {
     }).catch((err)=>{
       auth.RenderLogin(req,res,ADMIN_LOGIN_CONFIG,config,feedback);
     });
-
 
   }
 

@@ -1,4 +1,5 @@
 const router = require("express").Router();
+
 const user_auth_controller = require("./../controllers/user_auth_controller.js");
 const admin_auth_controller = require("./../controllers/admin_auth_controller.js");
 
@@ -36,9 +37,9 @@ router.post("/admin/create_account",
     }
   }),admin_auth_controller.CreateAccount);
 
+
 router.get("/admin/login",admin_auth_controller.GetAdminLoginPage);
 router.get("/admin/create_account",admin_auth_controller.GetCreateAccountPage);
-
 router.post("/admin/login",admin_auth_controller.PostAdminLogin);
 
 
