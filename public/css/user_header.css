@@ -21,8 +21,9 @@
 
 .catagory_search_user{
   border-radius:0px ;
-
 }
+
+
 .catagory_search_container{
   float:right;
   margin-right:10px;
@@ -225,6 +226,7 @@
   float:left;
   display: inline;
   margin-left:5%;
+  color:white;
 }
 
 .navbar_user_icon--cart{

@@ -181,6 +181,7 @@ async function OutputSearchResults(req,product_searched,page_counter,all_product
    new_feedback.searched_term = product_searched;
    new_feedback.isAdmin = ReturnIsAdmin(req);
    new_feedback.render = CURATEDPRODUCTSURL;
+   new_feedback.isAuthenticated = req.session.isAuthenticated;
    new_feedback.isAuthenticatedAdmin = req.session.isAuthenticatedAdmin;
    new_feedback.popup_message = popup_util.CheckPopup(new_feedback);
 
@@ -234,6 +235,7 @@ async function OutputCatagorySearch(req,catagory_searched,page_counter,all_produ
   new_feedback.cart = req.user ? req.user.cart : null;
   new_feedback.catagories = new_catagories;
   new_feedback.popup_message = null;
+  new_feedback.isAuthenticated = req.session.isAuthenticated;
   new_feedback.isAuthenticatedAdmin = req.session.isAuthenticatedAdmin;
   new_feedback.page_length = page_length;
   new_feedback.page_counter = page_counter;

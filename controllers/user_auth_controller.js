@@ -60,7 +60,6 @@ const PostUserLogin = (req,res,next) => {
 
   feedback.validationErrors = errors.array();
 
-
   if(errors.isEmpty()){
 
     User.findOne({email:email}).then((found_user)=>{
@@ -224,12 +223,12 @@ const CreateAccount = (req,res) => {
 
       if(!response){
 
-          // bcrypt.hash(password,12).then((encrypt)=>{
+          bcrypt.hash(password,12).then((encrypt)=>{
 
             const new_user = new User({
               email: email,
               name:name,
-              password:password,
+              password:encrypt,
               profileImg:"",
               cart:{items:[]}
             });
@@ -244,7 +243,7 @@ const CreateAccount = (req,res) => {
             });
 
             // res.redirect(USER_LOGIN_CONFIG.login_url);
-
+          });
         // }).then(result =>{
         // });
 

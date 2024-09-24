@@ -30,7 +30,7 @@ const RevealModal = () => {
 const SubmitSearch = (element_class,isAdmin,type) => {
 
   var search_bar_element = document.querySelector("."+element_class);
-  var input = search_bar_element.value;
+  var input = search_bar_element.value.length > 0 ? search_bar_element.value.length : "none";
   var isAdmin = isAdmin ? true : false;
 
   window.location.assign(`/search/product/${type}=${input}/page_counter=0/isAdmin=${isAdmin}`);

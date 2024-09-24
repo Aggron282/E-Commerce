@@ -73,7 +73,7 @@ const CreateAccount = (req,res) => {
             const new_admin = new Admin({
               email: email,
               name:name,
-              password:password,
+              password:encrypt,
               profileImg:"",
               products:[]
             });
@@ -125,25 +125,22 @@ const PostAdminLogin = async (req,res,next) => {
     Admin.findOne({email:config.email}).then((found_user)=>{
 
       if(found_user){
-
+        console.log(found_user);
         bcrypt.compare(config.password,found_user.password).then((isFound)=>{
-
+          console.log(isFound)
           if(isFound){
 
             req.session.isAuthenticatedAdmin = true;
             req.session.admin = found_user;
-
+            console.log("FOUND");
             req.session.save((err)=>{
               res.redirect(ADMIN_LOGIN_CONFIG.home_url);
-              return;
-            });
 
-            return;
+            });
 
           }
           else{
-            auth.RenderLogin(req,res,ADMIN_LOGIN_CONFIG.home_url,config,feedback);
-            return;
+            res.redirect(ADMIN_LOGIN_CONFIG.login_url)
           }
 
         })
@@ -151,7 +148,7 @@ const PostAdminLogin = async (req,res,next) => {
       }
       else{
         auth.RenderLogin(req,res,ADMIN_LOGIN_CONFIG,config,feedback);
-        return;
+
       }
 
     }).catch((err)=>{

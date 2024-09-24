@@ -440,7 +440,7 @@ const GetCartPage = async (req,res) =>{
           var didFindItemInCart = false
 
           if(existing_items.length <= 0){
-            existing_items.push(item);
+            existing_items.push(cart_item);
           }
           else{
 
@@ -460,7 +460,7 @@ const GetCartPage = async (req,res) =>{
 
           }
 
-          total_price += item.data.price  * item.quantity;
+          total_price += cart_item.data.price  * cart_item.quantity;
 
         }
 
@@ -495,7 +495,7 @@ const GetCartPage = async (req,res) =>{
 
 }
 
-Product.find().then(async (all_products) =>{
+    Product.find().then(async (all_products) =>{
 
      var popup = popup_util.CheckPopup(new_feedback);
 
@@ -514,9 +514,8 @@ Product.find().then(async (all_products) =>{
      new_feedback.cart = req.user ? req.user.cart : null;
      new_feedback.catagories = new_catagories;
      new_feedback.render =  CARTPAGEURL;
-     new_feedback.session_id = session;
      new_feedback.total_price = total_price;
-     new_feedback.cart.items = items ? items : [];
+     new_feedback.cart.items = all_cart_items ? all_cart_items : [];
 
      new_feedback.popup_message = popup.message;
 
