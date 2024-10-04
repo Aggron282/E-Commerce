@@ -37,6 +37,7 @@ function RenderPopup(message){
 }
 
 
+
 // <div class="catagory_arrow catagory_arrow--left" catagory = <%= c %> counter = -1  >
 //   <img src = "./../images/arrow.png" catagory = <%= c %> counter = -1/>
 // </div>

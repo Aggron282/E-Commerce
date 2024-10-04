@@ -82,10 +82,16 @@
             <%}%>
 
             <% for(var i = 0; i < limited_products.length; i++){%>
+              <%
+              const formatter = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+              });
+              %>
 
               <% var _id = limited_products[i]._id %>
               <% var title =  limited_products[i].title.substring(0,70) %>
-              <% var price = "$" + limited_products[i].price + ".99" %>
+              <% price = formatter.format(limited_products[i].price) %>
               <% var description = limited_products[i].description.substring(0,50) + "..." %>
               <% var clear = i % 4 == 0 ? "clear" : "" %>
 

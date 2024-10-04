@@ -12,12 +12,21 @@
           <% var thumbnail = "" %>
           <% var description = "[N/A]" %>
 
+
           <% if(items.top_deals[i]){ %>
 
             <% name = items.top_deals[i].title %>
             <% discount = items.top_deals[i].discount %>
             <% price_original = items.top_deals[i].price %>
             <% price_new = parseInt(items.top_deals[i].price - ((items.top_deals[i].price) * (items.top_deals[i].discount / 100)) ).toString() %>
+            <% const formatter = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+              }) %>
+
+            <%  price_original =  formatter.format(price_original) %>
+            <%  price_new =  formatter.format(price_new) %>
+
             <% link =`/product/${items.top_deals[i]._id}` %>
             <% name = name.substring(0, 35) + "..."; %>
             <% description = items.top_deals[i].description %>
@@ -45,9 +54,9 @@
 
                     <div class="discount_product_text_box">
 
-                      <p class="discount_product_text discount_product_text--original">$<%= price_original  %>.99</p>
+                      <p class="discount_product_text discount_product_text--original"><%= price_original  %></p>
 
-                      <p class="discount_product_text discount_product_text--price">$<%= price_new %>.99</p>
+                      <p class="discount_product_text discount_product_text--price"><%= price_new %></p>
                         <p class="discount_product_text discount_product_text--description"><%= description %></p>
                         <p class="discount_product_detail">See Details</p>
                       </div>

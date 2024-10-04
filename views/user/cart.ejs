@@ -27,6 +27,14 @@
                     <% if (cart.items.length > 0) {%>
 
                         <% for (var i = 0; i < cart.items.length; i++) { %>
+
+                          <%
+                            const formatter = new Intl.NumberFormat('en-US', {
+                              style: 'currency',
+                              currency: 'USD',
+                            });
+                          %>
+                          <% price = formatter.format(cart.items[i].data.price) %> 
                           <div class="cart_interface_box">
 
                             <div class="row">
@@ -38,7 +46,7 @@
                               <div class="col-6">
 
                                 <p class="cart_interface--title cart_interface--text width-100"> <%= cart.items[i].data.title %> </p>
-                                <p class="cart_interface--title cart_interface--text width-100"> $<%= cart.items[i].data.price %>.99 </p>
+                                <p class="cart_interface--title cart_interface--text width-100"> <%= price %> </p>
                                 <p class="cart_interface--title cart_interface--text width-100"> Qty: <%= cart.items[i].quantity %> </p>
 
                                 <form method = "POST" action = "/cart/delete" >

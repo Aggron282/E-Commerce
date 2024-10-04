@@ -51,6 +51,15 @@
   <%- include("./layouts/admin/product_form.ejs") %>
 <%}%>
 
+<% const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  }) %>
+
+<% var price =  formatter.format(item.price) %>
+<% var inactive = item.quantity > 0 ? "" : "sold_out" %>
+<% var qty = item.quantity > 0 ? "In Stock:"+item.quantity : "This Product is Currently Sold Out" %>
+
 <main class="main_content main_content--active" class="main_content relative">
 
   <div class="row">
@@ -61,12 +70,9 @@
 
             <p class="product_detail--name"> <%= item.title %> </p>
             <p class="product_detail--type"> <%= item.catagory %> </p>
-            <p class="product_detail--price"> $<%= item.price %>.99 </p>
+            <p class="product_detail--price"> <%= price %> </p>
 
             <span class="product_id" id="product_id_hash" _id = "<%= item._id %>"></span>
-
-            <% var inactive = item.quantity > 0 ? "" : "sold_out" %>
-            <% var qty = item.quantity > 0 ? "In Stock:"+item.quantity : "This Product is Currently Sold Out" %>
 
             <p class="product_detail--sold <%= inactive %>"><%= qty %></p>
 

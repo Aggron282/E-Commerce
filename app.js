@@ -1,5 +1,3 @@
-
-
 var Admin = require("./models/admin.js");
 var User = require("./models/user.js");
 var Products = require("./models/products.js");
@@ -14,7 +12,9 @@ var path = require("path");
 var session = require("express-session");
 var multer = require("multer");
 var mongoose = require("mongoose");
+
 var db_util = require("./util/db.js");
+
 var MongoDBStore = require('connect-mongodb-session')(session);
 
 var user_routes = require("./routes/user_routes.js");
@@ -22,7 +22,6 @@ var admin_routes = require("./routes/admin_routes.js");
 var uni_routes = require("./routes/uni_routes.js");
 var user_auth_routes = require("./routes/user_auth_routes.js");
 var admin_auth_routes = require("./routes/auth_admin_routes.js");
-
 
 var rootDir = require("./util/path.js");
 var port = process.env.PORT || 3003 ;
@@ -52,12 +51,6 @@ const fileStorage = multer.diskStorage({
   }
 
 })
-
-// app.use(cookieParser());
-// app.use(csrf);
-
-app.use(session({secret:"43489438994388948949842894389",saveUninitialized:false,store:StoreSession}));
-app.use(multer({storage:fileStorage}).single("thumbnail"));
 
 function SetDefaultAdmin(){
 
@@ -93,6 +86,9 @@ function SetDefaultAdmin(){
   });
 
 }
+
+app.use(session({secret:"43489438994388948949842894389",saveUninitialized:false,store:StoreSession}));
+app.use(multer({storage:fileStorage}).single("thumbnail"));
 
 app.use((req,res,next)=>{
 
@@ -148,7 +144,6 @@ app.use(admin_auth_routes);
 
 app.use(admin_routes);
 app.use(user_routes);
-
 app.use(uni_routes);
 
 app.get("/error",((req,res)=>{
@@ -175,7 +170,7 @@ app.use((req,res)=>{
 app.use((err, req, res, next) => {
 
   res.locals.error = err;
-  //------------------------vvvvvvv added
+
   const status = err.status || 500;
 
   res.status(status);
@@ -197,9 +192,7 @@ mongoose.connect("mongodb+srv://mawile12:sableye12@cluster0.mv38jgm.mongodb.net/
               prodId:"",
               quantity:1
           }
-
         }
-
       }
 
       var new_user = new User(schema_);

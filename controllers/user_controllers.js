@@ -33,6 +33,13 @@ const CARTPAGEURL = path.join(rootDir,"views","user","cart.ejs");
 const HOMEPAGEURL = path.join(rootDir,"views","user","index.ejs");
 const CURATEDPRODUCTSURL = path.join(rootDir,"views","user","curated_products.ejs");
 
+
+let formatting_options = {
+   style: 'currency',
+   currency: 'USD',
+   minimumFractionDigits: 2,
+}
+
 var feedback ={
   items:{
     top_deals:null,
@@ -333,11 +340,16 @@ const GetCheckoutPage = async (req,res) =>{
 
 }
 
+
+
 const GetHomePage = async (req,res,next) => {
 
   Product.find().then(async (all_products) =>{
 
+    var new_products = []
+
     var popup = popup_util.CheckPopup(feedback);
+
     redirects_counter = popup.redirects_counter;
 
     new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
