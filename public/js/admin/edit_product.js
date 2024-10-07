@@ -4,7 +4,6 @@ var edit_delete_containers = document.getElementsByClassName("edit_delete_contai
 var canEdit = false;
 var isModalOn = false;
 
-
 const ToggleCanEdit = () =>{
   canEdit = !canEdit;
   AddEditAndDeleteFeature(canEdit);

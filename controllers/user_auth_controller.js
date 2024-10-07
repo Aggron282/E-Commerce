@@ -66,10 +66,10 @@ const PostUserLogin = (req,res,next) => {
 
       if(found_user){
 
-        if(found_user.password == password){
-        // bcrypt.compare(password,found_user.password).then((isFound)=>{
+        // if(found_user.password == password){
+         bcrypt.compare(password,found_user.password).then((isFound)=>{
 
-          // if(isFound){
+           if(isFound){
 
             req.session.isAuthenticated = true;
             req.session.user = found_user;
@@ -84,21 +84,8 @@ const PostUserLogin = (req,res,next) => {
 
             res.status(401).render(LOGINPAGE,feedback);
           }
-        }
-        else{
-
-          feedback.popup_message = "No User Found!"
-          res.status(401).render(LOGINPAGE,feedback);
-
-        }
-
-        // }).catch((err)=>{
-        //   res.status(500).redirect(USER_LOGIN_CONFIG.login_url);
-        // });
-
-      // }else{
-      //   res.status(401).render(LOGINPAGE,feedback);
-      // }
+        });
+      }
 
     });
 

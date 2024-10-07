@@ -8,15 +8,7 @@ var increase_increment = 4;
 const RenderItems = (catagory) => {
 
   var populate_container = document.querySelector("#_"+catagory.catagory);
-
   var html = ``;
-
-  var name = "Name Will Be Placed Here";
-  var img = "./images/catagory_3.png";
-  var price = "[N/A]";
-  var description = "";
-  var discount_price=''
-  var cross_class = "";
 
   populate_container.innerHTML = "";
 
@@ -24,48 +16,13 @@ const RenderItems = (catagory) => {
 
     var current_catagory_counter = i + catagory.counter;
 
-    if(catagory.products[current_catagory_counter])
-    {
-
-       var product = catagory.products[current_catagory_counter];
-
-       name = product.title.substring(0, 30) + "...";
-       img = "/images/"+product.thumbnail
-       price = product.price
-       description = product.description.substring(0, 100) + "...";
-       discount_price = parseFloat(price - (price * (product.discount / 100)))
-       cross_class = product.discount > 0 ? "cross-out" : ""
-       discount_price = Math.round(discount_price * 100) / 100
-
-     }
-
      html += `
       <div class="col-3 catagorized_products_col">
-
-        <a href = ${"/product/"+product._id} >
-
-           <div class= "catagory_product_box product_box--catagory width-100" catagory = ${catagory.catagory} it = ${current_catagory_counter} >
-
-            <p class="catagory_product_text--name">${ name }</p>
-
-            <img class="catagory_product_image margin-top-5"src = ${ img } />
-
-             <div class="catagory_product_text_box margin-top-5">
-
-               <p class="catagory_product_text catagory_product_text--price ${cross_class}">$ ${ price }</p>
-               <p class="catagory_product_text catagory_product_text--price ">$ ${ discount_price} </p>
-
-             </div>
-
-            </div>
-
-        </a>
-
+        ${RenderProductBox(catagory,current_catagory_counter)}
       </div>`
-
  }
 
- populate_container.innerHTML = html;
+  populate_container.innerHTML = html;
 
 }
 
@@ -109,5 +66,49 @@ const InitToggle = () => {
 
 }
 
+const ExecToggle = (e) => {
+
+  var multiplier = e.target.getAttribute("multiplier");
+
+  if(!multiplier){
+    return;
+  }
+
+  multiplier = parseInt(multiplier);
+
+  ToggleCatagoryPage(multiplier);
+  BuiltCatagoriesHTML();
+
+}
+
+const ToggleCatagoryPage = (multiplier) => {
+
+    if(!selected_catagory){
+      return;
+    }
+    else{
+
+      counter += PAGE_INCREMENT * multiplier;
+      page_count = Math.floor(selected_catagory.items.length  / PAGE_INCREMENT);
+
+      if(counter >= page_count - 1){
+        counter = 0;
+      }
+
+      if(counter < 0){
+
+        if(page_count > 0)
+        {
+          counter = Math.floor(selected_catagory.items.length  / PAGE_INCREMENT);
+        }
+        else{
+          counter = 0;
+        }
+
+      }
+
+    }
+
+}
 
 InitToggle();

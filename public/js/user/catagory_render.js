@@ -7,73 +7,21 @@ var PAGE_INCREMENT = 5;
 var counter = 0;
 var selected_catagory = null;
 
-const RenderHTMLToCatagory = (catagories,catagory_name) => {
+const RenderHTMLToCatagory = (items_in_catagory,catagory_name) => {
 
-  var render_html =  `
-  <div class="catagory_container">
-   <p class="catagory_name"> ${catagory_name} </p>
-    <div>
-      ${catagories}
-    </div>
-    <div class="arrow_catagory_container">
-    <div class="arrow_catagory arrow_catagory--left " multiplier = "1">
-      <img src = "./images/arrow.png"  multiplier = "1"/>
-    </div>
-    <div class="arrow_catagory arrow_catagory--right " multiplier ="-1">
-      <img src = "./images/arrow.png" multiplier = "-1" />
-    </div>
-    </div>
-  </div>
-`
+  var html = RenderCatagories(items_in_catagory,catagory_name);
 
-  container_render.innerHTML = render_html;
+  container_render.innerHTML = html;
 
   var catagories_arrows = document.getElementsByClassName("arrow_catagory_sub");
 
   for(var i =0; i < catagories_arrows.length; i++){
 
     catagories_arrows[i].addEventListener("click",(e)=>{
-
-      var multiplier = e.target.getAttribute("multiplier");
-
-      multiplier = parseInt(multiplier);
-
-      ToggleCatagoryPage(multiplier);
-      BuiltCatagoriesHTML();
-
+      ExecToggle(e);
     })
 
   }
-
-}
-
-const ToggleCatagoryPage = (multiplier) => {
-
-    if(!selected_catagory){
-      return;
-    }
-    else{
-
-      counter += PAGE_INCREMENT * multiplier;
-      page_count = Math.floor(selected_catagory.items.length  / PAGE_INCREMENT);
-
-      if(counter >= page_count - 1){
-        counter = 0;
-      }
-
-      if(counter < 0){
-
-        if(page_count > 0)
-        {
-          counter = Math.floor(selected_catagory.items.length  / PAGE_INCREMENT);
-        }
-        else{
-          counter = 0;
-        }
-
-      }
-
-    }
 
 }
 
@@ -93,23 +41,9 @@ const BuiltCatagoriesHTML = () =>{
       break;
     }
 
-    var product_id = selected_catagory.products[i]._id;
-    var new_description = selected_catagory.products[i].title.substring(0, 55) + "...";
-
     html += `
     <div class="col-2">
-
-      <div class= "catagory_product_box product_box--catagory width-100" catagory = ${selected_catagory.catagory} i = ${selected_catagory.counter} >
-
-        <p class="catagory_product_text--name">${new_description}</p>
-        <div class="catagory_product_image_container">
-          <img class="catagory_product_image" src = ${selected_catagory.products[counter + i].thumbnail} />
-        </div>
-        <p class="catagory_product_text">$${selected_catagory.products[counter + i].price}.99</p>
-        <a href = "/product/${product_id}">  <button class="catagory_product_detail">See Details</button> </a>
-
-      </div>
-
+      ${RenderProductBox(selected_catagory,i)}
     </div>
     `
   }

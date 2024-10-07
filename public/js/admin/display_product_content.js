@@ -1,4 +1,4 @@
-//---Content Display
+
 var name_content = document.querySelector(".content_text--title");
 var price_content = document.querySelector(".content_text--price");
 var discount_content = document.querySelector(".content_text--discount");
@@ -51,7 +51,7 @@ const UpdateValue = (e,default_value,content) => {
 
 }
 
-const CheckIfZero(e){
+const CheckIfZero = (e) =>{
 
   var value = e.target.value;
 

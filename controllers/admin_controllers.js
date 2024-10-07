@@ -215,7 +215,7 @@ const GetMainPage = async (req,res,next) =>{
 const GetProductDetailPage = async (req,res,next) =>{
 
     var id = req.params._id;
-    var popup = popup_util.CheckPopup(new_feedback);
+    var popup = popup_util.CheckPopup(feedback);
 
     redirects_counter = popup.redirects_counter;
 
@@ -279,13 +279,15 @@ async function DeleteProduct(req,res,id){
     var new_admin = {...req.admin};
 
     new_admin.products = new_products;
-
-    var new_product = await  Product.findByIdAndDelete(id);
+    var isFound = await Product.findOne({_id:id});
+    if(isFound){
+      await Product.deleteOne({_id:id});
+    }
     var update_query = {$set: {'products': new_products}};
 
     var replace_admin_products = await Admin.findByIdAndUpdate({_id:req.admin._id},update_query,(update_response)=>{
       req.admin = new_admin;
-      res.json(r);
+      res.json(update_response);
     });
 
 }
@@ -306,7 +308,7 @@ const EditOneProduct = async (req,res,next) =>{
 
   var product_config = {...found_product._doc};
 
-  var product_thumbnail = new_product.thumbnail;
+  var product_thumbnail = product_config.thumbnail;
 
   if(req.file && req.file.filename){
      product_thumbnail = req.file.filename;
@@ -324,24 +326,27 @@ const EditOneProduct = async (req,res,next) =>{
 
   var new_products = products.map((product_)=>{
 
-    if(JSON.stringify(product_._id) == JSON.stringify(new_product._id)){
-      return product_ = new_product;
+    if(JSON.stringify(product_._id) == JSON.stringify(product_config._id)){
+      return product_ = product_config;
     }
 
     return product_;
 
   });
 
-  Product.findOneAndReplace({_id:product_config._id},new_product).then((replace_response)=>{
+  Product.findOneAndReplace({_id:product_config._id},product_config).then((replace_response)=>{
 
     const filter_by_id = { _id : new ObjectId(req.admin._id) };
     const update_products = {$set:{ products : new_products}};
 
     Admin.findOneAndUpdate(filter_by_id,update_products,{new: true,useFindAndModify:false}).then((err,doc)=>{
 
-      new_admin_.products = new_products;
+      var new_admin = {...req.admin};
 
-      req.admin = new_admin_;
+      new_admin.products = new_products;
+
+      req.admin = new_admin;
+
       feedback.popup_message = "Edited Product!"
 
       redirects_counter = 0;
@@ -376,13 +381,16 @@ const AddProduct = async (req,res,nect) => {
   }
 
   var new_product = new Product(product_config);
-  var new_products = new_admin.products;
+  console.log(new_admin);
   var new_admin = {...req.admin._doc};
+
+  var new_products = new_admin.products;
 
   const filter_by_id = { _id : new ObjectId(new_admin._id) };
   const update_products = {$set:{ products : new_products}};
 
   new_product.save();
+
 
   new_admin.products.push(new_product);
 

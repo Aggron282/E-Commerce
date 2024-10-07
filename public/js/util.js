@@ -1,4 +1,8 @@
 var popup_container = document.querySelector(".popup_container")
+const usd_format = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+});
 
 function titleCase(str) {
 
@@ -35,13 +39,3 @@ function RenderPopup(message){
    }
 
 }
-
-
-
-// <div class="catagory_arrow catagory_arrow--left" catagory = <%= c %> counter = -1  >
-//   <img src = "./../images/arrow.png" catagory = <%= c %> counter = -1/>
-// </div>
-//
-// <div class="catagory_arrow catagory_arrow--right"  catagory = <%= c %> counter =1>
-//   <img src = "./../images/arrow.png" catagory = <%= c %> counter =1/>
-// </div>

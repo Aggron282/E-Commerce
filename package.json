@@ -8,7 +8,7 @@
     "nodemon-watch": "nodemon app.js -e *",
     "dev": "npm-run-all --parallel sass-watch nodemon-watch"
   },
-  "author": "Maximilian Schwarzmüller",
+  "author": "Marco Khodr",
   "license": "ISC",
   "devDependencies": {
     "nodemon": "^1.18.3"
@@ -43,5 +43,5 @@
     "sequelize": "^5.0.0-beta.11",
     "stripe": "^14.25.0"
   },
-  "homepage": "https://customfacilityservices.herokuapp.com/"
+  "homepage": "https://ecommerce.herokuapp.com/"
 }

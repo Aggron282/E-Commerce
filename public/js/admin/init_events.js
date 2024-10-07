@@ -9,10 +9,6 @@ const InitEvents = async () => {
     AddEventToEditButtons();
   }
 
-  if(canDelete){
-    AddDeleteEventToButtons();
-  }
-
   AddEventsToAddProducts();
 
   edit_delete_button_navbar.addEventListener("click",()=>{
@@ -43,18 +39,6 @@ const AddEventToEditButtons = () => {
 
 }
 
-const AddDeleteEventToButtons = () =>{
-
-  var delete_product_buttons = document.getElementsByClassName("delete_button_p");
-
-  for(var i =0; i < delete_product_buttons.length; i++){
-      delete_product_buttons[i].addEventListener("click",async (e)=>{
-        await DeleteProduct(e);
-      });
-
-    }
-
-}
 
 const AddEventsToAddProducts = () => {
 
@@ -69,24 +53,17 @@ const AddEventsToAddProducts = () => {
 
 }
 
-const AddEditAndDeleteFeature  = (canEdit) => {
+const AddEventsToToggleArrows = () => {
 
-  for(var i =0; i < edit_delete_containers.length; i++){
+  var arrow_catagory_sub = document.getElementsByClassName("arrow_catagory_sub");
 
-    if(canEdit){
-      edit_delete_containers[i].classList.remove("edit_delete_container--inactive");
-      edit_delete_containers[i].classList.add("edit_delete_container--active");
+    for(var i =0; i < arrow_catagory_sub.length; i++){
+
+      arrow_catagory_sub[i].addEventListener("click",(e)=>{
+        ToggleCatagoryProducts(e);
+      });
+
     }
-    else{
-      edit_delete_containers[i].classList.add("edit_delete_container--inactive");
-      edit_delete_containers[i].classList.remove("edit_delete_container--active");
-    }
-
-  }
-
-  if(canEdit){
-    AddEventToEditButtons();
-  }
 
 }
 

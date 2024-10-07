@@ -12,11 +12,13 @@
 
       <% var left = 0; %>
 
-      <% for (var i =0; i < items.placeholder.length; i++){%>
+      <% for (var i =0; i < items.favorite.length; i++){%>
+        <% console.log(items.favorite) %>
+        <a href = <%="/product/"+items.favorite[i]._id %> class="banner_item" style=<%=`left:`+left+"%" %>>
 
-        <div class="banner_item" style=<%=`left:`+left+"%" %>>
-            <img class="banner_item_image" src = <%=`/images/${items.placeholder[i]} ` %>/>
-        </div>
+            <img class="banner_item_image" src = <%=`/images/${items.favorite[i].thumbnail} ` %>/>
+
+        </a>
 
         <%  left += 17.5; %>
 

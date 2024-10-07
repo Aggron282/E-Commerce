@@ -341,7 +341,6 @@ const GetCheckoutPage = async (req,res) =>{
 }
 
 
-
 const GetHomePage = async (req,res,next) => {
 
   Product.find().then(async (all_products) =>{
@@ -370,6 +369,7 @@ const GetHomePage = async (req,res,next) => {
     new_feedback.limited_products = null;
     new_feedback.isAdmin = false;
     new_feedback.reviews = all_reviews;
+    new_feedback.items.favorite = product_util.GetRandomProducts(all_products,10);
     new_feedback.popup_message = popup.message;
 
     feedback = new_feedback;
@@ -377,6 +377,7 @@ const GetHomePage = async (req,res,next) => {
     res.render(new_feedback.render,new_feedback)
 
  }).catch((err)=>{
+   console.log(err)
     StatusError(next,err,500);
  });
 

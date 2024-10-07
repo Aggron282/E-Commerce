@@ -38,18 +38,18 @@
 
             <div class="col-3 catagorized_products_col">
 
-            <a href = <%="/product/"+catagories[k].products[i_]._id %>>  <div class= "catagory_product_box product_box--catagory width-100" catagory = <%= c %> it = <%= i_ %> >
+            <a href = <%="/product/"+catagories[k].products[i_]._id %>>
+
+              <div class= "catagory_product_box product_box--catagory width-100" catagory = <%= c %> it = <%= i_ %> >
 
                 <% var name = "Name Will Be Placed Here" %>
                 <% var img = "./images/catagory_3.png" %>
                 <% var price = "[N/A]" %>
                 <% var description = "" %>
-                <%
-                const formatter = new Intl.NumberFormat('en-US', {
+                <% const formatter = new Intl.NumberFormat('en-US', {
                   style: 'currency',
                   currency: 'USD',
-                });
-                %>
+                }) %>
 
                 <% name = catagories[k].products[i_].title.substring(0, 30) + "..."; %>
                 <% img = "/images/"+catagories[k].products[i_].thumbnail %>
@@ -57,9 +57,9 @@
                 <% description = catagories[k].products[i_].description.substring(0, 100) + "...";  %>
                 <% var discount_price = parseInt(catagories[k].products[i_].price - (catagories[k].products[i_].price * (catagories[k].products[i_].discount / 100))) %>
                 <% var cross = catagories[k].products[i_].discount > 0 ? "cross-out" : "" %>
-                <%  discount_price =  formatter.format(discount_price)  %>
+                <% discount_price =  formatter.format(discount_price)  %>
 
-                <p class="catagory_product_text--name"><%= name %></p>
+                <p class="catagory_product_text--name"> <%= name %> </p>
 
                 <img class="catagory_product_image margin-top-5" src = "<%= img %>" />
 
@@ -85,10 +85,10 @@
 
       </div>
 
-     </div>
-
     </div>
 
   </div>
+
+</div>
 
   <% } %>

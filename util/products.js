@@ -20,6 +20,21 @@ async function GetItemsInCatagory(default_catagories,catagory){
 
 }
 
+
+function GetRandomProducts(products,limit){
+  var new_products = [];
+
+  for(var i =0; i < limit; i++){
+    if(i >= products.length){
+      break;
+    }
+    new_products.push(products[Math.floor(Math.random() * products.length)]);
+  }
+
+  return new_products;
+
+}
+
 function FindSimilarProducts(input,all_products) {
 
     input = input.toLowerCase();
@@ -237,9 +252,9 @@ function catagoryMatch(catagories, catagory_needed,counter) {
 
 }
 
-
 module.exports.FindProductsFromCatagory = FindProductsFromCatagory;
 module.exports.FindSimilarProducts = FindSimilarProducts;
+module.exports.GetRandomProducts = GetRandomProducts;
 module.exports.OrganizeCatagories = OrganizeCatagories;
 module.exports.catagoryMatch = catagoryMatch;
 module.exports.OrganizeDiscounts = OrganizeDiscounts;

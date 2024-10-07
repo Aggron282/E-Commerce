@@ -27,9 +27,10 @@ var data_url = "";
 var canEditLocation = false;
 
 
-const TurnOffDropdownAndToggleModal = () => {
+const TurnOffDropdownAndToggleModal = (on) => {
+  console.log(on)
   ToggleDropdown(dropdown_,false);
-  ToggleLocationModal(null);
+  ToggleLocationModal(on);
 }
 
 const SubmitAndUpdateLocation = async () => {
@@ -108,22 +109,22 @@ const GetCurrentLocation = () =>{
 
 const ToggleLocationModal = (toggle) =>{
 
-  var overlay =   document.querySelector(".black_overlay");
-
-  if(toggle){
+  var overlay = document.querySelector(".black_overlay");
+  console.log(toggle);
+  if(toggle != null){
     canEditLocation = toggle;
   }
   else{
     canEditLocation = !canEditLocation;
   }
-
+  console.log(canEditLocation)
   if(!canEditLocation){
-    overlay.classList.add("black_overlay--active")
-    location_modal.classList.add("update_location_container--active");
-  }
-  else{
     overlay.classList.remove("black_overlay--active")
     location_modal.classList.remove("update_location_container--active");
+  }
+  else{
+    overlay.classList.add("black_overlay--active")
+    location_modal.classList.add("update_location_container--active");
   }
 
 }
@@ -167,7 +168,7 @@ const RenderMapElement = (location) =>{
 if(location_choice){
 
   location_choice.addEventListener("click",(e)=>{
-    TurnOffDropdownAndToggleModal();
+    TurnOffDropdownAndToggleModal(true);
   });
 
 }
@@ -175,7 +176,7 @@ if(location_choice){
 if(location_choice_admin){
 
   location_choice_admin.addEventListener("click",(e)=>{
-    TurnOffDropdownAndToggleModal();
+    TurnOffDropdownAndToggleModal(true);
   });
 
 }
@@ -190,7 +191,7 @@ else if(navbar_delivery_col){
 if(navbar_update_location_list_dropdown){
 
   navbar_update_location_list_dropdown.addEventListener("click",(e)=>{
-    TurnOffDropdownAndToggleModal();
+    TurnOffDropdownAndToggleModal(true);
   });
 
 }
