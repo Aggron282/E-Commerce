@@ -2,7 +2,8 @@ let totalProducts;
 var redirects_counter = 0;
 var page_counter = 0;
 var new_catagories = null;
-
+var multer = require("multer");
+const upload = multer({dest:"images/"});
 const path = require("path");
 const fs = require("fs");
 const bcrypt = require("bcrypt");
@@ -21,6 +22,7 @@ const Admin = require("./../models/admin.js")
 
 const HOMEPAGEURL = path.join(rootDir,"views","admin","admin.ejs");
 const DETAILPAGEURL = path.join(rootDir,"views","detail.ejs");
+const {validationResult} = require("express-validator");
 
 var feedback = {
   product:null,
@@ -361,8 +363,24 @@ const EditOneProduct = async (req,res,next) =>{
 
 const AddProduct = async (req,res,nect) => {
 
+  var errors = validationResult(req);
   var body  =   req.body;
   var filename  = "";
+
+  feedback.validationErrors = errors.array();
+
+  if(!errors.isEmpty()){
+    feedback.popup_message = "Error: Some fields were empty";
+    res.redirect("/admin");
+    return;
+  }
+
+  if(!req.file){
+    feedback.popup_message = "Error: You can only upload image files";
+    res.redirect("/admin");
+    return;
+  }
+
 
   if(req.file){
     filename = req.file.filename ? req.file.filename : "";
@@ -377,11 +395,11 @@ const AddProduct = async (req,res,nect) => {
     catagory:body.catagory,
     banner:body.banner,
     thumbnail:filename,
-    userId:req.user
+    userId:req.admin._id
   }
 
   var new_product = new Product(product_config);
-  console.log(new_admin);
+
   var new_admin = {...req.admin._doc};
 
   var new_products = new_admin.products;

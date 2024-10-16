@@ -1,18 +1,29 @@
 var router = require("express").Router();
 var path = require("path");
 var multer = require("multer");
-
 const upload = multer({dest:"images/"});
-
 var rootDir = require("./../util/path.js");
 var adminControllers = require("./../controllers/admin_controllers.js");
-
+const {check,body} = require("express-validator");
 const isAuth = require("./../middleware/isAuthAdmin.js");
 
 // Admin Product Changes
-router.post("/admin/product/edit",isAuth,adminControllers.EditOneProduct);
+router.post("/admin/product/edit",
+  check("title").isLength({min:1}).withMessage("Field is Empty"),
+  check("quantity").isLength({min:1}).withMessage("Field is Empty"),
+  check("price").isLength({min:1}).withMessage("Field is Empty"),
+  check("catagory").isLength({min:1}).withMessage("Field is Empty"),
+  check("banner").isLength({min:1}).withMessage("Field is Empty"),
+  isAuth,adminControllers.EditOneProduct);
 router.post("/admin/product/delete",isAuth,adminControllers.DeleteOneProduct);
-router.post("/admin/product/add",isAuth,adminControllers.AddProduct);
+router.post("/admin/product/add",
+check("title").isLength({min:1}).withMessage("Field is Empty"),
+check("quantity").isLength({min:1}).withMessage("Field is Empty"),
+check("price").isLength({min:1}).withMessage("Field is Empty"),
+check("catagory").isLength({min:1}).withMessage("Field is Empty"),
+check("banner").isLength({min:1}).withMessage("Field is Empty")
+,isAuth,adminControllers.AddProduct);
+
 router.get("/admin/product/delete/:_id",isAuth,adminControllers.DeleteOneProductByParams);
 
 // Admin URL Pages

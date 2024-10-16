@@ -5,7 +5,7 @@ const DeleteFile = (filePath) =>{
   fs.unlink(filePath,(err)=>{
 
     if(err){
-      donsole.log(err);
+      console.log(err);
     }
 
   });
@@ -13,4 +13,4 @@ const DeleteFile = (filePath) =>{
 }
 
 
-module.exports = DeleteFile;
+module.exports.DeleteFile = DeleteFile;

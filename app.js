@@ -24,6 +24,9 @@ var user_auth_routes = require("./routes/user_auth_routes.js");
 var admin_auth_routes = require("./routes/auth_admin_routes.js");
 
 var rootDir = require("./util/path.js");
+var image_handler = require("./util/image_handler.js");
+var user_util = require("./util/user.js");
+
 var port = process.env.PORT || 3003 ;
 var hasInit = false;
 
@@ -63,15 +66,7 @@ function SetDefaultAdmin(){
 
       Products.find({}).then((prods)=>{
 
-        var config =   {
-            name:"marc",
-            email:"e2wim@gmail.com",
-            password:"294902",
-            user_id:"66b32d8202ede594203991ed",
-            products:prods,
-            resetToken:"",
-            resetTokenExpiration:"",
-          }
+        var config = user_util.GetDummyUser();
 
         var new_admin = new Admin(config);
 
@@ -88,7 +83,11 @@ function SetDefaultAdmin(){
 }
 
 app.use(session({secret:"43489438994388948949842894389",saveUninitialized:false,store:StoreSession}));
-app.use(multer({storage:fileStorage}).single("thumbnail"));
+
+app.use(multer({storage:fileStorage,fileFilter: function(req,file, cb) {
+    image_handler.checkFileType(file, cb);
+}}).single("thumbnail"));
+
 
 app.use((req,res,next)=>{
 

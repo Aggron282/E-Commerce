@@ -75,30 +75,30 @@ function CheckForm({banner,discount,catagory,title,_id,price,quantity,descriptio
     var err_msg = "Cannot Add Product for Following Reasons: \n";
     var isErr = false;
 
-    if(catagory.length <= 0){
-      err_msg+= " Catagory field is empty \n";
-      isErr= true;
-    }
-    if(price.length <= 0){
-      err_msg+= " Price field is empty \n";
-      isErr= true;
-    }
-    if(title.length <= 2){
-      err_msg+= " Title field is too small \n";
-      isErr= true;
-    }
-    if(thumbnail.length <= 0){
-      err_msg+= " Thumbnail field is empty \n";
-      isErr= true;
-    }
-    if(description.length <= 0){
-      err_msg+= " Description field is empty \n";
-      isErr= true;
-    }
-    if(quantity.length <= 0){
-      err_msg+= " Quantity field is empty \n";
-      isErr= true;
-    }
+    // if(catagory.length <= 0){
+    //   err_msg+= " Catagory field is empty \n";
+    //   isErr= true;
+    // }
+    // if(price.length <= 0){
+    //   err_msg+= " Price field is empty \n";
+    //   isErr= true;
+    // }
+    // if(title.length <= 2){
+    //   err_msg+= " Title field is too small \n";
+    //   isErr= true;
+    // }
+    // if(thumbnail.length <= 0){
+    //   err_msg+= " Thumbnail field is empty \n";
+    //   isErr= true;
+    // }
+    // if(description.length <= 0){
+    //   err_msg+= " Description field is empty \n";
+    //   isErr= true;
+    // }
+    // if(quantity.length <= 0){
+    //   err_msg+= " Quantity field is empty \n";
+    //   isErr= true;
+    // }
 
     return {
       isErr:isErr,
