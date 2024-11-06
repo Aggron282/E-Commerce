@@ -21,7 +21,7 @@ const StatusError = require("./../util/status_error.js");
 
 const admin_controller = require("./admin_controllers.js");
 const uni_controller = require("./uni_controller");
-
+const ProductRating = require("./../models/rating.js");
 const Product = require("./../models/products.js");
 const Order = require("../models/orders.js");
 const User = require("../models/user.js");
@@ -70,6 +70,31 @@ const GetOrders = async(req,res)=>{
     res.json(found_orders);
   });
 
+}
+
+const PostProductReview = async (req,res) =>{
+  var {description,rating,heading,product_id} = req.body;
+  rating = rating > 5 ? 5 : rating;
+
+  var config = {
+    heading:heading,
+    rating:rating,
+    description:description,
+    user_id: req.user._id,
+    product_id:product_id,
+    user_info: {
+      name:req.user.name,
+      profileImg:req.user.profileImg,
+      _id:req.user._id
+    }
+  }
+
+  var new_product_review = new ProductRating(config);
+  await new_product_review.save();
+  var new_feedback  = {...feedback};
+  new_feedback.popup_message = "Added Product Review";
+  feedback = new_feedback;
+  res.redirect(req.href);
 }
 
 const UpdateLocation = (req,res) =>{
@@ -355,6 +380,8 @@ const GetHomePage = async (req,res,next) => {
 
     var top_deals = product_util.OrganizeDiscounts(all_products);
     var all_reviews = await Review.find({});
+
+
     var new_feedback = {...feedback};
 
     new_feedback.items.top_deals = top_deals;
@@ -390,6 +417,9 @@ const GetProductDetailPage = async (req,res,next) =>{
    Product.find().then(async (all_products) =>{
 
     new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
+    product_reviews = await ProductRating.find({product_id:id});
+    console.log(product_reviews)
+    product_reviews = product_reviews;
 
      Product.findById(id).then((product)=>{
 
@@ -399,7 +429,7 @@ const GetProductDetailPage = async (req,res,next) =>{
        else{
 
          var new_feedback = {...feedback};
-
+         new_feedback.product_reviews = product_reviews
          new_feedback.redirect = "/product/"+id;
          new_feedback.items.top_deals = null;
          new_feedback.isAuthenticated = req.session.isAuthenticated;
@@ -422,6 +452,8 @@ const GetProductDetailPage = async (req,res,next) =>{
        }
 
      }).catch((err)=>{
+
+      console.logo(err)
       StatusError(next,err,500);
      });
 
@@ -538,6 +570,13 @@ const GetCartPage = async (req,res) =>{
 
   })
 
+
+
+}
+
+const GetProductReviews = async () =>{
+
+
 }
 
 //----------------------------------------------------------------------------------------
@@ -581,5 +620,6 @@ module.exports.GetCurrentCart = GetCurrentCart;
 module.exports.GetHomePage = GetHomePage;
 module.exports.AddToCart = AddToCart;
 module.exports.AddOrder = AddOrder;
-
+module.exports.PostProductReview = PostProductReview
+module.exports.GetProductReview = GetProductReviews
 module.exports.GetProductDetailPage = GetProductDetailPage;

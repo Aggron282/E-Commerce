@@ -1,0 +1,13 @@
+<div class="product_review_user_container">
+    <div class="row">
+        <div class="col-4">
+            <img class="user_img_review" src = "<%= product_review.user_info.profileImg %>" />
+            <p class="user_review_text user_review_text--name"><%= product_review.user_info.name %></p>
+        </div>
+        <div class="col-8">
+            <p class="review_rating"> <%= product_review.rating %> / 5</p>
+            <p class="review_rating review_rating--heading"> <%= product_review.heading %> </p>
+            <p class="user_review_text review_rating--description"> <%= product_review.description %> </p>
+        </div>
+    </div>
+</div>

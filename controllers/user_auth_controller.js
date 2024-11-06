@@ -1,5 +1,5 @@
 var path = require("path");
-//const nodemailer = require("nodemailer");
+
 //const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 
@@ -42,7 +42,6 @@ const feedback = {
   validationErrors:[]
 }
 
-// const sendgridTransport = require("nodemailer-sendgrid-transport");
 
 //------------------------------------------------------------
 // User Post Functions

@@ -1,0 +1,15 @@
+<div class="product_review_container">
+    <div class="product_review_box">
+        <h3 class="product_review_text product_review_text--title">Leave a Review</h3>
+        <form action = "/product/review/" method = "POST">
+            <input max = "5" min = "1" type="number" name="rating" class="form-control review_input" placeholder="Enter Rating"/>
+            <input type="text" name="heading" class="form-control heading_input" placeholder="Enter Heading"/>
+            <input value = "<%= product._id %>" name="product_id" type="hidden">
+            <textarea class="review_description" cols = "30" rows="30" name = "description">
+
+            </textarea>
+            <button type="submit" class="btn review_btn">Submit</button>
+        </form>
+    </div>
+
+</div>

@@ -13,6 +13,7 @@ router.get("/cart/pay",user_controller.AddOrder);
 
 // Changes to User Cart
 router.post("/cart",isAuth,user_controller.AddToCart);
+router.post("/product/review/",isAuth,user_controller.PostProductReview);
 router.post("/cart/delete",isAuth,user_controller.DeleteCartItem);
 //router.post("/delete/cart",user_controller.AddToCart);
 router.post("/catagories",user_controller.ToggleCatagories);

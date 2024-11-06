@@ -108,6 +108,54 @@
     <button class="product_detail_button--delete delete_button_p"> Delete </button>
   <%}%>
 
+  <div class="review_section">
+    <div class="product_review_container">
+        <div class="product_review_box">
+            <h3 class="product_review_text product_review_text--title">Leave a Review</h3>
+            <form action = "/product/review/" method = "POST">
+                <input max = "5" min = "1" type="number" name="rating" class="form-control review_input" placeholder="Enter Rating"/>
+                <input type="text" name="heading" class="form-control heading_input" placeholder="Enter Heading"/>
+                <input value = "<%= item._id %>" name="product_id" type="hidden">
+                <textarea class="review_description" cols = "30" rows="5" name = "description">
+
+                </textarea>
+                <button type="submit" class="btn review_btn">Submit</button>
+            </form>
+        </div>
+
+    </div>
+
+    <% if(product_reviews.length > 0) {%>
+
+      <% for (product_review in product_reviews) { %>
+
+        <div class="product_review_user_container">
+          <div class="row">
+              <div class="col-4">
+                  <img class="user_img_review" src = "<%= product_review.user_info.profileImg %>" />
+                  <p class="review_rating user_review_text--name"><%= product_review.user_info.name %></p>
+              </div>
+              <div class="col-8">
+                  <p class="review_rating">
+                    <%= product_review.rating %> / 5
+                  </p>
+                  <p class="review_rating review_rating--heading">
+                    <%= product_review.heading %>
+                  </p>
+                  <p class="user_review_text review_rating--description">
+                    <%= product_review.description %>
+                  </p>
+              </div>
+          </div>
+      </div>
+
+      <%}%>
+
+    <%}%>
+
+
+  </div>
+
 </main>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyACepJIoDZ1rhhju2bK-lO23qIzaKwXsnY&loading=async&libraries=maps,marker&v=beta" defer></script>
