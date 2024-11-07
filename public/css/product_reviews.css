@@ -3,12 +3,23 @@
   margin-top:5%;
   position: relative;
   z-index:99;
-  border-top:1px solid #e6e6e6;
+  border-bottom:1px solid #e6e6e6;
+}
+.user_review_text--name{
+  float:left;
+  width:50%;
+  font-size:15px !important;
+  margin-top: 5px;
+  padding:10px;
+}
+.product_review_container{
+  padding-top:50px;
 }
 .user_img_review{
   width:100px;
   height:100px;
   border-radius:50%;
+  float:left;
 }
 
 .review_rating {

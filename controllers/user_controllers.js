@@ -90,11 +90,17 @@ const PostProductReview = async (req,res) =>{
   }
 
   var new_product_review = new ProductRating(config);
+
   await new_product_review.save();
+
   var new_feedback  = {...feedback};
+
   new_feedback.popup_message = "Added Product Review";
+
   feedback = new_feedback;
+
   res.redirect(req.href);
+
 }
 
 const UpdateLocation = (req,res) =>{
@@ -156,8 +162,7 @@ const GetCurrentCart = (req,res,next)=>{
         res.json({error:"No Cart"})
       }
 
-    }
-    else{
+    }else{
       res.json({error:"No User"})
     }
 
@@ -167,8 +172,7 @@ const GetProfile = (req,res)=>{
 
   if(!req.user){
     res.redirect("/login");
-  }
-  else{
+  }else{
     res.json(req.user);
   }
 
@@ -404,7 +408,7 @@ const GetHomePage = async (req,res,next) => {
     res.render(new_feedback.render,new_feedback)
 
  }).catch((err)=>{
-   console.log(err)
+    console.log(err)
     StatusError(next,err,500);
  });
 
@@ -425,10 +429,10 @@ const GetProductDetailPage = async (req,res,next) =>{
 
        if(!product){
          res.redirect("/")
-       }
-       else{
+       }else{
 
          var new_feedback = {...feedback};
+
          new_feedback.product_reviews = product_reviews
          new_feedback.redirect = "/product/"+id;
          new_feedback.items.top_deals = null;
@@ -491,12 +495,10 @@ const GetCartPage = async (req,res) =>{
 
                 for(var k =0; k < existing_items.length; k ++ )
                 {
-
                     if(existing_items[k].data.title == cart_item.data.title){
                       existing_items[k].data.quantity += 1;
                       didFindItemInCart = true;
                     }
-
                 }
 
                 if(!didFindItemInCart){
@@ -575,7 +577,6 @@ const GetCartPage = async (req,res) =>{
 }
 
 const GetProductReviews = async () =>{
-
 
 }
 

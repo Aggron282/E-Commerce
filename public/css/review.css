@@ -12,6 +12,109 @@
   background:#e6e6e6;
 }
 
+.status_bar{
+  width:100%;
+  border-radius:5px;
+  transition: all .3s;
+  overflow: hidden;
+  position: relative;
+  margin-bottom:5px;
+}
+
+.bar_progress{
+  width:0%;
+  position: absolute;
+  left:0%;
+  text-align: center;
+  font-size:25px;
+  font-family: "Teko";
+  color:white;
+  border-radius: 2px;
+  transition: all .3s;
+  z-index:999;
+  bottom:0%;
+  height:35px;
+}
+
+.bar{
+  float:left;
+  height:20px;
+  width:11.11%;
+  transition: all .3s;
+  border-right:1px solid rgba(0,0,0,.1);
+  background: #e6e6e6;
+}
+
+.bar--inactive{
+  background: rgb(166, 166, 166);
+}
+
+#bar1{
+  background:red;
+}
+#bar1:has(.bar--active) {
+  display: none;
+  background:red !important;
+}
+#bar2:has(.bar--active){
+  background:crimson !important;
+}
+#bar3:has(.bar--active){
+  background:orangered !important;
+}
+#bar4:has(.bar--active){
+  background:orange !important;
+}
+#bar5:has(.bar--active){
+  color:rgb(255, 174, 0) !important;
+}
+#bar6:has(.bar--active){
+  background:rgb(204, 255, 0) !important;
+}
+#bar7:has(.bar--active){
+  background:yellowgreen !important;
+}
+#bar8:has(.bar--active){
+  background:rgb(8, 255, 41) !important;
+}
+#bar9:has(.bar--active){
+  background:rgb(0, 247, 255) !important;
+}
+
+
+.review_rating{
+  margin-top:2px;
+}
+#bar1:hover{
+  background:red !important;
+}
+#bar2:hover{
+  background:crimson !important;
+}
+#bar3:hover{
+  background:orangered !important;
+}
+#bar4:hover{
+  background:orange !important;
+}
+#bar5:hover{
+  color:rgb(255, 200, 0) !important;
+}
+#bar6:hover{
+  background:rgb(204, 255, 0) !important;
+}
+#bar7:hover{
+  background:yellowgreen !important;
+}
+#bar8:hover{
+  background:rgb(8, 255, 41) !important;
+}
+#bar9:hover{
+  background:limegreen!important;
+}
+
+
+
 .review_display_container--inner{
   background:white;
   padding:10px;
