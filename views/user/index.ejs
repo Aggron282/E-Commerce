@@ -24,7 +24,11 @@
 
      <%- include("./../layouts/user/home/catagorized_products.ejs") %>
 
-     <%-include("./../layouts/user/home/reviews.ejs") %>
+     <div class="review_section">
+       <%- include("./../layouts/user/review_collection.ejs") %>
+       <br >
+       <%- include("./../layouts/user/product_review_form.ejs") %>
+     </div>
 
   </div>
 
@@ -45,6 +49,6 @@
 <script src = "/js/user/slideshow.js" ></script>
 <script src = "/js/user/long_banner.js" ></script>
 <script src = "/js/user/catagory_render.js" ></script>
-<script src = "/js/user/company_review.js" ></script>
+<script src = "/js/review_bar.js" ></script>
 
 <%- include("./../layouts/end.ejs") %>

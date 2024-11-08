@@ -1,0 +1,9 @@
+<% for (var x =0; x < Math.floor(product_reviews[i].rating); x++) {%>
+    <img src = "/images/star.png" style="float:left;width:30px;height:30px"/>
+<%}%>
+<% if(product_reviews[i].rating % 1 != 0) {%>
+    <img src = "/images/half_star.png" style="float:left;width:30px;height:30px"/>
+<%}%>
+<% for (var e =0; e < Math.floor(5 - product_reviews[i].rating); e++) {%>
+    <img src = "/images/no_star.png" style="float:left;width:30px;height:30px"/>
+<%}%>

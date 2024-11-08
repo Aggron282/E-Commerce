@@ -129,16 +129,18 @@ const UpdateLocation = (req,res) =>{
 const PostCompanyReview = async (req,res,next) => {
 
   var body = req.body;
-  var name = body.name;
-  var title = body.title;
-  var profile_img = body.profileImg;
+  var heading = body.heading;
   var description = body.description;
+  var rating = body.rating;
 
   var review_config = {
-    title:name,
-    description:description,
-    profileImg:profile_img,
-    name:body.name
+    user_info:{
+      name:req.user.name,
+      profileImg:req.user.profileImg,
+      _id:req.user._id
+    },
+    heading:heading,
+    rating:rating
   }
 
   var new_review = new Review(review_config);
@@ -397,12 +399,15 @@ const GetHomePage = async (req,res,next) => {
     new_feedback.cart = req.user ? req.user.cart : null;
     new_feedback.catagories = new_catagories;
     new_feedback.redirect = "/";
+    new_feedback.isItem = false;
     new_feedback.limited_products = null;
     new_feedback.isAdmin = false;
-    new_feedback.reviews = all_reviews;
+    new_feedback.product_reviews = all_reviews;
+    new_feedback.review_form = "companyformreview";
+    new_feedback.review_btn = "companyreview";
     new_feedback.items.favorite = product_util.GetRandomProducts(all_products,10);
     new_feedback.popup_message = popup.message;
-
+    new_feedback.review_title = "E-Commerce Reviews"
     feedback = new_feedback;
 
     res.render(new_feedback.render,new_feedback)
@@ -422,7 +427,7 @@ const GetProductDetailPage = async (req,res,next) =>{
 
     new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
     product_reviews = await ProductRating.find({product_id:id});
-    console.log(product_reviews)
+
     product_reviews = product_reviews;
 
      Product.findById(id).then((product)=>{
@@ -439,12 +444,15 @@ const GetProductDetailPage = async (req,res,next) =>{
          new_feedback.isAuthenticated = req.session.isAuthenticated;
          new_feedback.items.all_products = all_products;
          new_feedback.user = req.user;
+         new_feedback.isItem = true;
          new_feedback.limited_products = null;
          new_feedback.cart = req.user ? req.user.cart : null;
          new_feedback.catagories = new_catagories;
          new_feedback.render = DETAILPAGEURL;
          new_feedback.item = product;
-
+         new_feedback.review_form = "formreview";
+         new_feedback.review_btn = "productreview";
+         new_feedback.review_title = "Product Reviews"
          var popup = popup_util.CheckPopup(new_feedback);
 
          new_feedback.popup_message = popup.message;

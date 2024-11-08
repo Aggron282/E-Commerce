@@ -78,10 +78,6 @@ const DisplayForm = (e)=>{
   var exit_review = document.querySelector(".exit_review");
   var review_form = document.querySelector(".review_form");
 
-  exit_review.addEventListener("click",(e)=>{
-    ExitForm();
-  });
-
   review_form.addEventListener("submit",async(e)=>{
     e.preventDefault();
     SubmitForm();
@@ -100,8 +96,7 @@ const SubmitForm = async ()=>{
     if(description.length < 10 || title.length < 4){
       alert("Invalid Input");
       return;
-    }
-    else{
+    }else{
       SubmitReview(title,description);
     }
 
@@ -139,17 +134,38 @@ const ExitForm = () => {
 const ReturnReviewForm = ()=>{
 
   return `
-    <div class="relative review_display_container--inner">
-    <span class = "exit_review">X</span>
+  <div class="product_review_container">
+      <div class="product_review_box">
+          <h3 class="product_review_text product_review_text--title">Leave a Review</h3>
+          <br>
+          <p class="product_review_text product_review_text--title">How Satisfied Were You?</p>
+          <div class="status_bar">
+            <div class="bar_progress"> 1 / 5</div>
+            <div class="bar" id="bar1" value = "1" isActive = "0"></div>
+            <div class="bar" id="bar2" value = "1.5" isActive = "0"></div>
+            <div class="bar" id="bar3" value = "2" isActive = "0"></div>
+            <div class="bar" id="bar4" value = "2.5" isActive = "0"></div>
+            <div class="bar" id="bar5" value = "3" isActive = "0"></div>
+            <div class="bar" id="bar6" value = "3.5" isActive = "0"></div>
+            <div class="bar" id="bar7" value = "4" isActive = "0"></div>
+            <div class="bar" id="bar8" value = "4.5" isActive = "0"></div>
+            <div class="bar" id="bar9" value = "5" isActive = "0"></div>
+          </div>
+          <br>
 
-      <p class="review_display_title">Tell us how we are doing!</p>
-      <form action = "/company/review" method = "POST" class="review_form">
-        <input name = "title" class="form-control review_input" placeholder ="Enter Title">
-        <textarea cols=50 rows= 10 name = "name" class="form-control review_description" value = "" placeholder="Enter Review"></textarea>
+          <form id ="formreview" method = "POST">
 
-        <button class="review_submit_button">Submit</button>
-      </form>
+              <input type="text" name="heading" class="form-control heading_input" placeholder="Enter Heading"/>
+              <br>
+
+              <textarea class="review_description" cols = "30" rows="5" name = "description">
+
+              </textarea>
+              <button type="submit" class="review_btn--company">Submit</button>
+          </form>
       </div>
+     <script src = "/js/review_bar.js" ></script>
+  </div>
       `
 
 }

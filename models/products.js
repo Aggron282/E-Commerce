@@ -16,6 +16,10 @@ const product_schema = new Schema(
       type:String,
       required:true
     },
+    average_rating:{
+      type:Number,
+      required:false
+    },
     catagory:{
       type:String,
       required:true

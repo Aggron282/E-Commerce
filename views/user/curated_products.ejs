@@ -108,7 +108,9 @@
                     <div class="product_item_container--image">
                         <img class="product_item_image" src = "/images/<%= limited_products[i].thumbnail %>" />
                     </div>
-
+                    <div class="star_container">
+                      <%- include("./../layouts/user/total_review_star.ejs") %>
+                    </div>
                     <p class="product_item_text product_item_text--title"> <%= title %> </p>
                     <p class="product_item_text product_item_text--price"> <%= price %> </p>
 
