@@ -25,7 +25,7 @@ if(document.querySelector("#companyformreview")){
 
 var style_config = {
   very_bad:{background:"crimson",solid:"crimson",width:11},
-  bad:{background:"linear-gradient(to right,crimson,red)",solid:"crimson",width:22},
+  bad:{background:"linear-gradient(to right,crimson,red)",solid:"red",width:22},
   not_good:{background:"linear-gradient(to right,red,orangered)",solid:"orangered",width:33},
   so_so:{background:"linear-gradient(to right,orangered,orange)",solid:"orange",width:44},
   ok:{background:'linear-gradient(to right,orange, rgb(255, 174, 0))',solid:"rgb(255,174,0)",width:55},
@@ -93,7 +93,7 @@ function InitReviewBar(){
       var value = parseFloat(element_value);
 
       var style = style_config.very_bad;
-
+      console.log(style)
       ChangeBarColor(style,value);
 
       style = GetStyle(value);
@@ -111,7 +111,7 @@ function InitReviewBar(){
       }
 
       ChangeBarColor(style,value);
-
+      score = value;
       bar_progress.innerText = value.toString() + "/5";
 
     });

@@ -78,7 +78,7 @@
               <% if(average_rating_new.rating % 1 != 0) {%>
                   <img src = "/images/half_star.png" style="float:left;width:30px;height:30px"/>
               <%}%>
-              <% for (var e =0; e < Math.floor(5 - average_rating_new); e++) {%>
+              <% for (var e =0; e < Math.floor(3 - average_rating_new); e++) {%>
                   <img src = "/images/no_star.png" style="float:left;width:30px;height:30px"/>
               <%}%>
 
@@ -121,7 +121,7 @@
   <%}%>
 
   <div class="review_section">
-
+    <%- include("./layouts/user/review_collection.ejs") %>
     <br >
     <%- include("./layouts/user/product_review_form.ejs") %>
   </div>

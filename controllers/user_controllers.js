@@ -93,12 +93,14 @@ const PostProductReview = async (req,res) =>{
   var products_reviewed_of_same = await ProductRating.find({product_id:product_id});
 
   var total_rating = 0;
+  console.log(rating)
 
   for(var i = 0; i < products_reviewed_of_same.length;i++){
     total_rating += products_reviewed_of_same[i].rating;
   }
-
-  var average_rating = parseFloat(total_rating / products_reviewed_of_same.length)
+  var l =  products_reviewed_of_same.length ?  products_reviewed_of_same.length : 1;
+  total_rating = total_rating <= 0 ? 1 : total_rating;
+  var average_rating = parseFloat(total_rating / l)
 
   average_rating = average_rating.toFixed(2);
 
@@ -440,11 +442,10 @@ const GetProductDetailPage = async (req,res,next) =>{
    Product.find().then(async (all_products) =>{
 
     new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
-    product_reviews = await ProductRating.find({product_id:id});
-
-    product_reviews = product_reviews;
-
-     Product.findById(id).then((product)=>{
+    var product_reviews = await ProductRating.find({product_id:id});
+    console.log(product_reviews);
+    
+    Product.findById(id).then((product)=>{
 
        if(!product){
          res.redirect("/")
@@ -466,7 +467,7 @@ const GetProductDetailPage = async (req,res,next) =>{
          new_feedback.item = product;
          new_feedback.review_form = "formreview";
          new_feedback.review_btn = "productreview";
-         new_feedback.review_title = "Product Reviews"
+         new_feedback.review_title = product.title + " " + "Reviews";
          var popup = popup_util.CheckPopup(new_feedback);
 
          new_feedback.popup_message = popup.message;
@@ -477,11 +478,7 @@ const GetProductDetailPage = async (req,res,next) =>{
 
        }
 
-     }).catch((err)=>{
-
-      console.logo(err)
-      StatusError(next,err,500);
-     });
+     })
 
    })
 
