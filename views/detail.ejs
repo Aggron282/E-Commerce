@@ -59,7 +59,7 @@
 <% var price =  formatter.format(item.price) %>
 <% var inactive = item.quantity > 0 ? "" : "sold_out" %>
 <% var qty = item.quantity > 0 ? "In Stock:"+item.quantity : "This Product is Currently Sold Out" %>
-
+<% var average_rating_new  = item.average_rating ? item.average_rating : 1 %>
 <main class="main_content main_content--active" class="main_content relative">
 
   <div class="row">
@@ -71,10 +71,22 @@
             <p class="product_detail--name"> <%= item.title %> </p>
             <p class="product_detail--type"> <%= item.catagory %> </p>
             <p class="product_detail--price"> <%= price %> </p>
+            <div class="star_container">
+              <% for (var x =0; x < Math.floor(average_rating_new); x++) {%>
+                  <img src = "/images/star.png" style="float:left;width:30px;height:30px"/>
+              <%}%>
+              <% if(average_rating_new.rating % 1 != 0) {%>
+                  <img src = "/images/half_star.png" style="float:left;width:30px;height:30px"/>
+              <%}%>
+              <% for (var e =0; e < Math.floor(5 - average_rating_new); e++) {%>
+                  <img src = "/images/no_star.png" style="float:left;width:30px;height:30px"/>
+              <%}%>
+
+            </div>
 
             <span class="product_id" id="product_id_hash" _id = "<%= item._id %>"></span>
-
-            <p class="product_detail--sold <%= inactive %>"><%= qty %></p>
+            <br />
+            <p style="width:100%;clear:both;margin-top:20px"class="product_detail--sold <%= inactive %>"><%= qty %></p>
 
             <br />
 
@@ -109,7 +121,7 @@
   <%}%>
 
   <div class="review_section">
-    <%- include("./layouts/user/review_collection.ejs") %>
+
     <br >
     <%- include("./layouts/user/product_review_form.ejs") %>
   </div>

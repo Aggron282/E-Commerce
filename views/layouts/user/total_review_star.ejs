@@ -1,9 +1,10 @@
-<% for (var x =0; x < Math.floor(average_rating); x++) {%>
+<% var average_rating_new  = average_rating ? average_rating : 1 %>
+<% for (var x =0; x < Math.floor(average_rating_new); x++) {%>
     <img src = "/images/star.png" style="float:left;width:30px;height:30px"/>
 <%}%>
-<% if(average_rating.rating % 1 != 0) {%>
+<% if(average_rating_new.rating % 1 != 0) {%>
     <img src = "/images/half_star.png" style="float:left;width:30px;height:30px"/>
 <%}%>
-<% for (var e =0; e < Math.floor(5 - average_rating); e++) {%>
+<% for (var e =0; e < Math.floor(5 - average_rating_new); e++) {%>
     <img src = "/images/no_star.png" style="float:left;width:30px;height:30px"/>
 <%}%>

@@ -90,6 +90,20 @@ const PostProductReview = async (req,res) =>{
   }
 
   var new_product_review = new ProductRating(config);
+  var products_reviewed_of_same = await ProductRating.find({product_id:product_id});
+
+  var total_rating = 0;
+
+  for(var i = 0; i < products_reviewed_of_same.length;i++){
+    total_rating += products_reviewed_of_same[i].rating;
+  }
+
+  var average_rating = parseFloat(total_rating / products_reviewed_of_same.length)
+
+  average_rating = average_rating.toFixed(2);
+
+  console.log(average_rating)
+  await Product.updateOne({_id:new ObjectId(config.product_id)},{$set:{average_rating:average_rating}})
 
   await new_product_review.save();
 
