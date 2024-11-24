@@ -37,7 +37,6 @@ const feedback = {
     name:""
   },
   type:"Admin",
-  popup_message:null,
   url:"/admin/create_account",
   validationErrors:[]
 }
@@ -84,15 +83,12 @@ const CreateAccount = (req,res) => {
 
             await req.session.save();
 
-            feedback.popup_message = "Created Your Account!"
-
             res.redirect(ADMIN_LOGIN_CONFIG.login_url);
 
          });
 
       }
       else{
-        feedback.popup_message = "Failure in Creating Account"
         res.redirect(ADMIN_LOGIN_CONFIG.create_url);
       }
 
@@ -100,7 +96,6 @@ const CreateAccount = (req,res) => {
 
   }
   else{
-    feedback.popup_message = "Invalid Inputs Detected"
     res.render(CREATEACCOUNTPAGEURL,feedback);
   }
 
@@ -121,38 +116,40 @@ const GetCreateAccountPage = (req,res) => {
 const PostAdminLogin = async (req,res,next) => {
 
     var config = await auth.GetLoginInfo(req);
-
     Admin.findOne({email:config.email}).then((found_user)=>{
 
       if(found_user){
-        console.log(found_user);
+
         bcrypt.compare(config.password,found_user.password).then((isFound)=>{
-          console.log(isFound)
+
           if(isFound){
 
             req.session.isAuthenticatedAdmin = true;
             req.session.admin = found_user;
-            console.log("FOUND");
-            req.session.save((err)=>{
-              res.redirect(ADMIN_LOGIN_CONFIG.home_url);
 
+            req.session.save((err)=>{
+              res.status(200).json(true);
+              return;
             });
 
           }
           else{
-            res.redirect(ADMIN_LOGIN_CONFIG.login_url)
+            res.status(403).json(false);
+            return;
           }
 
+        }).catch((err)=>{
+          throw new Error();
         })
 
-      }
-      else{
-        auth.RenderLogin(req,res,ADMIN_LOGIN_CONFIG,config,feedback);
-
+      }else{
+        res.status(403).json(false);
+        return;
       }
 
     }).catch((err)=>{
-      auth.RenderLogin(req,res,ADMIN_LOGIN_CONFIG,config,feedback);
+      res.status(500).json(false);
+      return;
     });
 
   }

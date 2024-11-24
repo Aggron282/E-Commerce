@@ -13,6 +13,9 @@ body{
   background: white;
   line-height: 1.7;
 }
+.popup p {
+  text-align: center;
+}
 
 .margin-top-2_5{
   margin-top:2.5%;

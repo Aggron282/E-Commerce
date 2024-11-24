@@ -30,3 +30,58 @@
   transform: translateY(0px);
 
 }
+
+
+
+
+.popup{
+  position: fixed;
+  top:0%;
+  width:100%;
+  padding:20px;
+  font-size:20px;
+  font-family:"Roboto";
+  box-shadow:0px 0px 10px rgba(0,0,0,.5);
+  text-align: center;
+  background:white;
+  z-index:9999999999999999999999999999999999999999;
+  animation: 1 ease-in .2s ap;
+  opacity:1;
+  transition: translateY(0px)
+  left:0%;
+}
+
+.popup_back{
+  animation: 1 ease-in .5s dis;
+  opacity:0;
+  transition: translateY(-50px)
+}
+
+@keyframes dis {
+
+  0%{
+    opacity:1;
+    transform:translateY(0px);
+  }
+
+  100%{
+    opacity:0;
+    transform:translateY(-50px);
+  }
+
+}
+
+@keyframes ap {
+
+
+
+  0%{
+    opacity:0;
+    transform:translateY(-50px);
+  }
+  100%{
+    opacity:1;
+    transform:translateY(0px);
+  }
+
+}

@@ -31,7 +31,9 @@ router.post("/company/review",isAuth,user_controller.PostCompanyReview);
 
 // Page URLS
 router.get("/",user_controller.GetHomePage);
-router.get("/product/:_id",isAuth,user_controller.GetProductDetailPage);
+router.get("/review_page=:review_page",user_controller.GetHomePage);
+router.get("/product/:_id/:review_page",isAuth,user_controller.GetProductDetailPage);
+router.get("/product/:_id/",isAuth,user_controller.GetProductDetailPage);
 router.get("/cart/purchase",isAuth,user_controller.GetCartPage);
 
 // Changes to User Profile

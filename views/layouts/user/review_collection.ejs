@@ -1,42 +1,44 @@
 <div class="review_collection">
 
-  <h3 class="product_review_text product_review_text--title" style="text-align:center;font-size:25px"> <%= review_title %></h3>
-
   <% if(product_reviews.length > 0) {%>
 
-    <% for (var i = 0; i < product_reviews.length; i++) { %>
+    <% for (var i = 0; i < post_per_page; i++) { %>
 
-      <div class="product_review_user_container"style="margin-top:20px;padding-top:20px;padding-bottom:20px;border-top:0px none solid">
+      <% if(product_reviews.length <= i) {%>
+          <% break %>
+      <%}%>
+
+      <div class="product_review_user_container">
 
         <div class="row">
 
             <div class="col-4">
-                <img class="user_img_review" src = "<%= product_reviews[i].user_info.profileImg %>" style="background:#e6e6e6" />
-                <p class="review_rating user_review_text--name"><%= product_reviews[i].user_info.name %></p>
+                <img class="user_img_review" src = "<%= product_reviews[page_counter + i].user_info.profileImg %>" />
+                <p class="review_rating user_review_text--name"><%= product_reviews[page_counter + i].user_info.name %></p>
             </div>
 
-            <div class="col-8 "style="margin-top:2.5%">
+            <div class="col-8 review_text_col">
 
                 <div class="star_container">
-                  <% for (var x =0; x < Math.floor(product_reviews[i].rating); x++) {%>
-                      <img src = "/images/star.png" style="float:left;width:30px;height:30px"/>
+                  <% for (var x =0; x < Math.floor(product_reviews[page_counter+ i].rating); x++) {%>
+                      <img src = "/images/star.png" class="review_star"/>
                   <%}%>
-                  <% if(product_reviews[i].rating % 1 != 0) {%>
-                      <img src = "/images/half_star.png" style="float:left;width:30px;height:30px"/>
+                  <% if(product_reviews[page_counter + i].rating % 1 != 0) {%>
+                      <img src = "/images/half_star.png" class="review_star"/>
                   <%}%>
-                  <% for (var e =0; e < Math.floor(5 - product_reviews[i].rating); e++) {%>
-                      <img src = "/images/no_star.png" style="float:left;width:30px;height:30px"/>
+                  <% for (var e =0; e < Math.floor(5 - product_reviews[page_counter + i].rating); e++) {%>
+                      <img src = "/images/no_star.png" class="review_star"/>
                   <%}%>
                 </div>
 
-                <div class="text-container" style="clear:both;padding-top:10px;">
+                <div class="text-container-review" >
 
                   <p class="review_rating review_rating--heading">
-                    <%= product_reviews[i].heading %>
+                    <%= product_reviews[page_counter + i].heading %>
                   </p>
 
                   <p class="user_review_text review_rating--description">
-                    <%= product_reviews[i].description %>
+                    <%= product_reviews[page_counter + i].description %>
                   </p>
 
                 </div>
@@ -47,8 +49,10 @@
 
     </div>
 
-
     <%}%>
+
+    <br>
+    <br>
 
   <%}%>
 

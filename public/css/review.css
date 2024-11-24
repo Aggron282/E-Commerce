@@ -220,8 +220,43 @@
   backface-visibility: hidden;
   transition: all .3s
 }
+.product_review_text--title{
+  text-align:center;font-size:25px;
+}
+.product_review_user_container{
+  margin-top:20px;padding-top:20px;padding-bottom:20px;border-top:0px none solid
+}
+.review_text_col{
+  margin-top:2.5%
+}
+.user_img_review{
+  background:#e6e6e6;
+}
 .review_collection{
   margin-top:7.5%;
+}
+.paginatsion a  {
+  text-decoration: underline;
+  margin-left:10px;float:left;font-size:18px;font-family:'Roboto'
+}
+.text-container-review{
+  clear:both;padding-top:10px;
+}
+.review_star{
+  float:left;width:30px;height:30px
+}
+.paginatsion p  {
+
+  margin-left:10px;float:left;font-size:13px;font-family:'Roboto';margin-top:5px;
+}
+#act{
+  color:cornflowerblue
+}
+.paginatsion{
+  color:black;overflow:hidden;width:50%;margin-left:40%
+}
+.paginatsion a:hover{
+  color:cornflowerblue;
 }
 .review_btn{
   margin-top:2.5%;

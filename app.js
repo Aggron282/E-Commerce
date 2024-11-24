@@ -1,38 +1,38 @@
-var Admin = require("./models/admin.js");
-var User = require("./models/user.js");
-var Products = require("./models/products.js");
+const Admin = require("./models/admin.js");
+const User = require("./models/user.js");
+const Products = require("./models/products.js");
 
-var express = require("express");
-var ejs = require("ejs");
-var cors = require("cors");
-var bodyParser = require("body-parser");
-var csrf = require('csrf');
-var bcrypt = require("bcrypt")
-var path = require("path");
-var session = require("express-session");
-var multer = require("multer");
-var mongoose = require("mongoose");
+const express = require("express");
+const ejs = require("ejs");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const csrf = require('csrf');
+const bcrypt = require("bcrypt")
+const path = require("path");
+const session = require("express-session");
+const multer = require("multer");
+const mongoose = require("mongoose");
 
-var db_util = require("./util/db.js");
+const db_util = require("./util/db.js");
 
-var MongoDBStore = require('connect-mongodb-session')(session);
+const MongoDBStore = require('connect-mongodb-session')(session);
 
-var user_routes = require("./routes/user_routes.js");
-var admin_routes = require("./routes/admin_routes.js");
-var uni_routes = require("./routes/uni_routes.js");
-var user_auth_routes = require("./routes/user_auth_routes.js");
-var admin_auth_routes = require("./routes/auth_admin_routes.js");
+const user_routes = require("./routes/user_routes.js");
+const admin_routes = require("./routes/admin_routes.js");
+const uni_routes = require("./routes/uni_routes.js");
+const user_auth_routes = require("./routes/user_auth_routes.js");
+const admin_auth_routes = require("./routes/auth_admin_routes.js");
 
-var rootDir = require("./util/path.js");
-var image_handler = require("./util/image_handler.js");
-var user_util = require("./util/user.js");
+const rootDir = require("./util/path.js");
+const image_handler = require("./util/image_handler.js");
+const user_util = require("./util/user.js");
 
-var port = process.env.PORT || 3003 ;
+const port = process.env.PORT || 3003 ;
 var hasInit = false;
 
-var app = express();
+const app = express();
 
-var StoreSession =  new MongoDBStore({
+const StoreSession =  new MongoDBStore({
   uri:"mongodb+srv://mawile12:sableye12@cluster0.mv38jgm.mongodb.net/shop?",
   collection:"session"
 });
@@ -66,9 +66,9 @@ function SetDefaultAdmin(){
 
       Products.find({}).then((prods)=>{
 
-        var config = user_util.GetDummyUser();
+        const config = user_util.GetDummyUser();
 
-        var new_admin = new Admin(config);
+        const new_admin = new Admin(config);
 
         new_admin.save();
 
@@ -85,6 +85,7 @@ function SetDefaultAdmin(){
 app.use(session({secret:"43489438994388948949842894389",saveUninitialized:false,store:StoreSession}));
 
 app.use(multer({storage:fileStorage,fileFilter: function(req,file, cb) {
+  console.log(req,file)
     image_handler.checkFileType(file, cb);
 }}).single("thumbnail"));
 
@@ -171,7 +172,7 @@ app.use((err, req, res, next) => {
   res.locals.error = err;
 
   const status = err.status || 500;
-
+  console.log(err)
   res.status(status);
   res.render(ERRORPAGEURL,{err:err.msg,statusCode:error.statusCode});
 
@@ -183,7 +184,7 @@ mongoose.connect("mongodb+srv://mawile12:sableye12@cluster0.mv38jgm.mongodb.net/
 
     if(users.length <= 0){
 
-      var schema_ = {
+      const schema_ = {
         name:"Marco Khodr",
         email:"marcokhodr16@gmail.com",
         cart:{
@@ -194,7 +195,7 @@ mongoose.connect("mongodb+srv://mawile12:sableye12@cluster0.mv38jgm.mongodb.net/
         }
       }
 
-      var new_user = new User(schema_);
+      const new_user = new User(schema_);
 
       new_user.save();
 

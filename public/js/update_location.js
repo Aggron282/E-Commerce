@@ -28,7 +28,6 @@ var canEditLocation = false;
 
 
 const TurnOffDropdownAndToggleModal = (on) => {
-  console.log(on)
   ToggleDropdown(dropdown_,false);
   ToggleLocationModal(on);
 }
@@ -42,11 +41,14 @@ const SubmitAndUpdateLocation = async () => {
     var data = await axios.post("/location/convert",{address:address});
 
     var new_location_data = data.data.location;
-
+    console.log(data);
     current_address_data = address;
-
+    if(!data.data){
+      CreatePopup("Error Occured");
+      return;
+    }
     if(!new_location_data){
-        RenderPopup("Invalid Location");
+        CreatePopup("Invalid Location");
         return;
     }
     else{
@@ -54,11 +56,11 @@ const SubmitAndUpdateLocation = async () => {
         RenderMapElement(new_location_data.coords);
 
         var update_location = await axios.post(update_location_url,new_location_data);
-
+        console.log(CreatePopup);
         if(update_location.data){
-          RenderPopup("Location Updated");
+          CreatePopup("Updated Location");
         }else{
-          RenderPopup("Error Occured");
+          CreatePopup("Unable to Update Location");
         }
 
       }
@@ -110,14 +112,14 @@ const GetCurrentLocation = () =>{
 const ToggleLocationModal = (toggle) =>{
 
   var overlay = document.querySelector(".black_overlay");
-  console.log(toggle);
+
   if(toggle != null){
     canEditLocation = toggle;
   }
   else{
     canEditLocation = !canEditLocation;
   }
-  console.log(canEditLocation)
+
   if(!canEditLocation){
     overlay.classList.remove("black_overlay--active")
     location_modal.classList.remove("update_location_container--active");

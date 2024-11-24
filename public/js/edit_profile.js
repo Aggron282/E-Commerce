@@ -58,28 +58,30 @@ const PopulateProfileForm = async (profile_url_form) => {
     profile_password_input.value = "";
     profile_confirm_input.value = "";
 
+
   }).catch((err)=>{console.log(err)});
 
 }
 
-const SubmitProfileEdit = ({name,username,password,confirm},e) => {
+const SubmitProfileEdit = async ({name,username,password,confirm},e) => {
 
-  e.preventDefault();
 
-  if(password.length <=-1){
-    alert("Password Too Short");
-    return;
-  }
-  else{
+  var data = CreateFormData(submit_form);
+  var url = submit_form.getAttribute("action");
 
-    if(confirm == password){
-      submit_form.submit();
+  if(data.confirm == data.password){
+      const response = await axios.post(url,data);
+
+          if(response.data){
+            CreatePopup("Updated Profile!");
+            DelayedRefresh(1000);
+          }else{
+            CreatePopup("Unable to Update")
+          }
     }
     else{
-      alert("Passwords Do Not Match")
+      CreatePopup("Passwords do not Match")
     }
-
-  }
 
 }
 
@@ -118,6 +120,7 @@ if(edit_profile_admin){
 if(submit_profile){
 
   submit_profile.addEventListener("click",(e)=>{
+    e.preventDefault();
     ConfigureAndSubmit(e);
   });
 
@@ -126,6 +129,7 @@ if(submit_profile){
 if(submit_form){
 
   submit_form.addEventListener("submit",(e)=>{
+    e.preventDefault();
     ConfigureAndSubmit(e);
   });
 
@@ -134,6 +138,7 @@ if(submit_form){
 if(profile_dropdown_opener){
 
   profile_dropdown_opener.addEventListener("click",(e)=>{
+    e.preventDefault();
     ToggleDropdown(dropdown,true);
   });
 

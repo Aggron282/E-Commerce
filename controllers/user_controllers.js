@@ -15,7 +15,6 @@ const fileHelper = require("./../util/file.js");
 
 const text_util = require("./../util/text.js");
 const product_util = require("./../util/products.js");
-const popup_util = require("./../util/popup.js");
 
 const StatusError = require("./../util/status_error.js");
 
@@ -53,7 +52,6 @@ var feedback ={
   user:null,
   searched_term:"",
   current_catagory:"",
-  popup_message:null,
   render:HOMEPAGEURL,
   root:".",
   action:"/user/",
@@ -73,9 +71,25 @@ const GetOrders = async(req,res)=>{
 }
 
 const PostProductReview = async (req,res) =>{
+
   var {description,rating,heading,product_id} = req.body;
+
   rating = rating > 5 ? 5 : rating;
 
+  var found_user = await User.findOne({_id:req.user._id});
+
+  var today = new Date();
+
+  const tomorrow = new Date(today);
+
+  tomorrow.setDate(today.getDate() + 1);
+
+  if(!found_user.next_able_to_review <= today){
+    res.json(false);
+    return;
+  }else{
+    await User.updateOne({_id:req.user._id}, {$set:{next_able_to_review: tomorrow}})
+  }
   var config = {
     heading:heading,
     rating:rating,
@@ -93,29 +107,28 @@ const PostProductReview = async (req,res) =>{
   var products_reviewed_of_same = await ProductRating.find({product_id:product_id});
 
   var total_rating = 0;
-  console.log(rating)
 
   for(var i = 0; i < products_reviewed_of_same.length;i++){
     total_rating += products_reviewed_of_same[i].rating;
   }
+
   var l =  products_reviewed_of_same.length ?  products_reviewed_of_same.length : 1;
+
   total_rating = total_rating <= 0 ? 1 : total_rating;
+
   var average_rating = parseFloat(total_rating / l)
 
   average_rating = average_rating.toFixed(2);
 
-  console.log(average_rating)
   await Product.updateOne({_id:new ObjectId(config.product_id)},{$set:{average_rating:average_rating}})
 
   await new_product_review.save();
 
   var new_feedback  = {...feedback};
 
-  new_feedback.popup_message = "Added Product Review";
-
   feedback = new_feedback;
 
-  res.redirect(req.href);
+  res.status(200).json(true);
 
 }
 
@@ -133,7 +146,7 @@ const UpdateLocation = (req,res) =>{
 
     new_user.save();
 
-    res.json({user:new_user,popup:"Updated Location"});
+    res.json({user:new_user});
     res.end();
 
     return;
@@ -148,6 +161,26 @@ const PostCompanyReview = async (req,res,next) => {
   var heading = body.heading;
   var description = body.description;
   var rating = body.rating;
+
+  var found_user = await User.findOne({_id:req.user._id});
+
+  var today = new Date();
+
+  const tomorrow = new Date(today);
+
+  tomorrow.setDate(today.getDate() + 1);
+
+  if(found_user.next_able_to_review){
+    console.log(today,found_user.next_able_to_review)
+    if(!found_user.next_able_to_review <= today){
+      res.json(false);
+      return;
+    }else{
+      await User.updateOne({_id:req.user._id}, {$set:{next_able_to_review: tomorrow}})
+    }
+  }else{
+    await User.updateOne({_id:req.user._id}, {$set:{next_able_to_review: tomorrow}})
+  }
 
   var review_config = {
     user_info:{
@@ -227,7 +260,6 @@ const EditProfile = (req,res) => {
         var new_feedback = {...feedback};
 
         new_feedback.user = req.user;
-        new_feedback.popup_message = "Edited Profile!";
         new_feedback.redirect = feedback.redirect;
 
         feedback = new_feedback;
@@ -256,8 +288,6 @@ const DeleteCartItem = async (req,res,next) => {
     req.user.deleteProduct(id,(delete_response)=>{
 
       redirects_counter = 0;
-
-      feedback.popup_message = "Deleted Item From Cart";
 
       res.redirect("/cart");
 
@@ -288,8 +318,6 @@ const AddOrder = async(req,res,next) =>{
      new_order.save();
 
      req.user.ClearCart();
-
-     feedback.popup_message = "Your Order has been Placed! Check Orders Tab to Confirm"
 
      res.redirect("/");
 
@@ -377,7 +405,6 @@ const GetCheckoutPage = async (req,res) =>{
     new_feedback.cart = req.user ? req.user.cart : null;
     new_feedback.catagories = null;
     new_feedback.isAuthenticated = req.session.isAuthenticated;
-    new_feedback.popup_message = new_feedback.redirect == redirect ? new_feedback.popup_message : null;
     new_feedback.redirect = redirect;
     new_feedback.render = CHECKOUTPAGEURL;
 
@@ -394,9 +421,6 @@ const GetHomePage = async (req,res,next) => {
 
     var new_products = []
 
-    var popup = popup_util.CheckPopup(feedback);
-
-    redirects_counter = popup.redirects_counter;
 
     new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
 
@@ -406,6 +430,24 @@ const GetHomePage = async (req,res,next) => {
 
     var new_feedback = {...feedback};
 
+    page_counter = 0;
+
+    if(req.params){
+      page_counter = req.params.review_page ? req.params.review_page  : 0;
+    }
+
+    page_counter = parseInt(page_counter);
+
+    var post_per_page = 7;
+    var page_length = Math.floor(all_reviews.length / post_per_page);
+
+    new_feedback.page_counter = parseInt(page_counter);
+    new_feedback.post_per_page = 4;
+    new_feedback.page_length = page_length;
+    new_feedback.next_page = page_counter + 1 > page_length ? page_length : page_counter + 1;
+    new_feedback.prev_page = page_counter - 1 < 0 ? 0 : page_counter - 1;
+    new_feedback.start_counter = page_counter <= 0 ? 0 : page_counter;
+    new_feedback.first_page = 0;
     new_feedback.items.top_deals = top_deals;
     new_feedback.items.all_products = all_products;
     new_feedback.isAdmin = false;
@@ -422,7 +464,6 @@ const GetHomePage = async (req,res,next) => {
     new_feedback.review_form = "companyformreview";
     new_feedback.review_btn = "companyreview";
     new_feedback.items.favorite = product_util.GetRandomProducts(all_products,10);
-    new_feedback.popup_message = popup.message;
     new_feedback.review_title = "E-Commerce Reviews"
     feedback = new_feedback;
 
@@ -444,7 +485,7 @@ const GetProductDetailPage = async (req,res,next) =>{
     new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
     var product_reviews = await ProductRating.find({product_id:id});
     console.log(product_reviews);
-    
+
     Product.findById(id).then((product)=>{
 
        if(!product){
@@ -453,7 +494,24 @@ const GetProductDetailPage = async (req,res,next) =>{
 
          var new_feedback = {...feedback};
 
-         new_feedback.product_reviews = product_reviews
+         page_counter = 0;
+
+         if(req.params){
+           page_counter = req.params.review_page ? req.params.review_page  : 0;
+         }
+         page_counter = parseInt(page_counter);
+         var post_per_page = 7;
+         var page_length = Math.floor(product_reviews.length / post_per_page);
+
+         new_feedback.page_counter = parseInt(page_counter);
+         new_feedback.post_per_page = 4;
+         new_feedback.page_length = page_length;
+         new_feedback.next_page = page_counter + 1 > page_length ? page_length : page_counter + 1;
+         new_feedback.prev_page = page_counter - 1 < 0 ? 0 : page_counter - 1;
+         new_feedback.start_counter = page_counter <= 0 ? 0 : page_counter;
+
+         new_feedback.first_page = 0;
+         new_feedback.product_reviews = product_reviews;
          new_feedback.redirect = "/product/"+id;
          new_feedback.items.top_deals = null;
          new_feedback.isAuthenticated = req.session.isAuthenticated;
@@ -468,11 +526,6 @@ const GetProductDetailPage = async (req,res,next) =>{
          new_feedback.review_form = "formreview";
          new_feedback.review_btn = "productreview";
          new_feedback.review_title = product.title + " " + "Reviews";
-         var popup = popup_util.CheckPopup(new_feedback);
-
-         new_feedback.popup_message = popup.message;
-
-         redirects_counter = popup.redirects_counter;
 
          res.render(new_feedback.render,new_feedback);
 
@@ -563,9 +616,7 @@ const GetCartPage = async (req,res) =>{
 
     Product.find().then(async (all_products) =>{
 
-     var popup = popup_util.CheckPopup(new_feedback);
 
-     redirects_counter = popup.redirects_counter;
 
      new_catagories = new_catagories ? new_catagories : product_util.OrganizeCatagories(all_products);
 
@@ -582,8 +633,6 @@ const GetCartPage = async (req,res) =>{
      new_feedback.render =  CARTPAGEURL;
      new_feedback.total_price = total_price;
      new_feedback.cart.items = all_cart_items ? all_cart_items : [];
-
-     new_feedback.popup_message = popup.message;
 
      feedback = new_feedback;
 

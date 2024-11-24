@@ -38,7 +38,6 @@ const feedback = {
   redirect:USER_LOGIN_CONFIG.login_url,
   type:USER_LOGIN_CONFIG.type,
   url:"",
-  popup_message:null,
   validationErrors:[]
 }
 
@@ -58,39 +57,46 @@ const PostUserLogin = (req,res,next) => {
   var errors = validationResult(req);
 
   feedback.validationErrors = errors.array();
-
+  console.log(errors)
   if(errors.isEmpty()){
 
     User.findOne({email:email}).then((found_user)=>{
 
       if(found_user){
-
         // if(found_user.password == password){
          bcrypt.compare(password,found_user.password).then((isFound)=>{
-
+           
            if(isFound){
 
             req.session.isAuthenticated = true;
             req.session.user = found_user;
-            feedback.popup_message = "Success!"
 
             req.session.save((err)=>{
-              res.redirect(USER_LOGIN_CONFIG.home_url);
+              res.status(200).json(true)
+              return;
             });
 
           }else{
-            feedback.popup_message = "Username/Password Incorrect!"
-
-            res.status(401).render(LOGINPAGE,feedback);
+            res.status(401).json(false);
+            return;
           }
+
         });
+      }else{
+        res.status(401).json(false)
+        return;
       }
 
+    }).catch((err)=>{
+      res.status(500).json(false);
+      return;
     });
 
   }
   else{
-    res.redirect(USER_LOGIN_CONFIG.login_url);
+    res.status(403).json(false)
+    return;
+
   }
 
 }
@@ -224,7 +230,6 @@ const CreateAccount = (req,res) => {
             req.session.user = new_user;
 
             req.session.save((err)=>{
-              feedback.popup_message = "Created Your Account!"
               res.redirect(USER_LOGIN_CONFIG.login_url);
             });
 
@@ -235,7 +240,6 @@ const CreateAccount = (req,res) => {
 
       }
       else{
-        feedback.popup_message = "Failure in Creating Account"
         res.redirect(USER_LOGIN_CONFIG.create_url);
       }
 
@@ -243,7 +247,6 @@ const CreateAccount = (req,res) => {
 
   }
   else{
-    feedback.popup_message = "Invalid Inputs Detected"
     res.status(202).render(CREATEACCOUNTPAGE,feedback);
   }
 

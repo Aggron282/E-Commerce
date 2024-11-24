@@ -14,6 +14,10 @@
   width:15%;
 }
 
+.navbar_user_input--search{
+  margin-top:10px;
+}
+
 .navbar_user_col--cart{
   float:left;
   width:10%;

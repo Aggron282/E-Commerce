@@ -14,7 +14,6 @@ const StatusError = require("./../util/status_error.js");
 
 const rootDir = require("./../util/path.js");
 const product_util = require("./../util/products.js");
-const popup_util = require("./../util/popup.js");
 
 const Product = require("./../models/products.js");
 const Order = require("./../models/orders.js");
@@ -31,7 +30,6 @@ var feedback = {
   redirect:"",
   isAdmin:true,
   isAuthenticatedAdmin:false,
-  popup_message:null
 }
 
 const HardResetProducts = (req,res) => {
@@ -92,7 +90,7 @@ const GetOneProduct = (req,res,next) => {
   var didFindProduct = false;
 
   if(!req.admin){
-    res.redirect("/admin/login");
+    res.status(403).redirect("/admin/login");
     return;
   }
 
@@ -122,14 +120,14 @@ const EditAdmin = (req,res) => {
 
   var data  = req.body;
 
-  redirects_counter = 0;
+  console.log(data);
 
   if(!req.admin){
-    res.redirect("/admin/login");
+    res.status(403).redirect("/admin/login");
     return;
   }
 
-  const filter_by_id = { _id : new ObjectId(req.admin._id) };
+  const filter_by_id = { _id : req.admin._id };
 
   var profile_img = null;
 
@@ -143,10 +141,14 @@ const EditAdmin = (req,res) => {
 
       const update_profile_values = {$set:{ username : data.username, name:data.name, password:encrypt, profileImg:profile_img} };
 
-      Admin.findOneAndUpdate(filter_by_id,update_profile_values).then((update_response)=>{
-        req.admin = update_response;
-        feedback.popup_message = "Edited Your Profile!"
-        res.redirect("/admin");
+
+      Admin.updateOne(filter_by_id,update_profile_values).then(async (update_response)=>{
+        const new_admin = await Admin.findOne(filter_by_id);
+        req.session.admin = new_admin;
+        res.status(200).json(true);
+      }).catch((err)=>{
+        console.log(err);
+        res.status(500).json(false);
       });
 
   });
@@ -157,8 +159,6 @@ const EditAdmin = (req,res) => {
 //Update Location
 
 const UpdateLocation = (req,res) =>{
-
-  const popup_string = "Updated Location!"
 
   var data = req.body;
   var address = data.address;
@@ -173,23 +173,19 @@ const UpdateLocation = (req,res) =>{
     var new_admin = new Admin(admin_found);
 
     new_admin.save();
+    req.admin = new_admin;
+    res.status(200).json({user:new_admin});
 
-    feedback.popup_message = popup_string;
-
-    res.json({user:new_admin,popup:popup_string});
-
-  }).catch(err => console.log(err));
+  }).catch((err) => {
+    console.log(err)
+    res.status(500).json(false);
+  });
 
 }
 
 //--------------------------------------------------------------------------------
 // Get URL Pages
 const GetMainPage = async (req,res,next) =>{
-
-
-   var popup = popup_util.CheckPopup(feedback);
-
-   redirects_counter = popup.redirects_counter;
 
    if(!req.admin){
      res.redirect("/admin/login");
@@ -205,7 +201,6 @@ const GetMainPage = async (req,res,next) =>{
    new_feedback.action = "/admin/profile/edit";
    new_feedback.totalProducts = totalProducts
    new_feedback.isAuthenticatedAdmin = req.session.isAuthenticatedAdmin;
-   new_feedback.popup_message = popup.message;
    new_feedback.catagories = new_catagories;
 
    feedback = new_feedback;
@@ -217,19 +212,16 @@ const GetMainPage = async (req,res,next) =>{
 const GetProductDetailPage = async (req,res,next) =>{
 
     var id = req.params._id;
-    var popup = popup_util.CheckPopup(feedback);
-
-    redirects_counter = popup.redirects_counter;
 
     if(!id || id.length < 10){
-        res.redirect("/admin")
+        res.status(403).redirect("/admin")
         return;
     }
 
     Product.findById(id).then(async (found_product)=>{
 
       if(!found_product){
-        res.redirect("/admin")
+        res.status(403).redirect("/admin")
       }
       else{
 
@@ -243,14 +235,14 @@ const GetProductDetailPage = async (req,res,next) =>{
         new_feedback.isAdmin = true;
         new_feedback.catagories = new_catagories;
         new_feedback.isAuthenticatedAdmin = req.session.isAuthenticatedAdmin;
-        new_feedback.popup_message = popup.message;
 
         res.render(DETAILPAGEURL,new_feedback);
 
       }
 
     }).catch((err)=>{
-     StatusError(next,err,500);
+      console.log(err);
+      res.status(500).json(false);
     });
 
 }
@@ -259,6 +251,9 @@ const GetOrderPage =(req,res,next)=>{
 
   Order.find({"user.userId":req.user._id}).then((orders)=>{
     res.render(path.join(rootDir,"views","layouts","orders.ejs"),{orders:orders});
+  }).catch((err)=>{
+    console.log(err);
+    res.status(500).json(false);
   });
 
 }
@@ -281,15 +276,22 @@ async function DeleteProduct(req,res,id){
     var new_admin = {...req.admin};
 
     new_admin.products = new_products;
+
     var isFound = await Product.findOne({_id:id});
+
     if(isFound){
       await Product.deleteOne({_id:id});
+    }else{
+      console.log("Could not find Product");
     }
+
     var update_query = {$set: {'products': new_products}};
 
-    var replace_admin_products = await Admin.findByIdAndUpdate({_id:req.admin._id},update_query,(update_response)=>{
+    Admin.findByIdAndUpdate({_id:req.admin._id},update_query,(update_response)=>{
       req.admin = new_admin;
-      res.json(update_response);
+      res.status(200).json(update_response);
+    }).catch((err)=>{
+      res.status(500).json(false);
     });
 
 }
@@ -349,15 +351,11 @@ const EditOneProduct = async (req,res,next) =>{
 
       req.admin = new_admin;
 
-      feedback.popup_message = "Edited Product!"
-
-      redirects_counter = 0;
-
       res.redirect(req.url);
 
     });
 
-  })
+  });
 
 }
 
@@ -366,21 +364,18 @@ const AddProduct = async (req,res,nect) => {
   var errors = validationResult(req);
   var body  =   req.body;
   var filename  = "";
-
+  console.log(req.file)
   feedback.validationErrors = errors.array();
 
   if(!errors.isEmpty()){
-    feedback.popup_message = "Error: Some fields were empty";
-    res.redirect("/admin");
+    res.status(500).json(false);
     return;
   }
 
-  if(!req.file){
-    feedback.popup_message = "Error: You can only upload image files";
-    res.redirect("/admin");
-    return;
-  }
-
+  // if(!req.file){
+  //   res.status(500).json(false);
+  //   return;
+  // }
 
   if(req.file){
     filename = req.file.filename ? req.file.filename : "";
@@ -409,14 +404,13 @@ const AddProduct = async (req,res,nect) => {
 
   new_product.save();
 
-
   new_admin.products.push(new_product);
 
   Admin.findOneAndUpdate(filter_by_id,update_products,{new: true,useFindAndModify:false}).then((err,doc)=>{
-
-    feedback.popup_message = "Added Product";
-    res.redirect("/admin");
-
+    res.status(200).json(true);
+    return;
+  }).catch((err)=>{
+    res.status(500).json(false);
   })
 
 }

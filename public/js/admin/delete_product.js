@@ -12,17 +12,18 @@ const DeleteProduct = async (e) => {
 
     var id = e.target.getAttribute('_id');
 
-    var product =  axios.post("/admin/product/delete",{_id:id}).then((res)=>{
+    var response =  await axios.post("/admin/product/delete",{_id:id});
 
-      if(res){
+      if(response.data){
+        CreatePopup("Deleted Product")
         InitCatagories();
+      }else{
+        CreatePopup("Could not Delete")
       }
-
-    });
 
   }
   else{
-    alert("Canceled");
+    CreatePopup("Canceled")
   }
 
   canDelete = true;

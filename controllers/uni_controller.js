@@ -16,7 +16,6 @@ const fileHelper = require("./../util/file.js");
 const text_util = require("./../util/text.js");
 const product_util = require("./../util/products.js");
 const location = require("./../util/location.js");
-const popup_util = require("./../util/popup.js");
 
 const StatusError = require("./../util/status_error.js");
 
@@ -43,7 +42,6 @@ var feedback ={
   user:null,
   searched_term:"",
   current_catagory:"",
-  popup_message:null,
   render:"/",
   root:".",
   action:"/user/",
@@ -183,7 +181,6 @@ async function OutputSearchResults(req,product_searched,page_counter,all_product
    new_feedback.render = CURATEDPRODUCTSURL;
    new_feedback.isAuthenticated = req.session.isAuthenticated;
    new_feedback.isAuthenticatedAdmin = req.session.isAuthenticatedAdmin;
-   new_feedback.popup_message = popup_util.CheckPopup(new_feedback);
 
    return new_feedback;
 }
@@ -234,7 +231,6 @@ async function OutputCatagorySearch(req,catagory_searched,page_counter,all_produ
   new_feedback.limited_products = limited_products;
   new_feedback.cart = req.user ? req.user.cart : null;
   new_feedback.catagories = new_catagories;
-  new_feedback.popup_message = null;
   new_feedback.isAuthenticated = req.session.isAuthenticated;
   new_feedback.isAuthenticatedAdmin = req.session.isAuthenticatedAdmin;
   new_feedback.page_length = page_length;

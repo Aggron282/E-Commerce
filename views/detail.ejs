@@ -40,7 +40,6 @@
 <%}%>
 
 <div class="black_overlay"></div>
-<%- include("./layouts/modal/popup_message.ejs") %>
 
 <div class="profile_change_overlay">
   <%- include("./layouts/modal/profile.ejs") %>
@@ -122,8 +121,39 @@
 
   <div class="review_section">
     <%- include("./layouts/user/review_collection.ejs") %>
+
+    <div class="paginatsion">
+
+      <a href =  "<%=`/product/${item._id}/${first_page}` %>">
+      First Page
+      </a>
+          <p>...</p>
+      <% if(prev_page > first_page){ %>
+        <a href =  "<%=`/product/${item._id}/${prev_page}` %>">
+          <%= (prev_page + 1).toString() %>
+        </a>
+      <%}%>
+
+      <a id="act" href =  "<%=`/product/${item._id}/${page_counter}` %>">
+       <%= (page_counter + 1).toString() %>
+      </a>
+
+     <% if(next_page < page_length){ %>
+        <a href =  "<%=`/product/${item._id}/${next_page}` %>">
+          <%= (next_page + 1).toString() %>
+        </a>
+      <%}%>
+      <p>...</p>
+      <a href =  "<%=`/product/${item._id}/${page_length}` %>" >
+       Last Page
+      </a>
+
+    </div>
+
     <br >
+
     <%- include("./layouts/user/product_review_form.ejs") %>
+
   </div>
 
 </main>

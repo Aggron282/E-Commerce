@@ -12,6 +12,10 @@
   margin-top: 5px;
   padding:10px;
 }
+.navbar_user_input--search{
+  margin-top:20px !important;
+}
+
 .product_review_container{
   padding-top:50px;
 }

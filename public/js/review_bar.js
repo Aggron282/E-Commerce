@@ -4,35 +4,69 @@ var score = 1;
 var review_btn = document.querySelector("#productreview");
 var review_btn_company =document.querySelector(".review_btn--company");
 
-var form = null;
+var review_form = null;
 var companyformreview = null;
 var path = "/product/review/"
 
-
-
 if(document.querySelector("#formreview")){
-  form = document.querySelector("#formreview");
+  review_form = document.querySelector("#formreview");
   path = "/product/review/"
   review_btn = document.querySelector("#productreview");
 }
 
 if(document.querySelector("#companyformreview")){
-  form = document.querySelector("#companyformreview");
+  review_form = document.querySelector("#companyformreview");
   path = "/company/review/";
   review_btn = document.querySelector("#companyreview");
 }
 
 
 var style_config = {
-  very_bad:{background:"crimson",solid:"crimson",width:11},
-  bad:{background:"linear-gradient(to right,crimson,red)",solid:"red",width:22},
-  not_good:{background:"linear-gradient(to right,red,orangered)",solid:"orangered",width:33},
-  so_so:{background:"linear-gradient(to right,orangered,orange)",solid:"orange",width:44},
-  ok:{background:'linear-gradient(to right,orange, rgb(255, 174, 0))',solid:"rgb(255,174,0)",width:55},
-  better:{background:'linear-gradient(to right,rgb(255, 174, 0),rgb(204, 255, 0))',solid:"rgb(204,255,0)",width:66},
-  good:{background:'linear-gradient(to right,rgb(204, 255, 0),yellowgreen)',solid:"yellowgreen",width:77},
-  very_good:{background:'linear-gradient(to right,yellowgreen,rgb(8, 255, 41))',solid:"rgb(8,255,41)",width:88},
-  perfect:{background:'linear-gradient(to right,yellowgreen,limegreen)',solid:"limegreen",width:100}
+  very_bad:{
+    background:"crimson",
+    solid:"crimson",
+    width:11
+  },
+  bad:{
+    background:"linear-gradient(to right,crimson,red)",
+    solid:"red",
+    width:22
+  },
+  not_good:{
+    background:"linear-gradient(to right,red,orangered)",
+    solid:"orangered",
+    width:33
+  },
+  so_so:{
+    background:"linear-gradient(to right,orangered,orange)",
+    solid:"orange",
+    width:44
+  },
+  ok:{
+    background:'linear-gradient(to right,orange, rgb(255, 174, 0))',
+    solid:"rgb(255,174,0)",
+    width:55
+  },
+  better:{
+    background:'linear-gradient(to right,rgb(255, 174, 0),rgb(204, 255, 0))',
+    solid:"rgb(204,255,0)",
+    width:66
+  },
+  good:{
+    background:'linear-gradient(to right,rgb(204, 255, 0),yellowgreen)',
+    solid:"yellowgreen",
+    width:77
+  },
+  very_good:{
+    background:'linear-gradient(to right,yellowgreen,rgb(8, 255, 41))',
+    solid:"rgb(8,255,41)",
+    width:88
+  },
+  perfect:{
+    background:'linear-gradient(to right,yellowgreen,limegreen)',
+    solid:"limegreen",
+    width:100
+  }
 }
 
 var style = style_config.very_bad;
@@ -74,7 +108,7 @@ function GetStyle(value){
     style = style_config.very_good
   }
   if(value == 5){
-    style = style_config.pefect;
+    style = style_config.perfect;
   }
 
   return style;
@@ -93,7 +127,7 @@ function InitReviewBar(){
       var value = parseFloat(element_value);
 
       var style = style_config.very_bad;
-      console.log(style)
+
       ChangeBarColor(style,value);
 
       style = GetStyle(value);
@@ -127,9 +161,9 @@ function ChangeBarColor(style,value){
 }
 
 
-if(form && review_btn){
+if(review_form && review_btn){
 
-    form.addEventListener("submit",async (e)=>{
+    review_form.addEventListener("submit",async (e)=>{
       e.preventDefault();
       SubmitReview();
     });
@@ -144,17 +178,17 @@ if(form && review_btn){
 
 async function SubmitReview(){
 
-  var formData = new FormData(form);
-
-  var data = {};
-
-  for (const [key, value] of formData) {
-    data[key] = value;
-  }
+  var data = CreateFormData(review_form);
 
   data.rating = score;
 
-  await axios.post(path,data);
+  const response = await axios.post(path,data);
+  console.log(response)
+  if(response.data == 200){
+    CreatePopup("You have Placed a Review");
+  }else{
+    CreatePopup("You Cannot Place a Review Yet");
+  }
 
 }
 

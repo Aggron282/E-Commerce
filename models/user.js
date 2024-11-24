@@ -15,6 +15,10 @@ const user = new Schema(
       type:String,
       required:true
     },
+    next_able_to_review :{
+      type:Date,
+      required:false
+    },
     location:{
       address:{
         type:String,

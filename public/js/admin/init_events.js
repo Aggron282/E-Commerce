@@ -20,6 +20,16 @@ const InitEvents = async () => {
 
 const AddEventToEditButtons = () => {
 
+  var form = document.querySelector(".product_form");
+
+  form.setAttribute("id",'edit-product');
+  form.setAttribute("button_id",'edit-product-btn');
+  form.setAttribute("redirect",'/admin/');
+
+  var button = document.querySelector(".product_form_button");
+
+  button.setAttribute("id",form.getAttribute("button_id"));
+
   for(var i =0; i < edit_buttons.length; i++){
 
     edit_buttons[i].addEventListener("click",async (e)=>{
@@ -30,7 +40,7 @@ const AddEventToEditButtons = () => {
 
         product = product.data;
 
-        PopulateModal(product,"/admin/product/edit");
+        PopulateModal(product,form);
         PopulateContent(product.title,product.catagory,product.price,product.discount,product.thumbnail,product.description);
 
     });
@@ -42,11 +52,22 @@ const AddEventToEditButtons = () => {
 
 const AddEventsToAddProducts = () => {
 
+  var form = document.querySelector(".product_form");
+
+  form.setAttribute("id",'add-product');
+  form.setAttribute("button_id",'add-product-btn');
+  form.setAttribute("redirect",'/admin/');
+  form.setAttribute("action",'/admin/product/add');
+
+  var button = document.querySelector(".product_form_button");
+
+  button.setAttribute("id",form.getAttribute("button_id"));
+
   for(var i =0; i < add_product_buttons.length; i++){
 
     add_product_buttons[i].addEventListener("click",(e)=>{
       ToggleModal(true);
-      SetForm("/admin/product/add");
+      SetForm(form);
     });
 
   }

@@ -16,7 +16,6 @@
   <body>
 
   <div class="container-fluid">
-    <%- include("./../layouts/modal/popup_message.ejs") %>
 
     <div class="authentication_container authentication_container--<%= type.toLowerCase() %> ">
 
@@ -103,6 +102,10 @@
 
   </div>
 
-  <script src = "./../js/util.js" ></script>
+
+  <script src = "https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyACepJIoDZ1rhhju2bK-lO23qIzaKwXsnY&loading=async&libraries=maps,marker&v=beta" defer> </script>
+  <script src = "/js/util.js" ></script>
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
 
   </body>
